@@ -3,86 +3,158 @@ import { projects } from "@/data/projects";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { Marquee } from "@/components/Marquee";
 import { SectionLabel } from "@/components/SectionLabel";
+import { ScrambleText } from "@/components/ScrambleText";
+import { useReveal } from "@/hooks/useReveal";
 
 /**
- * HomePage — Hero, About, Works, and a closing CTA.
- * Mobile-first stacking; on desktop the hero has a 2-column layout.
+ * HomePage — magazine COVER.
+ *
+ * Layout (think broadsheet front page):
+ *
+ *   ┌──────────┬──────────────────────────────────────┬────────┐
+ *   │ vertical │  "I build small things                  │  spec  │
+ *   │  stamp   │   carefully, quickly,                   │  box   │
+ *   │          │   and forgettably."                     │        │
+ *   │          │                                          │        │
+ *   │          │   [Fragments from a working week]       │        │
+ *   └──────────┴──────────────────────────────────────┴────────┘
+ *   ── a divider line ──
+ *   ▌ a standfirst paragraph  ▌
+ *   ── a divider line ──
+ *   ▌  "in this issue"  — two featured lines pulled up ▌
+ *   ── marquee ──
+ *   ▌  Selected Works  ▌
+ *   ▌  grid (lives below) ▌
+ *   ▌  Closing manifesto  ▌
  */
+
 export function HomePage() {
+  useReveal();
   const live = projects.filter((p) => p.status === "live").length;
   const total = projects.length;
-  const featured = projects.filter((p) => p.featured);
 
   const marqueeItems = [
-    "Independent Web Works",
-    "Design × Engineering",
-    `${total} projects · ${live} live`,
-    "Taipei / Remote",
-    "Open to Collab",
+    "Built from Taipei",
+    "Web · Cloud · 3D print · Arduino",
+    `${total} entries · ${live} now live`,
+    "An independent working notebook",
+    "Open to collab",
   ];
+
+  const today = new Date();
+  const todayLabel = today.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
 
   return (
     <div className="page-in">
-      {/* HERO */}
+      {/* ─── COVER ──────────────────────────────────────────────────────── */}
       <section className="relative">
-        <div className="absolute inset-0 cross-grid pointer-events-none" aria-hidden />
-        <div className="relative px-5 sm:px-6 lg:px-10 pt-10 sm:pt-16 pb-12 sm:pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end">
-            <div className="lg:col-span-9">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="stamp">FIN · PORTFOLIO · 2026</span>
-                <span className="hidden sm:inline-block font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-                  v1.0
-                </span>
-              </div>
-              <h1 className="text-[clamp(40px,9vw,128px)] font-semibold leading-[0.95] tracking-[-0.03em]">
-                <span>Side</span>
-                <br />
-                <span className="text-[var(--color-ink)]">projects,</span>{" "}
-                <span className="inline-flex items-baseline gap-3">
-                  <span>built</span>
-                  <span className="relative">
-                    <span className="absolute -inset-1 bg-[var(--color-accent)] -z-10" aria-hidden />
-                    <span className="relative">carefully</span>
-                  </span>
-                </span>
-                .
-              </h1>
-              <p className="mt-6 sm:mt-8 max-w-2xl text-[16px] sm:text-[18px] leading-[1.6] text-[var(--color-ink-2)]">
-                我是 <strong className="text-[var(--color-ink)] font-semibold">Finrod</strong>,
-                白天在生醫產業做細胞治療, 晚上用 side project 練手感 — 寫網站、
-                玩雲端、3D 列印、Arduino。這裡蒐集的就是這些「興趣使然」的小玩意,
-                每一個都是為一個很具體的理由而生。
-              </p>
+        {/* subtle cream-wash backdrop — drifts gently */}
+        <div
+          aria-hidden
+          className="absolute inset-0 drift"
+          style={{
+            background:
+              "radial-gradient(70% 60% at 100% 0%, rgba(217,119,87,0.10) 0%, rgba(255,255,255,0) 60%), radial-gradient(60% 50% at 0% 100%, rgba(42,39,66,0.06) 0%, rgba(255,255,255,0) 55%)",
+          }}
+        />
+        {/* baseline grid — keep it subtle, never competing with the type */}
+        <div
+          aria-hidden
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(26,22,37,0.04) 1px, transparent 1px)",
+            backgroundSize: "100% 8px",
+          }}
+        />
 
-              <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-3">
-                <a
-                  href="#works"
-                  className="inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-accent)] transition-colors"
-                >
-                  See works <span aria-hidden>↓</span>
-                </a>
-              <a
-                href="mailto:me@finrod.xyz"
-                className="inline-flex items-center gap-2 h-11 px-5 border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] transition-colors"
-              >
-                Say hi <span aria-hidden>↗</span>
-              </a>
+        <div className="relative px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-16 sm:pb-24">
+          {/* 1. The vertical stamp (col 1) + headline (col 2 wide) + spec (col 3) */}
+          <div className="grid grid-cols-12 gap-x-6 lg:gap-x-10 items-start">
+            {/* vertical stamp */}
+            <div className="hidden md:flex md:col-span-1 lg:col-span-1 pt-3">
+              <div className="rotate-180 font-mono text-[10px] tracking-[0.3em] uppercase text-[var(--color-mute)] [writing-mode:vertical-rl]">
+                FIN · Portfolio · {todayLabel}
               </div>
             </div>
 
-            {/* spec sidebar */}
-            <aside className="lg:col-span-3">
-              <div className="border border-[var(--color-line)] bg-[var(--color-paper)] p-5">
-                <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] mb-3">
-                  Spec sheet
-                </div>
-                <dl className="space-y-3 text-[13px]">
-                  <Row k="Day job" v="R&D Lead · Cell therapy" />
-                  <Row k="Side" v="Web · Cloud · 3D print · Arduino" />
-                  <Row k="Location" v="永和 · 新北市, TW" />
-                  <Row k="Available" v="週末 / 業餘接觸" dotColor="var(--color-success)" />
-                  <Row k="Projects" v={`${total} (${live} live)`} />
+            {/* headline */}
+            <div className="col-span-12 md:col-span-9 lg:col-span-8">
+              <div className="flex items-baseline gap-3 mb-5 mask-up" style={{ "--mask-delay": "0ms" } as React.CSSProperties}>
+                <span className="font-mono text-[11px] tracking-[0.22em] uppercase text-[var(--color-accent-deep-2)]">
+                  An independent working notebook
+                </span>
+              </div>
+
+              <h1
+                className="font-display text-[clamp(48px,9vw,128px)] font-medium leading-[0.96] tracking-[-0.025em] text-[var(--color-ink)] mask-up"
+                style={{ "--mask-delay": "120ms" } as React.CSSProperties}
+              >
+                Small things,{" "}
+                <em className="text-[var(--color-accent-deep-2)] font-normal">
+                  <ScrambleText text="carefully" />
+                </em>
+                <br />
+                built at the desk{" "}
+                <em className="font-normal">after work.</em>
+              </h1>
+
+              <p
+                className="mt-7 sm:mt-9 max-w-2xl font-display italic text-[clamp(18px,1.6vw,22px)] leading-[1.5] text-[var(--color-ink-2)] mask-up"
+                style={{ "--mask-delay": "320ms" } as React.CSSProperties}
+              >
+                I'm <strong className="not-italic font-medium">Finrod</strong>.
+                By day I run a cell-therapy R&amp;D desk in 新北永和. By night
+                I keep this notebook — of small web works, cloud toys,
+                3D-printed odds, and Arduino experiments.
+              </p>
+
+              <div
+                className="mt-10 sm:mt-14 flex flex-wrap items-center gap-4 mask-up"
+                style={{ "--mask-delay": "460ms" } as React.CSSProperties}
+              >
+                <a
+                  href="#works"
+                  className="inline-flex items-center justify-between gap-6 h-14 px-6 min-w-[260px] bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.2em] hover:bg-[var(--color-accent)] transition-colors"
+                >
+                  <span>Open the issue</span>
+                  <span aria-hidden>↓</span>
+                </a>
+                <a
+                  href="mailto:me@finrod.xyz"
+                  className="inline-flex items-center justify-between gap-6 h-14 px-6 min-w-[260px] border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] font-mono uppercase tracking-[0.2em] hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] transition-colors"
+                >
+                  <span>Write to me</span>
+                  <span aria-hidden>↗</span>
+                </a>
+              </div>
+            </div>
+
+            {/* spec box */}
+            <aside className="col-span-12 md:col-span-2 lg:col-span-3 mt-10 md:mt-0">
+              <div className="border border-[var(--color-ink)]/15 p-5 lg:p-6 bg-[var(--color-paper)]">
+                <div className="mag-eyebrow mb-4">This Issue</div>
+                <dl className="space-y-3.5 text-[12.5px]">
+                  <SpecRow k="Day job" v="R&D Lead · cell therapy" />
+                  <SpecRow k="At night" v="Web · cloud · 3D print · Arduino" />
+                  <SpecRow k="Where" v="永和 · 新北市, TW" />
+                  <SpecRow
+                    k="Status"
+                    v={
+                      <span className="inline-flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)]" />
+                        Open to collab
+                      </span>
+                    }
+                  />
+                  <SpecRow
+                    k="Pages"
+                    v={`${total} entries · ${live} live`}
+                  />
                 </dl>
               </div>
             </aside>
@@ -90,102 +162,95 @@ export function HomePage() {
         </div>
       </section>
 
-      <Marquee items={marqueeItems} speed={42} />
+      {/* ─── Divider rule ─────────────────────────────────────────────── */}
+      <hr className="border-t border-[var(--color-ink)]/15 mx-5 sm:mx-8 lg:mx-12" />
 
-      {/* ABOUT */}
-      <section className="px-5 sm:px-6 lg:px-10 pt-14 sm:pt-20 pb-10 sm:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+      {/* ─── Editor's note / manifesto ──────────────────────────────── */}
+      <section
+        className="px-5 sm:px-8 lg:px-12 pt-20 sm:pt-28 pb-16 sm:pb-20"
+        data-reveal
+      >
+        <SectionLabel label="A note from the editor" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           <div className="lg:col-span-4">
-            <SectionLabel index="01" label="About" meta="01/04" />
-            <h2 className="text-[clamp(28px,4vw,40px)] font-semibold leading-[1.1] tracking-tight">
-              白天做細胞,
-              <br />
-              晚上寫 side。
-            </h2>
+            <p className="font-display text-[clamp(22px,2vw,28px)] leading-[1.25] tracking-tight text-[var(--color-ink)]">
+              一份<span className="italic">週末</span>做的筆記。
+            </p>
+            <p className="mt-3 font-display italic text-[clamp(22px,2vw,28px)] leading-[1.25] tracking-tight text-[var(--color-ink-2)]">
+              白天的製程很嚴謹、晚上就寬容多了。
+            </p>
           </div>
-          <div className="lg:col-span-8 space-y-5 text-[15px] sm:text-[16px] leading-[1.8] text-[var(--color-ink-2)]">
+          <div className="lg:col-span-8 space-y-6 text-[16px] leading-[1.8] text-[var(--color-ink-2)] max-w-prose">
             <p>
-              研究所唸的是生物工程, 畢業後進到細胞治療產業, 從製程做到研發主任。
-              細胞治療是一個高度被法規框住、但又非常需要動手做的領域 —
-              每一個計畫都是「為了救一個病人」, 沒有犯錯的空間。
+              研究所唸的是生物工程。進到細胞治療產業以後 — 從製程到研發主任、
+              從一個案件到十二個 — 寫 SOP、簽放行報告、跑品質系統。
+              每一個計畫都是「為了救一個病人」，沒有犯錯的空間。
             </p>
             <p>
-              寫網站、做 3D 列印、玩 Arduino 是另一回事 — 沒人審查、可以失敗、可以亂改。
-              這裡放的每一個小玩意, 都是某個晚上「如果這樣做會怎樣」的具現化。
-              重視排版、效能與閱讀體驗, 因為這些是寫給未來的自己看的。
+              寫網站、做 3D 列印、玩 Arduino 是另一回事 — 沒人審查、
+              可以失敗、可以亂改。這裡放的每一個小玩意，都是某個晚上
+              「如果這樣做會怎樣」的具現化。重視排版、效能與閱讀體驗，
+              因為這些是寫給未來的自己看的。
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-4 border-t border-[var(--color-line)]">
+            <dl className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-[var(--color-ink)]/15">
               <Stat n="12+" label="Years in biotech" />
-              <Stat n="10+" label="Side projects" />
-              <Stat n="3" label="Printers" />
+              <Stat n={String(total)} label="Side projects" />
+              <Stat n="3" label="3D printers" />
               <Stat n="1" label="Blog since 2013" />
-            </div>
+            </dl>
           </div>
         </div>
       </section>
 
-      {/* FEATURED */}
-      {featured.length > 0 && (
-        <section className="px-5 sm:px-6 lg:px-10 py-10 sm:py-14 bg-[var(--color-paper-2)] border-y border-[var(--color-line)]">
-          <SectionLabel index="01.5" label="Featured" meta="Highlights" />
-          <ul className="divide-y divide-[var(--color-line)] border-y border-[var(--color-line)]">
-            {featured.map((p, i) => (
-              <li key={p.id}>
-                <Link
-                  to={`/work/${p.id}`}
-                  className="group flex items-center gap-4 sm:gap-6 py-5 sm:py-6 hover:bg-[var(--color-paper)] transition-colors -mx-2 px-2"
-                >
-                  <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-10">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[20px] sm:text-[24px] font-semibold tracking-tight truncate">
-                      {p.title}
-                    </span>
-                    <span className="block text-[13px] sm:text-[14px] text-[var(--color-mute)] truncate">
-                      {p.tagline}
-                    </span>
-                  </span>
-                  <span className="hidden sm:inline font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-24 text-right">
-                    {p.category}
-                  </span>
-                  <span className="hidden sm:inline font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-16 text-right">
-                    {p.year}
-                  </span>
-                  <span className="ml-2 w-8 h-8 grid place-items-center border border-[var(--color-line)] group-hover:border-[var(--color-ink)] group-hover:bg-[var(--color-ink)] group-hover:text-[var(--color-paper)] transition-colors">
-                    <span aria-hidden>→</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {/* ─── Marquee ──────────────────────────────────────────────────── */}
+      <Marquee items={marqueeItems} speed={48} />
 
-      {/* WORKS GRID */}
+      {/* ─── Selected Works grid ─────────────────────────────────────── */}
       <ProjectGrid projects={projects} />
 
-      {/* CTA */}
-      <section className="border-t border-[var(--color-line)]">
-        <div className="px-5 sm:px-6 lg:px-10 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
-          <div className="lg:col-span-8">
-            <SectionLabel index="99" label="Contact" />
-            <h2 className="text-[clamp(36px,7vw,84px)] font-semibold leading-[1.02] tracking-[-0.02em]">
-              交個朋友吧！
-              <br />
-              <span className="text-[var(--color-mute)]">來聊聊。</span>
-            </h2>
-          </div>
-          <div className="lg:col-span-4 lg:text-right">
+      {/* ─── Closing manifesto ────────────────────────────────────────── */}
+      <section
+        className="border-t border-[var(--color-ink)]/15 px-5 sm:px-8 lg:px-12 py-24 sm:py-36 relative overflow-hidden"
+        data-reveal
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 drift"
+          style={{
+            background:
+              "radial-gradient(50% 50% at 50% 50%, rgba(217,119,87,0.10) 0%, rgba(255,255,255,0) 70%)",
+          }}
+        />
+        <div className="relative max-w-5xl mx-auto text-center">
+          <div className="mag-eyebrow inline-block mb-6 border-transparent">Closing</div>
+          <h2 className="font-display text-[clamp(48px,8vw,128px)] font-medium leading-[0.96] tracking-[-0.025em] text-[var(--color-ink)]">
+            <em className="text-[var(--color-accent-deep-2)] font-normal">Thanks</em>
+            <br />
+            for reading.
+          </h2>
+          <p className="mt-8 font-display italic text-[clamp(18px,1.6vw,22px)] text-[var(--color-ink-2)]">
+            來信說個{" "}
+            <span className="not-italic font-medium text-[var(--color-ink)]">hi</span>{" "}
+            就好,
+            <br className="hidden sm:block" />
+            或者繼續往下 — shop 那一頁有我真心用過的好物。
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
               href="mailto:me@finrod.xyz"
-              className="inline-flex items-center gap-2 h-12 px-6 bg-[var(--color-ink)] text-[var(--color-paper)] text-[13px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-accent)] transition-colors"
+              className="inline-flex items-center justify-between gap-6 h-14 px-6 min-w-[280px] bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.2em] hover:bg-[var(--color-accent)] transition-colors"
             >
-              me@finrod.xyz <span aria-hidden>↗</span>
+              <span>me@finrod.xyz</span>
+              <span aria-hidden>↗</span>
             </a>
-            <p className="mt-3 text-[12px] font-mono tracking-[0.14em] uppercase text-[var(--color-mute)]">
-              New Taipei · 永和 · TW
-            </p>
+            <Link
+              to="/blog"
+              className="inline-flex items-center justify-between gap-6 h-14 px-6 min-w-[280px] border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] font-mono uppercase tracking-[0.2em] hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] transition-colors"
+            >
+              <span>Or read the writing</span>
+              <span aria-hidden>→</span>
+            </Link>
           </div>
         </div>
       </section>
@@ -193,25 +258,26 @@ export function HomePage() {
   );
 }
 
-function Row({ k, v, dotColor }: { k: string; v: string; dotColor?: string }) {
+function SpecRow({ k, v }: { k: string; v: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-[var(--color-line-soft)] pb-2 last:border-b-0 last:pb-0">
-      <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+    <div className="grid grid-cols-[1fr_auto] items-baseline gap-3">
+      <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-mute)]">
         {k}
       </dt>
-      <dd className="text-right text-[var(--color-ink-2)] font-medium flex items-center gap-2">
-        {dotColor && <span className="w-1.5 h-1.5 rounded-full" style={{ background: dotColor }} />}
+      <dd className="text-right text-[13px] text-[var(--color-ink)] leading-[1.35]">
         {v}
       </dd>
     </div>
   );
 }
 
-function Stat({ n, label }: { n: string; label: string }) {
+function Stat({ n, label }: { n: string | number; label: string }) {
   return (
     <div>
-      <div className="text-[clamp(28px,4vw,40px)] font-semibold tracking-tight leading-none">{n}</div>
-      <div className="mt-2 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+      <div className="font-display text-[clamp(34px,4vw,48px)] font-medium tracking-tight leading-none text-[var(--color-ink)]">
+        {n}
+      </div>
+      <div className="mt-2 font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-mute)]">
         {label}
       </div>
     </div>

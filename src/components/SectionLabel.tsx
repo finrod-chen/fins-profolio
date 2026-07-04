@@ -1,32 +1,26 @@
 /**
- * SectionLabel — a small "spec sheet" style label that sits
- * above section headings. Numbered, monospaced, hairline-ruled.
+ * SectionLabel — editorial magazine-style section divider.
+ * Centered label flanked by full-width rules. Optional numerals
+ * (volume/issue) live in a side row.
  */
 export function SectionLabel({
-  index,
   label,
   meta,
+  numeral,
 }: {
-  index: string;
   label: string;
   meta?: string;
+  numeral?: string;
 }) {
   return (
-    <div className="flex items-center gap-3 mb-4 md:mb-6">
-      <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-        § {index}
-      </span>
-      <span className="h-px flex-1 bg-[var(--color-line)]" />
-      <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-ink-2)]">
-        {label}
-      </span>
+    <div data-reveal>
+      <div className="mag-section-label">
+        <span>{numeral ?? "§"}</span>
+        <span className="rule" />
+        <span>{label}</span>
+      </div>
       {meta && (
-        <>
-          <span className="h-px w-6 bg-[var(--color-line)]" />
-          <span className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-            {meta}
-          </span>
-        </>
+        <div className="eyebrow -mt-3 mb-12 opacity-70">{meta}</div>
       )}
     </div>
   );

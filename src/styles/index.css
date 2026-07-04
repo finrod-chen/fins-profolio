@@ -1,0 +1,457 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./animations.css";
+
+/* ============================================================
+   Base — paper-and-ink rendering
+   ============================================================ */
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100svh;
+}
+
+/* Subtle warm paper grain — three-tone, almost invisible,
+   barely there until you stare. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(rgba(154, 130, 89, 0.05) 1px, transparent 1.5px),
+    radial-gradient(rgba(154, 130, 89, 0.03) 1px, transparent 1.5px);
+  background-size: 3px 3px, 7px 7px;
+  background-position: 0 0, 1px 2px;
+  mix-blend-mode: multiply;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--color-accent-tint);
+  color: var(--color-accent-deep-2);
+}
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+.font-display {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01", "ss02", "salt";
+  font-variation-settings: "opsz" 144, "wght" 400;
+  letter-spacing: -0.02em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "zero";
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+.mag-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  border-top: 1px solid var(--color-ink);
+  padding-top: 6px;
+}
+
+/* ============================================================
+   Baseline grid (8px) — for editorial rhythm
+   Use via bg-baseline (visual debug) or just rely on padding
+   multiples when writing layouts.
+   ============================================================ */
+.baseline-6 { padding-block: calc(var(--grid-baseline) * var(--baseline-mult)); }
+.baseline-8 { padding-block: calc(var(--grid-baseline) * 8); }
+.baseline-12 { padding-block: calc(var(--grid-baseline) * 12); }
+
+/* Debug baseline — never applied by default; opt in with `data-grid` */
+[data-grid="1"] body {
+  background-image:
+    linear-gradient(to bottom, rgba(184, 92, 61, 0.05) 1px, transparent 1px);
+  background-size: 100% 8px;
+}
+
+/* ============================================================
+   Decorative grids
+   ============================================================ */
+.cross-grid {
+  background-image:
+    linear-gradient(to right, rgba(26, 22, 37, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26, 22, 37, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.dot-bg {
+  background-image: radial-gradient(rgba(26, 22, 37, 0.10) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ============================================================
+   Selection & focus
+   ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   Scrollbar — slim, warm
+   ============================================================ */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-paper); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border: 2px solid var(--color-paper);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink); }
+
+/* ============================================================
+   Tags & pills
+   ============================================================ */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid var(--color-ink);
+  color: var(--color-ink-2);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag.is-accent {
+  background: var(--color-accent);
+  color: var(--color-paper);
+  border-color: var(--color-accent);
+}
+
+.tag.is-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+
+/* ============================================================
+   Card lift — a physical press, not a snappy hover
+   ============================================================ */
+.lift {
+  transition:
+    transform 420ms var(--ease-out-quint),
+    border-color 420ms var(--ease-out-quint),
+    box-shadow 420ms var(--ease-out-quint);
+  will-change: transform;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-ink);
+  box-shadow: 0 14px 0 -8px var(--color-paper-3);
+}
+@media (max-width: 640px) {
+  .lift:hover { transform: none; box-shadow: none; }
+}
+
+/* ============================================================
+   Link underline (animated scan)
+   ============================================================ */
+.link-line {
+  position: relative;
+  display: inline-block;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transform: scaleX(1);
+  transition: transform 380ms var(--ease-display);
+}
+.link-line:hover::after {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: link-rev 380ms var(--ease-display) forwards 80ms;
+}
+@keyframes link-rev {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+/* ============================================================
+   Page in
+   ============================================================ */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-in {
+  animation: page-in 480ms var(--ease-out-quint) both;
+}
+
+/* ============================================================
+   Section label — horizontal rule with mono caps
+   ============================================================ */
+.mag-section-label {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-block: 12px 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+.mag-section-label .rule {
+  height: 1px;
+  background: var(--color-ink);
+}
+
+/* ============================================================
+   Aspect helpers
+   ============================================================ */
+.ratio-16-9  { aspect-ratio: 16 / 9;  }
+.ratio-16-10 { aspect-ratio: 16 / 10; }
+.ratio-4-3   { aspect-ratio: 4 / 3;   }
+.ratio-1-1   { aspect-ratio: 1 / 1;   }
+.ratio-21-9  { aspect-ratio: 21 / 9;  }
+.ratio-3-2   { aspect-ratio: 3 / 2;   }
+.ratio-2-3   { aspect-ratio: 2 / 3;   }
+
+/* ============================================================
+   Prose (markdown body) — keep adjacent tokens consistent
+   ============================================================ */
+.prose {
+  color: var(--color-ink-2);
+  font-size: 17px;
+  line-height: 1.8;
+  word-break: break-word;
+}
+
+.prose > * + * { margin-top: 1.1em; }
+.prose > * + h2 { margin-top: 2.4em; }
+.prose > * + h3 { margin-top: 2em; }
+
+.prose h1, .prose h2, .prose h3,
+.prose h4, .prose h5, .prose h6 {
+  scroll-margin-top: 100px;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  font-family: var(--font-display);
+  font-feature-settings: "ss01", "salt";
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+}
+.prose h1 {
+  font-size: clamp(32px, 4.5vw, 44px);
+  font-weight: 500;
+  line-height: 1.1;
+  margin-top: 0.6em;
+}
+.prose h2 {
+  font-size: clamp(24px, 3.4vw, 30px);
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-line);
+}
+.prose h3 {
+  font-size: clamp(18px, 2.6vw, 22px);
+  font-weight: 500;
+}
+.prose h4 {
+  font-weight: 600;
+  font-size: 17px;
+  margin-top: 1.6em;
+}
+.prose h5, .prose h6 {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.prose h5 { font-size: 13px; }
+.prose h6 { font-size: 11px; color: var(--color-mute); }
+
+.prose p { margin: 0; }
+
+.prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms, text-decoration-thickness 200ms;
+}
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+}
+
+.prose strong { color: var(--color-ink); font-weight: 600; }
+.prose em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-feature-settings: "ss01", "salt";
+  color: var(--color-ink-2);
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin: 0;
+}
+.prose ul { list-style: none; }
+.prose ul > li {
+  position: relative;
+  padding-left: 1.2em;
+  margin: 0.3em 0;
+}
+.prose ul > li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-accent);
+}
+.prose ol { list-style: decimal; }
+.prose ol > li { margin: 0.3em 0; padding-left: 0.2em; }
+.prose ol > li::marker { color: var(--color-mute); font-variant-numeric: tabular-nums; }
+
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-accent-tint);
+  padding: 14px 18px;
+  margin: 1.4em 0;
+  color: var(--color-ink-2);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-feature-settings: "ss01", "salt";
+  font-size: 19px;
+  line-height: 1.5;
+}
+.prose blockquote p { margin: 0; }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  padding: 2px 6px;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-line-soft);
+  color: var(--color-ink);
+}
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  background: var(--color-ink);
+  color: #E9E3D3;
+  padding: 18px 20px;
+  overflow-x: auto;
+  margin: 1.6em 0;
+  border-left: 3px solid var(--color-accent);
+}
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 2.6em 0;
+}
+
+.prose img, .prose video, .prose iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.6em auto;
+  border: 1px solid var(--color-line);
+}
+.prose iframe { aspect-ratio: 16 / 9; }
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 1.6em 0;
+  border: 1px solid var(--color-line);
+  font-variant-numeric: tabular-nums;
+}
+.prose thead {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--color-line);
+  vertical-align: top;
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.prose tbody tr:nth-child(even) td {
+  background: var(--color-paper-2);
+}
+
+.prose kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 2px 6px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-ink);
+  border-bottom-width: 2px;
+  color: var(--color-ink);
+  display: inline-block;
+}
+
+.prose del { color: var(--color-mute); }

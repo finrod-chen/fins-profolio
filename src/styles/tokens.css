@@ -1,0 +1,51 @@
+/* ============================================================
+   Design Tokens — Editorial / Corallo / Fraunces × Geist
+   ------------------------------------------------------------
+   A 12-color token system for a print-magazine inspired layout.
+   The palette is warm (corallo + faded papyrus) with deep plum
+   ink and, intentionally, very limited chroma elsewhere. The
+   the goal is "literary supplement," not "tech portfolio."
+   ============================================================ */
+@theme {
+  /* Fonts — 3-tier system */
+  --font-display: "Fraunces", "Iowan Old Style", "Times New Roman", "Songti TC", "Noto Serif TC", serif;
+  --font-sans:    "Geist",    ui-sans-serif, system-ui, "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif;
+  --font-mono:    "Geist Mono", ui-monospace, "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* ---------- Neutrals (editorial cream) ---------- */
+  --color-paper:       #F4EFE6;  /* base bg — warm, off-white cream */
+  --color-paper-2:     #ECE6DA;  /* section alt */
+  --color-paper-3:     #E1DBC9;  /* hairline surface */
+  --color-cream-deep:  #D9D1BB;  /* deeper wash */
+  --color-ink:         #1A1625;  /* primary text — deep plum-black */
+  --color-ink-2:       #3B3340;  /* secondary text */
+  --color-mute:        #6B6273;  /* tertiary text */
+  --color-line:        #C9C0AA;  /* borders — warm taupe, NOT gray */
+  --color-line-soft:   #DCD3BC;  /* soft borders */
+
+  /* ---------- Brand: Corallo (warm coral) ---------- */
+  --color-accent:         #D97757; /* primary corallo, slightly desaturated */
+  --color-accent-deep:    #B85C3D; /* deeper for hover */
+  --color-accent-deep-2:  #8F3F26; /* deepest, for type highlights */
+  --color-accent-tint:    #F5D9CB; /* peach wash */
+  --color-accent-tint-2:  #EFBFA9; /* mid wash */
+
+  /* ---------- Brand: Inkwell (deep indigo) ---------- */
+  --color-indigo:        #2A2742; /* second brand tone */
+  --color-indigo-soft:   #3D3960;
+
+  /* ---------- Functional ---------- */
+  --color-success: #5E8A6A;
+  --color-warn:    #C28A3E;
+
+  /* ---------- Geometry ---------- */
+  --grid-baseline: 8px;          /* all vertical rhythm */
+  --baseline-mult: 6;            /* default 48px stride */
+  --col-gutter:    24px;
+
+  /* ---------- Motion easings ---------- */
+  --ease-out-quint:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-expo:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:     cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-display:    cubic-bezier(0.7, 0, 0.2, 1);  /* headline fills */
+}
