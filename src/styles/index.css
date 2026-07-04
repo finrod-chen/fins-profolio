@@ -3,12 +3,12 @@
 @import "./animations.css";
 
 /* ============================================================
-   Base — paper-and-ink rendering
+   Base — 文件白頁面
    ============================================================ */
 :root {
   color-scheme: light;
   font-family: var(--font-sans);
-  font-feature-settings: "ss01", "cv11";
+  font-feature-settings: "kern";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -23,23 +23,9 @@ html, body {
 
 body {
   min-height: 100svh;
-}
-
-/* Subtle warm paper grain — three-tone, almost invisible,
-   barely there until you stare. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-  background-image:
-    radial-gradient(rgba(154, 130, 89, 0.05) 1px, transparent 1.5px),
-    radial-gradient(rgba(154, 130, 89, 0.03) 1px, transparent 1.5px);
-  background-size: 3px 3px, 7px 7px;
-  background-position: 0 0, 1px 2px;
-  mix-blend-mode: multiply;
+  /* Chinese punctuation line-break */
+  line-break: strict;
+  word-break: break-word;
 }
 
 * {
@@ -47,18 +33,23 @@ body::before {
 }
 
 ::selection {
-  background: var(--color-accent-tint);
-  color: var(--color-accent-deep-2);
+  background: var(--color-accent);
+  color: white;
 }
 
 /* ============================================================
    Typography helpers
    ============================================================ */
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
 .font-display {
   font-family: var(--font-display);
-  font-feature-settings: "ss01", "ss02", "salt";
-  font-variation-settings: "opsz" 144, "wght" 400;
-  letter-spacing: -0.02em;
 }
 
 .font-mono {
@@ -70,64 +61,24 @@ body::before {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-mute);
 }
 
-.mag-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-ink);
-  border-top: 1px solid var(--color-ink);
-  padding-top: 6px;
-}
-
 /* ============================================================
-   Baseline grid (8px) — for editorial rhythm
-   Use via bg-baseline (visual debug) or just rely on padding
-   multiples when writing layouts.
+   Grids (skipped — too decorative for this design language)
    ============================================================ */
-.baseline-6 { padding-block: calc(var(--grid-baseline) * var(--baseline-mult)); }
-.baseline-8 { padding-block: calc(var(--grid-baseline) * 8); }
-.baseline-12 { padding-block: calc(var(--grid-baseline) * 12); }
-
-/* Debug baseline — never applied by default; opt in with `data-grid` */
-[data-grid="1"] body {
-  background-image:
-    linear-gradient(to bottom, rgba(184, 92, 61, 0.05) 1px, transparent 1px);
-  background-size: 100% 8px;
-}
 
 /* ============================================================
-   Decorative grids
-   ============================================================ */
-.cross-grid {
-  background-image:
-    linear-gradient(to right, rgba(26, 22, 37, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(26, 22, 37, 0.05) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
-.dot-bg {
-  background-image: radial-gradient(rgba(26, 22, 37, 0.10) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-/* ============================================================
-   Selection & focus
+   Focus & scrollbar
    ============================================================ */
 :focus-visible {
   outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
-/* ============================================================
-   Scrollbar — slim, warm
-   ============================================================ */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-paper); }
 ::-webkit-scrollbar-thumb {
@@ -135,63 +86,60 @@ body::before {
   border: 2px solid var(--color-paper);
   border-radius: 0;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--color-ink); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
 
 /* ============================================================
-   Tags & pills
+   Tags & pills — 簡約文件用
    ============================================================ */
 .tag {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  padding: 4px 8px;
-  border: 1px solid var(--color-ink);
+  padding: 3px 8px;
+  border: 1px solid var(--color-line);
   color: var(--color-ink-2);
-  background: transparent;
+  background: var(--color-paper);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
 }
-
 .tag.is-accent {
   background: var(--color-accent);
-  color: var(--color-paper);
+  color: white;
   border-color: var(--color-accent);
 }
-
 .tag.is-ink {
   background: var(--color-ink);
-  color: var(--color-paper);
+  color: white;
   border-color: var(--color-ink);
 }
 
 /* ============================================================
-   Card lift — a physical press, not a snappy hover
+   Card lift
    ============================================================ */
 .lift {
   transition:
-    transform 420ms var(--ease-out-quint),
-    border-color 420ms var(--ease-out-quint),
-    box-shadow 420ms var(--ease-out-quint);
-  will-change: transform;
+    transform 240ms var(--ease-out-quint),
+    border-color 240ms var(--ease-out-quint),
+    box-shadow 240ms var(--ease-out-quint);
 }
 .lift:hover {
-  transform: translateY(-3px);
-  border-color: var(--color-ink);
-  box-shadow: 0 14px 0 -8px var(--color-paper-3);
+  transform: translateY(-2px);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 12px -4px rgba(29, 78, 216, 0.18);
 }
 @media (max-width: 640px) {
   .lift:hover { transform: none; box-shadow: none; }
 }
 
 /* ============================================================
-   Link underline (animated scan)
+   Link underline (animated scan, gentle)
    ============================================================ */
 .link-line {
   position: relative;
   display: inline-block;
+  text-decoration: none;
 }
 .link-line::after {
   content: "";
@@ -203,12 +151,12 @@ body::before {
   background: currentColor;
   transform-origin: right;
   transform: scaleX(1);
-  transition: transform 380ms var(--ease-display);
+  transition: transform 280ms cubic-bezier(0.7, 0, 0.2, 1);
 }
 .link-line:hover::after {
   transform-origin: left;
   transform: scaleX(0);
-  animation: link-rev 380ms var(--ease-display) forwards 80ms;
+  animation: link-rev 280ms cubic-bezier(0.7, 0, 0.2, 1) forwards 60ms;
 }
 @keyframes link-rev {
   from { transform: scaleX(0); transform-origin: left; }
@@ -216,35 +164,30 @@ body::before {
 }
 
 /* ============================================================
-   Page in
+   Section header — 文件化章節標題（左名 / 右日期）
    ============================================================ */
-@keyframes page-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.page-in {
-  animation: page-in 480ms var(--ease-out-quint) both;
-}
-
-/* ============================================================
-   Section label — horizontal rule with mono caps
-   ============================================================ */
-.mag-section-label {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
+.section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
   gap: 16px;
-  margin-block: 12px 32px;
+  padding-bottom: 12px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--color-ink);
+}
+.section-header .section-title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+.section-header .section-meta {
   font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-ink);
-}
-.mag-section-label .rule {
-  height: 1px;
-  background: var(--color-ink);
+  color: var(--color-mute);
 }
 
 /* ============================================================
@@ -253,18 +196,17 @@ body::before {
 .ratio-16-9  { aspect-ratio: 16 / 9;  }
 .ratio-16-10 { aspect-ratio: 16 / 10; }
 .ratio-4-3   { aspect-ratio: 4 / 3;   }
+.ratio-3-2   { aspect-ratio: 3 / 2;   }
 .ratio-1-1   { aspect-ratio: 1 / 1;   }
 .ratio-21-9  { aspect-ratio: 21 / 9;  }
-.ratio-3-2   { aspect-ratio: 3 / 2;   }
-.ratio-2-3   { aspect-ratio: 2 / 3;   }
 
 /* ============================================================
-   Prose (markdown body) — keep adjacent tokens consistent
+   Prose — markdown body (中文)
    ============================================================ */
 .prose {
   color: var(--color-ink-2);
   font-size: 17px;
-  line-height: 1.8;
+  line-height: 1.9;  /* 較寬行距中文 */
   word-break: break-word;
 }
 
@@ -277,38 +219,41 @@ body::before {
   scroll-margin-top: 100px;
 }
 
-.prose h1, .prose h2, .prose h3 {
-  font-family: var(--font-display);
-  font-feature-settings: "ss01", "salt";
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
-}
 .prose h1 {
-  font-size: clamp(32px, 4.5vw, 44px);
-  font-weight: 500;
-  line-height: 1.1;
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 3.6vw, 36px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--color-ink);
   margin-top: 0.6em;
 }
 .prose h2 {
-  font-size: clamp(24px, 3.4vw, 30px);
-  font-weight: 500;
-  line-height: 1.2;
+  font-family: var(--font-serif);
+  font-size: clamp(22px, 2.8vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.35;
+  color: var(--color-ink);
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--color-line);
 }
 .prose h3 {
-  font-size: clamp(18px, 2.6vw, 22px);
-  font-weight: 500;
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 600;
+  color: var(--color-ink);
 }
 .prose h4 {
   font-weight: 600;
   font-size: 17px;
+  color: var(--color-ink);
   margin-top: 1.6em;
 }
 .prose h5, .prose h6 {
   font-family: var(--font-mono);
   font-weight: 500;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 .prose h5 { font-size: 13px; }
@@ -317,7 +262,7 @@ body::before {
 .prose p { margin: 0; }
 
 .prose a {
-  color: var(--color-ink);
+  color: var(--color-accent-hover);
   text-decoration: underline;
   text-decoration-color: var(--color-line);
   text-decoration-thickness: 1px;
@@ -330,12 +275,7 @@ body::before {
 }
 
 .prose strong { color: var(--color-ink); font-weight: 600; }
-.prose em {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-feature-settings: "ss01", "salt";
-  color: var(--color-ink-2);
-}
+.prose em { font-style: italic; }
 
 .prose ul, .prose ol {
   padding-left: 1.5em;
@@ -360,21 +300,16 @@ body::before {
 
 .prose blockquote {
   border-left: 3px solid var(--color-accent);
-  background: var(--color-accent-tint);
-  padding: 14px 18px;
+  background: var(--color-paper-2);
+  padding: 12px 16px;
   margin: 1.4em 0;
   color: var(--color-ink-2);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-feature-settings: "ss01", "salt";
-  font-size: 19px;
-  line-height: 1.5;
 }
 .prose blockquote p { margin: 0; }
 
 .prose code {
   font-family: var(--font-mono);
-  font-size: 0.86em;
+  font-size: 0.88em;
   padding: 2px 6px;
   background: var(--color-paper-2);
   border: 1px solid var(--color-line-soft);
@@ -385,8 +320,8 @@ body::before {
   font-size: 13px;
   line-height: 1.7;
   background: var(--color-ink);
-  color: #E9E3D3;
-  padding: 18px 20px;
+  color: #E2E8F0;
+  padding: 16px 18px;
   overflow-x: auto;
   margin: 1.6em 0;
   border-left: 3px solid var(--color-accent);
@@ -402,7 +337,7 @@ body::before {
 .prose hr {
   border: 0;
   border-top: 1px solid var(--color-line);
-  margin: 2.6em 0;
+  margin: 2.4em 0;
 }
 
 .prose img, .prose video, .prose iframe {
@@ -423,8 +358,8 @@ body::before {
   font-variant-numeric: tabular-nums;
 }
 .prose thead {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-accent);
+  color: white;
 }
 .prose th, .prose td {
   text-align: left;
@@ -437,7 +372,7 @@ body::before {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
 }
 .prose tbody tr:nth-child(even) td {
   background: var(--color-paper-2);

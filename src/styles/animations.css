@@ -1,50 +1,20 @@
 /* ============================================================
-   Animations — type-as-motion for editorial layouts
-   ------------------------------------------------------------
-   Everything here respects prefers-reduced-motion.
+   Animations — minimal; scroll-reveal only.
+   Document-style sites don't need scramble / drift / mask-up.
    ============================================================ */
 
-/* ---------- Fill-wipe reveal (one-shot) ---------- */
-@keyframes fill-up {
-  from { transform: scaleY(0); transform-origin: bottom; }
-  to   { transform: scaleY(1); transform-origin: bottom; }
-}
-
-.fill-wipe {
-  transform: scaleY(0);
-  transform-origin: bottom;
-  animation: fill-up 820ms var(--ease-display, cubic-bezier(0.7,0,0.2,1)) forwards;
-  animation-delay: var(--fill-delay, 0ms);
-}
-
-/* Mask reveal for headline — wipes up from the baseline */
-@keyframes mask-up {
-  from { clip-path: inset(100% 0% 0% 0%); }
-  to   { clip-path: inset(0%   0% 0% 0%); }
-}
-.mask-up {
-  clip-path: inset(100% 0% 0% 0%);
-  animation: mask-up 920ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)) forwards;
-  animation-delay: var(--mask-delay, 0ms);
-}
-
-/* Soft scroll-reveal (CSS-only, used as fallback when JS hook
-   hasn't run yet) */
-@keyframes reveal-soft {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* Scroll-reveal — used with [data-reveal] attributes */
 .reveal {
   opacity: 0;
-  transform: translate3d(0, 18px, 0);
+  transform: translateY(14px);
   transition:
-    opacity 760ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)),
-    transform 760ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1));
+    opacity 600ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1)),
+    transform 600ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1));
   transition-delay: var(--reveal-delay, 0ms);
 }
 .reveal.is-in {
   opacity: 1;
-  transform: translate3d(0, 0, 0);
+  transform: translateY(0);
 }
 .reveal[data-reveal-delay="1"] { transition-delay:  60ms; }
 .reveal[data-reveal-delay="2"] { transition-delay: 120ms; }
@@ -55,7 +25,7 @@
 .reveal[data-reveal-delay="7"] { transition-delay: 420ms; }
 .reveal[data-reveal-delay="8"] { transition-delay: 480ms; }
 
-/* ---------- Marquee ---------- */
+/* Marquee (used in HomePage) */
 @keyframes marquee-x {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -65,48 +35,23 @@
 }
 .marquee-track:hover { animation-play-state: paused; }
 
-/* ---------- Subtle drift (cream wash on hero) ---------- */
-@keyframes drift-y {
-  0%   { transform: translate3d(0,    0,  0); }
-  50%  { transform: translate3d(-1%, -0.6%, 0); }
-  100% { transform: translate3d(0,    0,  0); }
+/* Page-in (route change subtle fade) */
+@keyframes page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
-.drift {
-  animation: drift-y 28s ease-in-out infinite;
-  will-change: transform;
+.page-in {
+  animation: page-in 240ms var(--ease-out-quint) both;
 }
 
-/* ---------- Caret blink (for ScrambleText) ---------- */
-@keyframes caret-blink {
-  0%, 49%   { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-.caret {
-  display: inline-block;
-  width: 1px;
-  margin-left: 2px;
-  background: currentColor;
-  animation: caret-blink 900ms steps(1) infinite;
-}
-
-/* ---------- Underline scan (link) ---------- */
-.link-line::after {
-  transition: transform 380ms var(--ease-display, cubic-bezier(0.7,0,0.2,1));
-}
-
-/* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   .reveal,
   .reveal.is-in,
-  .fill-wipe,
-  .mask-up,
-  .drift {
+  .page-in {
     opacity: 1 !important;
     transform: none !important;
-    clip-path: none !important;
     transition: none !important;
     animation: none !important;
   }
   .marquee-track { animation: none !important; }
-  .caret { animation: none !important; opacity: 0; }
 }

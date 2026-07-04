@@ -9,17 +9,17 @@ import { findPost, posts, relatedPosts } from "@/data/blog";
 import { SectionLabel } from "@/components/SectionLabel";
 import { useReveal } from "@/hooks/useReveal";
 
-// ─── TOC extract ─────────────────────────────────────────────
 interface Heading {
   id: string;
   level: number;
   text: string;
 }
+
 function extractToc(body: string): Heading[] {
   const slugger = new GithubSlugger();
+  const out: Heading[] = [];
   const lines = body.split(/\r?\n/);
   let inFence = false;
-  const out: Heading[] = [];
   for (const line of lines) {
     if (/^```/.test(line)) {
       inFence = !inFence;
@@ -28,7 +28,11 @@ function extractToc(body: string): Heading[] {
     if (inFence) continue;
     const m = line.match(/^(#{1,6})\s+(.+?)\s*#*\s*$/);
     if (!m) continue;
-    out.push({ id: slugger.slug(m[2].trim()), level: m[1].length, text: m[2].trim() });
+    out.push({
+      id: slugger.slug(m[2].trim()),
+      level: m[1].length,
+      text: m[2].trim(),
+    });
   }
   return out;
 }
@@ -74,8 +78,6 @@ function useScrollSpy(ids: string[], offsetTop = 140) {
   return active;
 }
 
-// ─── Main ────────────────────────────────────────────────────
-
 export function BlogPostPage() {
   useReveal();
   const { "*": splat } = useParams();
@@ -87,21 +89,19 @@ export function BlogPostPage() {
 
   if (!post) {
     return (
-      <div className="page-in px-5 sm:px-8 lg:px-12 py-24 sm:py-36 text-center">
-        <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)] mb-3">
-          Error · 404
-        </div>
-        <h1 className="font-display text-[clamp(28px,5vw,48px)] font-medium tracking-tight text-[var(--color-ink)]">
+      <div className="page-in px-5 sm:px-8 lg:px-12 py-24 text-center">
+        <div className="eyebrow mb-3">404 · 找不到文章</div>
+        <h1 className="font-serif text-[clamp(28px,4vw,40px)] font-semibold text-[var(--color-ink)]">
           找不到這篇文章
         </h1>
-        <p className="mt-3 text-[15px] text-[var(--color-mute)] max-w-md mx-auto">
+        <p className="mt-3 text-[14px] text-[var(--color-mute)] max-w-md mx-auto">
           文章可能已搬移、刪除、或連結拼錯。
         </p>
         <Link
           to="/blog"
-          className="mt-7 inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.18em] hover:bg-[var(--color-accent)] transition-colors"
+          className="mt-7 inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-white text-[13px] font-medium hover:bg-[var(--color-accent)] transition-colors"
         >
-          ← Back to blog
+          ← 回到文章列表
         </Link>
       </div>
     );
@@ -113,34 +113,38 @@ export function BlogPostPage() {
   const next = idx > 0 ? posts[idx - 1] : null;
 
   const formatDate = (d: Date) =>
-    d.toLocaleDateString("en-CA", { year: "numeric", month: "2-digit", day: "2-digit" });
-
-  const pageTitle = `${post.title} — FIN / Writing`;
-  const pageDesc = post.description || post.title;
+    d.toLocaleDateString("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
 
   return (
     <article className="page-in">
-      <title>{pageTitle}</title>
-      <meta name="description" content={pageDesc} />
-      <meta property="og:title" content={pageTitle} />
-      <meta property="og:description" content={pageDesc} />
-      <meta property="og:type" content="article" />
-      {post.heroImage && <meta property="og:image" content={post.heroImage} />}
+      <title>{post.title} — 文章</title>
+      <meta
+        name="description"
+        content={post.description || post.title}
+      />
 
-      {/* breadcrumb */}
       <div className="px-5 sm:px-8 lg:px-12 pt-10 sm:pt-14">
         <Link
           to="/blog"
-          className="inline-flex items-center gap-2 text-[11px] font-mono tracking-[0.18em] uppercase text-[var(--color-mute)] hover:text-[var(--color-accent-deep-2)] transition-colors"
+          className="inline-flex items-center gap-1.5 text-[12px] text-[var(--color-mute)] hover:text-[var(--color-accent)] transition-colors"
         >
-          <span aria-hidden>←</span> All Writing
+          <span aria-hidden>←</span> 回到文章列表
         </Link>
       </div>
 
-      {/* header */}
-      <header className="px-5 sm:px-8 lg:px-12 mt-8 sm:mt-10" data-reveal>
-        <div className="flex flex-wrap items-center gap-2 mb-5">
-          <Link to={`/blog?cat=${post.category}`} className="tag is-accent">
+      <header
+        className="px-5 sm:px-8 lg:px-12 mt-8 sm:mt-10"
+        data-reveal
+      >
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          <Link
+            to={`/blog?cat=${post.category}`}
+            className="tag is-accent"
+          >
             {post.category}
           </Link>
           <span className="tag">{formatDate(post.date)}</span>
@@ -150,23 +154,22 @@ export function BlogPostPage() {
             </span>
           ))}
         </div>
-        <h1 className="font-display text-[clamp(36px,6vw,72px)] font-medium leading-[1.05] tracking-[-0.02em] text-[var(--color-ink)] max-w-4xl">
+        <h1 className="font-serif text-[clamp(32px,5vw,56px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)] max-w-4xl">
           {post.title}
         </h1>
         {post.description && (
-          <p className="mt-6 max-w-3xl font-display italic text-[clamp(18px,1.6vw,22px)] leading-[1.5] text-[var(--color-ink-2)]">
+          <p className="mt-5 max-w-3xl text-[16px] sm:text-[17px] leading-[1.8] text-[var(--color-ink-2)]">
             {post.description}
           </p>
         )}
       </header>
 
-      {/* hero image */}
       {post.heroImage && (
         <div
-          className="px-5 sm:px-8 lg:px-12 mt-12 sm:mt-16"
+          className="px-5 sm:px-8 lg:px-12 mt-10 sm:mt-12"
           data-reveal
         >
-          <div className="border border-[var(--color-ink)]/15 bg-[var(--color-paper-2)] overflow-hidden">
+          <div className="border border-[var(--color-line)] bg-[var(--color-paper-2)] overflow-hidden">
             <img
               src={post.heroImage}
               alt=""
@@ -177,10 +180,9 @@ export function BlogPostPage() {
         </div>
       )}
 
-      {/* body + sidebar */}
-      <div className="px-5 sm:px-8 lg:px-12 mt-14 sm:mt-20 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+      <div className="px-5 sm:px-8 lg:px-12 mt-12 sm:mt-16 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
         <div className="lg:col-span-8">
-          <div className="prose" data-reveal>
+          <div className="prose max-w-prose" data-reveal>
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               rehypePlugins={[rehypeRaw, rehypeSlug]}
@@ -191,10 +193,10 @@ export function BlogPostPage() {
         </div>
 
         <aside className="lg:col-span-4" data-reveal>
-          <div className="lg:sticky lg:top-28 space-y-10">
+          <div className="lg:sticky lg:top-24 space-y-8">
             {toc.length > 1 && (
               <div>
-                <SectionLabel label="Contents" meta={`${toc.length}`} />
+                <SectionLabel title="目錄" />
                 <nav aria-label="Table of contents">
                   <ul className="border-l border-[var(--color-line)]">
                     {toc.map((h) => {
@@ -212,7 +214,7 @@ export function BlogPostPage() {
                         >
                           <a
                             href={`#${h.id}`}
-                            className={`group block py-1.5 pr-2 text-[13px] leading-[1.5] border-l-2 -ml-px transition-colors ${
+                            className={`block py-1 pr-2 text-[13px] leading-[1.5] border-l-2 -ml-px transition-colors ${
                               isActive
                                 ? "border-[var(--color-accent)] text-[var(--color-ink)] font-medium"
                                 : "border-transparent text-[var(--color-mute)] hover:text-[var(--color-ink)]"
@@ -228,28 +230,23 @@ export function BlogPostPage() {
               </div>
             )}
 
-            <div>
-              <SectionLabel label="About this entry" />
-              <dl className="space-y-3 text-[13px]">
-                <SpecRow k="Published" v={formatDate(post.date)} />
-                <SpecRow k="Category" v={post.category} />
-                {post.tags.length > 0 && (
-                  <SpecRow k="Tags" v={post.tags.join(", ")} />
-                )}
-              </dl>
-            </div>
-
             {related.length > 0 && (
               <div>
-                <SectionLabel label="More in this category" />
+                <SectionLabel title="相關文章" />
                 <ul className="border-t border-[var(--color-line)]">
                   {related.map((r) => (
-                    <li key={r.slug} className="border-b border-[var(--color-line)]">
-                      <Link to={`/blog/${r.slug}`} className="block py-3 group">
-                        <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] mb-0.5">
+                    <li
+                      key={r.slug}
+                      className="border-b border-[var(--color-line)]"
+                    >
+                      <Link
+                        to={`/blog/${r.slug}`}
+                        className="block py-3 group"
+                      >
+                        <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)] mb-0.5">
                           {formatDate(r.date)}
                         </div>
-                        <div className="font-display text-[16px] leading-[1.3] text-[var(--color-ink)] group-hover:text-[var(--color-accent-deep-2)] transition-colors line-clamp-2">
+                        <div className="font-serif text-[15px] font-medium leading-[1.3] text-[var(--color-ink)] group-hover:text-[var(--color-accent-hover)] transition-colors line-clamp-2">
                           {r.title}
                         </div>
                       </Link>
@@ -262,52 +259,40 @@ export function BlogPostPage() {
         </aside>
       </div>
 
-      {/* prev/next */}
-      <nav className="border-t border-[var(--color-ink)]/15">
-        <div className="px-5 sm:px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-ink)]/15">
+      <nav className="border-t border-[var(--color-line)]">
+        <div className="px-5 sm:px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-[var(--color-line)]">
           {prev ? (
             <Link
               to={`/blog/${prev.slug}`}
-              className="py-8 sm:py-10 sm:pr-6 group block"
+              className="py-7 sm:pr-6 group block"
             >
-              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-mute)] mb-2">
-                ← Older · {formatDate(prev.date)}
+              <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)] mb-2">
+                ← 較舊 · {formatDate(prev.date)}
               </div>
-              <div className="font-display text-[clamp(18px,2vw,24px)] font-medium leading-[1.2] tracking-tight text-[var(--color-ink-2)] group-hover:text-[var(--color-ink)] transition-colors line-clamp-2">
+              <div className="font-serif text-[clamp(16px,1.8vw,20px)] font-medium leading-snug text-[var(--color-ink-2)] group-hover:text-[var(--color-ink)] transition-colors line-clamp-2">
                 {prev.title}
               </div>
             </Link>
           ) : (
-            <div className="py-8 sm:py-10 sm:pr-6" />
+            <div className="py-7 sm:pr-6" />
           )}
           {next ? (
             <Link
               to={`/blog/${next.slug}`}
-              className="py-8 sm:py-10 sm:pl-6 group block text-left sm:text-right"
+              className="py-7 sm:pl-6 group block text-left sm:text-right"
             >
-              <div className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-mute)] mb-2">
-                Newer · {formatDate(next.date)} →
+              <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)] mb-2">
+                較新 · {formatDate(next.date)} →
               </div>
-              <div className="font-display text-[clamp(18px,2vw,24px)] font-medium leading-[1.2] tracking-tight text-[var(--color-ink-2)] group-hover:text-[var(--color-ink)] transition-colors line-clamp-2">
+              <div className="font-serif text-[clamp(16px,1.8vw,20px)] font-medium leading-snug text-[var(--color-ink-2)] group-hover:text-[var(--color-ink)] transition-colors line-clamp-2">
                 {next.title}
               </div>
             </Link>
           ) : (
-            <div className="py-8 sm:py-10 sm:pl-6" />
+            <div className="py-7 sm:pl-6" />
           )}
         </div>
       </nav>
     </article>
-  );
-}
-
-function SpecRow({ k, v }: { k: string; v: string }) {
-  return (
-    <div className="grid grid-cols-[110px_1fr] items-baseline gap-3">
-      <dt className="font-mono text-[10px] tracking-[0.2em] uppercase text-[var(--color-mute)]">
-        {k}
-      </dt>
-      <dd className="text-[13px] text-[var(--color-ink)] leading-[1.4]">{v}</dd>
-    </div>
   );
 }
