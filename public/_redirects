@@ -1,0 +1,4 @@
+# SPA fallback — serve index.html for any path so client-side routing
+# (React Router) can handle deep links like /blog/coding/... directly.
+# Used by Cloudflare Pages and Netlify.
+/*    /index.html   200

@@ -1,0 +1,414 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Design Tokens — Industrial / Light / Minimal
+   ============================================================ */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+
+  /* Neutrals — stone / zinc mix, warm-leaning */
+  --color-paper: #FAFAF9;        /* base bg */
+  --color-paper-2: #F4F4F2;      /* section alt */
+  --color-paper-3: #ECECE8;      /* hairline / surface */
+  --color-ink: #0A0A0A;          /* primary text */
+  --color-ink-2: #1F1F1E;        /* secondary text */
+  --color-mute: #6B6B68;         /* tertiary text */
+  --color-line: #D9D9D4;         /* borders */
+  --color-line-soft: #E7E7E2;    /* softer borders */
+
+  /* Brand accent — industrial orange */
+  --color-accent: #FF4D00;
+  --color-accent-ink: #FFFFFF;
+
+  /* Functional */
+  --color-success: #1F7A4D;
+  --color-warn: #B45309;
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+:root {
+  color-scheme: light;
+  font-family: var(--font-sans);
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+html, body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100svh;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+/* ============================================================
+   Typography helpers
+   ============================================================ */
+.font-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "zero";
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+.hairline {
+  border-color: var(--color-line);
+}
+
+/* ============================================================
+   Industrial details
+   ============================================================ */
+.cross-grid {
+  background-image:
+    linear-gradient(to right, rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media (min-width: 768px) {
+  .cross-grid {
+    background-size: 48px 48px;
+  }
+}
+
+.dot-bg {
+  background-image: radial-gradient(rgba(10, 10, 10, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.diag-stripe {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0,
+    transparent 6px,
+    rgba(10, 10, 10, 0.06) 6px,
+    rgba(10, 10, 10, 0.06) 7px
+  );
+}
+
+/* Subtle "rubber stamp" mark */
+.stamp {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid var(--color-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stamp::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--color-accent);
+  display: inline-block;
+}
+
+/* Card hover effect — keep it "industrial" */
+.lift {
+  transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              box-shadow 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+              border-color 220ms;
+}
+.lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-ink);
+  box-shadow: 0 8px 0 -4px var(--color-paper-3);
+}
+@media (max-width: 640px) {
+  .lift:hover { transform: none; }
+}
+
+/* Custom scrollbar — thin and neutral */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-paper); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border: 2px solid var(--color-paper);
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink); }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* Tag pill — minimal */
+.tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid var(--color-line);
+  color: var(--color-ink-2);
+  background: var(--color-paper);
+  display: inline-flex;
+  align-items: center;
+}
+
+.tag.is-accent {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border-color: var(--color-ink);
+}
+
+/* Animated underline link */
+.link-line {
+  position: relative;
+  display: inline-block;
+}
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: currentColor;
+  transform-origin: right;
+  transform: scaleX(1);
+  transition: transform 320ms cubic-bezier(0.7, 0, 0.2, 1);
+}
+.link-line:hover::after {
+  transform-origin: left;
+  transform: scaleX(0);
+  animation: link-rev 320ms cubic-bezier(0.7, 0, 0.2, 1) forwards 80ms;
+}
+@keyframes link-rev {
+  from { transform: scaleX(0); transform-origin: left; }
+  to   { transform: scaleX(1); transform-origin: left; }
+}
+
+/* Subtle page-load fade */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-in {
+  animation: page-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Aspect helpers (Tailwind already has these but for placeholder ratio) */
+.ratio-16-10 { aspect-ratio: 16 / 10; }
+.ratio-16-9  { aspect-ratio: 16 / 9;  }
+.ratio-4-3   { aspect-ratio: 4 / 3;   }
+.ratio-1-1   { aspect-ratio: 1 / 1;   }
+
+/* ============================================================
+   Prose — markdown 內容樣式
+   套用在 react-markdown 渲染後的元素上, 保持工業感淺色
+   ============================================================ */
+.prose {
+  color: var(--color-ink-2);
+  font-size: 16px;
+  line-height: 1.85;
+  word-break: break-word;
+}
+
+.prose > * + * { margin-top: 1.1em; }
+.prose > * + h2 { margin-top: 2.4em; }
+.prose > * + h3 { margin-top: 2em; }
+
+/* Heading anchors: prevent sticky header from covering jump target */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  scroll-margin-top: 100px;
+}
+
+.prose h1 {
+  font-size: clamp(28px, 4.5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--color-ink);
+  margin-top: 0.6em;
+}
+.prose h2 {
+  font-size: clamp(22px, 3.4vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--color-ink);
+  padding-bottom: 0.3em;
+  border-bottom: 1px solid var(--color-line);
+}
+.prose h3 {
+  font-size: clamp(18px, 2.6vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+.prose h4, .prose h5, .prose h6 {
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-top: 1.6em;
+}
+.prose h4 { font-size: 17px; }
+.prose h5 { font-size: 15px; text-transform: uppercase; letter-spacing: 0.05em; }
+.prose h6 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-mute); }
+
+.prose p { margin: 0; }
+
+.prose a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 200ms;
+}
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+}
+
+.prose strong { color: var(--color-ink); font-weight: 600; }
+.prose em { font-style: italic; }
+
+.prose ul, .prose ol {
+  padding-left: 1.5em;
+  margin: 0;
+}
+.prose ul { list-style: none; }
+.prose ul > li {
+  position: relative;
+  padding-left: 1.2em;
+  margin: 0.3em 0;
+}
+.prose ul > li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: var(--color-accent);
+  font-size: 0.85em;
+}
+.prose ol { list-style: decimal; }
+.prose ol > li { margin: 0.3em 0; padding-left: 0.2em; }
+.prose ol > li::marker { color: var(--color-mute); font-variant-numeric: tabular-nums; }
+
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-paper-2);
+  padding: 12px 16px;
+  margin: 1.2em 0;
+  color: var(--color-ink-2);
+  font-style: italic;
+}
+.prose blockquote p { margin: 0; }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 1px 6px;
+  background: var(--color-paper-2);
+  border: 1px solid var(--color-line-soft);
+  color: var(--color-ink);
+}
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.65;
+  background: var(--color-ink);
+  color: #E5E5E1;
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 1.4em 0;
+  border-left: 3px solid var(--color-accent);
+}
+.prose pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 2.4em 0;
+}
+
+.prose img, .prose video, .prose iframe {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.4em auto;
+  border: 1px solid var(--color-line);
+}
+.prose iframe { aspect-ratio: 16 / 9; }
+
+/* Table — industrial spec sheet style */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 1.4em 0;
+  border: 1px solid var(--color-line);
+  font-variant-numeric: tabular-nums;
+}
+.prose thead {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.prose th, .prose td {
+  text-align: left;
+  padding: 8px 12px;
+  border: 1px solid var(--color-line);
+  vertical-align: top;
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.prose tbody tr:nth-child(even) td {
+  background: var(--color-paper-2);
+}
+
+.prose kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 2px 6px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-ink);
+  border-bottom-width: 2px;
+  color: var(--color-ink);
+  display: inline-block;
+}
+
+.prose del { color: var(--color-mute); }
