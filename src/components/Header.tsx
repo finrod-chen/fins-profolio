@@ -41,72 +41,98 @@ export function Header() {
 
   return (
     <>
-      {/* 占位 spacer，當 shrunk 時 header 變 floating，需保留上方空間 */}
-      <header className="sticky top-2 sm:top-3 z-40 px-3 sm:px-6">
+      <header
+        className={`sticky z-40 bg-[var(--color-paper)] border-b border-[var(--color-line)] ${
+          shrunk ? "md:top-3 top-0" : "top-0"
+        }`}
+      >
+        {/* 手機版：rectangular full-width */}
         <div
-          className={`floating-pill ${shrunk ? "is-shrunk" : ""} h-14 sm:h-16`}
-          style={shrunk ? { maxWidth: 720, margin: "0 auto" } : { maxWidth: "100%" }}
+          className={`md:hidden h-14 px-5 flex items-center justify-between`}
         >
-          <div className="h-full flex items-center justify-between px-4 sm:px-6 lg:px-8">
-            <Link
-              to="/"
-              className="flex items-center gap-3 group"
-              onClick={() => setOpen(false)}
-            >
-              <div className="relative w-9 h-9 grid place-items-center bg-[var(--color-accent)] text-white transition-transform group-hover:rotate-[-6deg] duration-300">
-                <span className="font-mono text-[12px] font-bold leading-none">FR</span>
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
-              </div>
-              <div className="leading-tight hidden sm:block">
-                <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
-                  個人作品集
-                </div>
-                <div className="font-serif font-semibold text-[15px] tracking-tight text-[var(--color-ink)]">
-                  Finrod Chen
-                </div>
-              </div>
-            </Link>
+          <Link
+            to="/"
+            className="flex items-center gap-3"
+            onClick={() => setOpen(false)}
+          >
+            <div className="relative w-8 h-8 grid place-items-center bg-[var(--color-accent)] text-white">
+              <span className="font-mono text-[11px] font-bold leading-none">FR</span>
+              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
+            </div>
+            <div className="font-serif font-semibold text-[15px] tracking-tight text-[var(--color-ink)]">
+              Finrod Chen
+            </div>
+          </Link>
+          <button
+            type="button"
+            aria-label={open ? "關閉選單" : "開啟選單"}
+            aria-expanded={open}
+            className="-mr-2 p-2 text-[var(--color-ink)]"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
+            <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
+            <span className="block w-5 h-[1.5px] bg-current" />
+          </button>
+        </div>
 
-            <nav className="hidden md:flex items-center gap-6 text-[14px]">
-              {navItems.map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `link-line transition-colors ${
-                      isActive
-                        ? "text-[var(--color-ink)] font-medium"
-                        : "text-[var(--color-ink-2)] hover:text-[var(--color-accent)]"
-                    }`
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              ))}
-              <a href="mailto:me@finrod.xyz" className="ml-3 btn btn-coral">
-                <span>聯絡</span>
-                <span className="hover-arrow" aria-hidden>↗</span>
-              </a>
-            </nav>
+        {/* 桌面版：floating pill 在 top-3 scroll 時縮成 720 */}
+        <div
+          className={`hidden md:block px-3 sm:px-6 ${shrunk ? "fixed top-3 left-0 right-0 z-40" : ""}`}
+        >
+          <div
+            className={`floating-pill ${shrunk ? "is-shrunk" : ""} h-14 sm:h-16 mx-auto`}
+            style={{ maxWidth: shrunk ? 720 : "100%" }}
+          >
+            <div className="h-full flex items-center justify-between px-5 sm:px-6 lg:px-8">
+              <Link
+                to="/"
+                className="flex items-center gap-3 group"
+                onClick={() => setOpen(false)}
+              >
+                <div className="relative w-9 h-9 grid place-items-center bg-[var(--color-accent)] text-white transition-transform group-hover:rotate-[-6deg] duration-300">
+                  <span className="font-mono text-[12px] font-bold leading-none">FR</span>
+                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
+                </div>
+                <div className="leading-tight">
+                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
+                    個人作品集
+                  </div>
+                  <div className="font-serif font-semibold text-[15px] tracking-tight text-[var(--color-ink)]">
+                    Finrod Chen
+                  </div>
+                </div>
+              </Link>
 
-            <button
-              type="button"
-              aria-label={open ? "關閉選單" : "開啟選單"}
-              aria-expanded={open}
-              className="md:hidden -mr-2 p-2 text-[var(--color-ink)]"
-              onClick={() => setOpen((v) => !v)}
-            >
-              <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
-              <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
-              <span className="block w-5 h-[1.5px] bg-current" />
-            </button>
+              <nav className="flex items-center gap-6 text-[14px]">
+                {navItems.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    className={({ isActive }) =>
+                      `link-line transition-colors ${
+                        isActive
+                          ? "text-[var(--color-ink)] font-medium"
+                          : "text-[var(--color-ink-2)] hover:text-[var(--color-accent)]"
+                      }`
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                ))}
+                <a href="mailto:me@finrod.xyz" className="ml-3 btn btn-coral">
+                  <span>聯絡</span>
+                  <span className="hover-arrow" aria-hidden>↗</span>
+                </a>
+              </nav>
+            </div>
           </div>
         </div>
 
         {open && (
-          <div className="md:hidden mt-2 floating-pill overflow-hidden">
-            <nav className="flex flex-col px-4 py-3 text-[15px]">
+          <div className="md:hidden border-t border-[var(--color-line-soft)] bg-[var(--color-paper)]">
+            <nav className="flex flex-col px-5 py-3 text-[15px]">
               {navItems.map((item) => (
                 <NavLink
                   key={item.to}

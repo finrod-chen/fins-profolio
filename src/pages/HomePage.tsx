@@ -58,24 +58,20 @@ export function HomePage() {
 
         <div className="relative">
           <h1
-            className="font-serif font-semibold leading-[0.88] tracking-[-0.04em] text-[var(--color-ink)]"
-            style={{ fontSize: "clamp(64px, 12vw, 168px)" }}
+            className="font-serif font-semibold leading-[0.92] tracking-[-0.03em] text-[var(--color-ink)]"
+            style={{ fontSize: "clamp(56px, 9vw, 132px)" }}
             data-reveal
           >
-            白天<br />
-            <span>
-              做
-              <span className="hl-accent hl-marker">細胞</span>
-              <span className="hl-coral">治療</span>
-              <span className="hl-accent">，</span>
+            <span className="block">白天做</span>
+            <span className="block">
+              <span className="text-[var(--color-coral)]">細胞治療</span>
+              <span>，</span>
             </span>
-            <br />
-            晚上<br />
-            <span>
-              寫
-              <span className="hl-coral">side</span>{" "}
-              <span className="hl-accent hl-underline">project</span>
-              <span className="hl-coral">。</span>
+            <span className="block">晚上寫</span>
+            <span className="block">
+              <span>side&nbsp;</span>
+              <span className="text-[var(--color-coral)]">project</span>
+              <span>。</span>
             </span>
           </h1>
 
@@ -110,9 +106,7 @@ export function HomePage() {
         >
           <div className="lg:col-span-7">
             <p className="font-serif text-[clamp(20px,2.4vw,28px)] leading-[1.55] tracking-tight text-[var(--color-ink-2)] max-w-2xl">
-              平常工作之餘做出來的網站作品 —{" "}
-              <span className="hl-accent">寫前端</span>、<span className="hl-coral">玩雲端</span>、
-              <span className="hl-amber">3D 列印</span>、<span className="hl-accent">Arduino</span>。
+              平常工作之餘做出來的網站作品 — 寫前端、玩雲端、3D 列印、Arduino。
               每個都做到一個可以說得上來的階段。
             </p>
           </div>
@@ -187,7 +181,7 @@ export function HomePage() {
             <p>
               寫網站、做 3D 列印、玩 Arduino 是另一回事 — 沒人審查、
               可以失敗、可以亂改。這裡放的每一個小玩意,
-              都是某個晚上「<span className="hl-coral">如果這樣做會怎樣</span>」的具現化。
+              都是某個晚上「如果這樣做<span className="text-[var(--color-coral)] font-semibold">會怎樣</span>」的具現化。
             </p>
             <div className="flex flex-wrap gap-2 pt-3">
               <span className="chip is-blue">生物工程</span>
@@ -258,7 +252,7 @@ export function HomePage() {
           label="Chapter 02 · 聯絡"
           title={
             <>
-              想<span className="hl-coral">聊</span>些什麼？
+              想聊些什麼<span className="hl-coral">？</span>
             </>
           }
           tone="coral"
@@ -268,7 +262,7 @@ export function HomePage() {
           <div className="lg:col-span-8">
             <p className="font-serif text-[clamp(28px,3.2vw,48px)] leading-[1.2] tracking-tight text-[var(--color-ink)]">
               技術的、做東西的、細胞治療的、<br className="hidden sm:block" />
-              或<span className="hl-amber">純粹好奇</span>的 — 就寫信給我。
+              或純粹好奇的 — 就寫信給我。
             </p>
             <a
               href="mailto:me@finrod.xyz"
