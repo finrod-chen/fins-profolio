@@ -28,7 +28,7 @@ export function HomePage() {
       <section className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-20 pb-12 sm:pb-16">
         <div className="max-w-4xl">
           <p className="text-[13px] text-[var(--color-mute)] mb-3">
-            陳思蒝 / 個人作品集 / 2026
+            Finrod Chen / 個人作品集 / 2026
           </p>
           <h1
             className="font-serif text-[clamp(36px,6vw,64px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)]"

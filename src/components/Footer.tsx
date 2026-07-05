@@ -11,7 +11,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           <div className="md:col-span-5">
             <div className="font-serif text-[20px] font-semibold leading-tight text-[var(--color-ink)]">
-              陳思蒝
+              Finrod Chen
             </div>
             <p className="mt-2 text-[13px] text-[var(--color-mute)] leading-relaxed">
               個人作品集 — 網站作品彙整、技術雜談、偶爾的 3D 列印與 Arduino 紀錄。
@@ -47,7 +47,7 @@ export function Footer() {
 
       <div className="border-t border-[var(--color-line-soft)]">
         <div className="px-5 sm:px-8 lg:px-12 h-12 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[11px] text-[var(--color-mute)]">
-          <div>© {new Date().getFullYear()} 陳思蒝 · Finrod Chen</div>
+          <div>© {new Date().getFullYear()} Finrod Chen</div>
           <div>本站以 Vite + React + Tailwind 構建</div>
         </div>
       </div>

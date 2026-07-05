@@ -13,7 +13,7 @@ export function AboutPage() {
           關於
         </h1>
         <p className="mt-3 text-[14px] text-[var(--color-mute)]">
-          陳思蒝 · 個人簡介
+          Finrod Chen · 個人簡介
         </p>
       </header>
 
@@ -21,7 +21,7 @@ export function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10" data-reveal>
           <div className="lg:col-span-7 space-y-5 text-[15px] sm:text-[16px] leading-[1.85] text-[var(--color-ink-2)] max-w-prose">
             <p>
-              我是陳思蒝 (Finrod), 喜躍生醫的研發主任。
+              我是 Finrod Chen, 喜躍生醫的研發主任。
               生物工程研究所畢業後一直在細胞治療產業 — 從製程工程師
               做到生產主任、資訊管理, 一直到現在帶領研發團隊與特管辦法案件。
             </p>
@@ -46,7 +46,7 @@ export function AboutPage() {
             <div className="border border-[var(--color-line)] bg-[var(--color-paper-2)] p-6">
               <div className="eyebrow mb-3">基本資料</div>
               <dl className="space-y-3 text-[14px]">
-                <Row k="姓名" v="陳思蒝 / Finrod Chen" />
+                <Row k="姓名" v="Finrod Chen" />
                 <Row k="Email" v={<a href="mailto:me@finrod.xyz" className="link-line text-[var(--color-accent-hover)]">me@finrod.xyz</a>} />
                 <Row k="地點" v="新北市永和, TW" />
                 <Row k="本職" v="研發主任 · 喜躍生醫" />

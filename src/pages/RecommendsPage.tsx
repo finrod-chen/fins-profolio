@@ -41,10 +41,10 @@ export function RecommendsPage() {
   useReveal();
   return (
     <article className="page-in">
-      <title>好物 — 陳思蒝</title>
+      <title>好物 — Finrod Chen</title>
       <meta
         name="description"
-        content="陳思蒝用過覺得值得的生活好物, 加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
+        content="Finrod Chen 用過覺得值得的生活好物, 加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
       />
 
       <header

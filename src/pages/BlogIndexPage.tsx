@@ -36,7 +36,7 @@ export function BlogIndexPage() {
 
   const pageTitle =
     active === "All"
-      ? "文章列表 — 陳思蒝"
+      ? "文章列表 — Finrod Chen"
       : `${active} — 文章列表`;
 
   return (

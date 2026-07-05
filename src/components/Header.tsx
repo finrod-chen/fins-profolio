@@ -31,7 +31,7 @@ export function Header() {
               個人作品集
             </div>
             <div className="font-serif font-semibold text-[15px] tracking-tight text-[var(--color-ink)]">
-              陳思蒝
+              Finrod Chen
             </div>
           </div>
         </Link>
