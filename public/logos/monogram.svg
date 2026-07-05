@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2003/svg" viewBox="0 0 72 72" role="img" aria-label="Finrod monogram">
+  <rect width="72" height="72" rx="14" fill="#0A0E1A"/>
+  <!-- Geometric F -->
+  <g fill="#FAFAF7">
+    <rect x="16" y="16" width="13" height="40"/>
+    <rect x="16" y="16" width="40" height="13"/>
+    <rect x="16" y="29" width="24" height="10"/>
+  </g>
+  <!-- coral dot -->
+  <circle cx="56" cy="56" r="6" fill="#FF6B5C"/>
+  <!-- electric blue corner mark -->
+  <rect x="14" y="56" width="22" height="3" fill="#0066FF"/>
+</svg>

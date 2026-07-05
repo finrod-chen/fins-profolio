@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
+import { Logo } from "@/components/Logo";
 
 /**
- * Footer — 三列平實 (個人 / 網站 / 其它)，加上底部 marquee。
+ * Footer — 三列平實 (個人 / 網站 / 其它)。
  */
 export function Footer() {
   return (
@@ -9,14 +10,7 @@ export function Footer() {
       <div className="px-5 sm:px-8 lg:px-12 py-12 md:py-16">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-10">
           <div className="md:col-span-5">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 grid place-items-center bg-[var(--color-accent)] text-white">
-                <span className="font-mono text-[11px] font-bold leading-none">FR</span>
-              </div>
-              <div className="font-serif text-[20px] font-semibold leading-tight text-[var(--color-ink)]">
-                Finrod Chen
-              </div>
-            </div>
+            <Logo variant="footer" asLink />
             <p className="mt-4 text-[14px] text-[var(--color-ink-2)] leading-relaxed max-w-md">
               個人作品集 — 網站、雲端、3D 列印、Arduino，以及細胞治療的種種紀錄。<br />
               <span className="text-[var(--color-mute)]">平常 9–17 點在研究室</span>

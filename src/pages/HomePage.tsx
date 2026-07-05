@@ -6,6 +6,7 @@ import { BloBg } from "@/components/BloBg";
 import { BigSectionNumber } from "@/components/BigSectionNumber";
 import { StatCard } from "@/components/StatCard";
 import { FinrodMark } from "@/components/FinrodMark";
+import { Logo } from "@/components/Logo";
 import { useReveal } from "@/hooks/useReveal";
 
 /**
@@ -54,6 +55,16 @@ export function HomePage() {
           <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
             Finrod · 2026 · v5
           </span>
+        </div>
+
+        {/* Logo plate — 大 mark + lockup tagline */}
+        <div
+          className="inline-flex items-stretch gap-0 border-2 border-[var(--color-ink)] bg-[var(--color-paper)] mb-10 sm:mb-14 group hover:-translate-y-0.5 transition-transform"
+          data-reveal
+        >
+          <Link to="/" className="flex items-center" aria-label="Finrod Chen — 回首頁">
+            <Logo variant="lockup" />
+          </Link>
         </div>
 
         <div className="relative">

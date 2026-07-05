@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { Logo } from "@/components/Logo";
 
 /**
  * Header — v5 bold
@@ -55,13 +56,7 @@ export function Header() {
             className="flex items-center gap-3"
             onClick={() => setOpen(false)}
           >
-            <div className="relative w-8 h-8 grid place-items-center bg-[var(--color-accent)] text-white">
-              <span className="font-mono text-[11px] font-bold leading-none">FR</span>
-              <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
-            </div>
-            <div className="font-serif font-semibold text-[15px] tracking-tight text-[var(--color-ink)]">
-              Finrod Chen
-            </div>
+            <Logo variant="mark" />
           </Link>
           <button
             type="button"
@@ -90,10 +85,9 @@ export function Header() {
                 className="flex items-center gap-3 group"
                 onClick={() => setOpen(false)}
               >
-                <div className="relative w-9 h-9 grid place-items-center bg-[var(--color-accent)] text-white transition-transform group-hover:rotate-[-6deg] duration-300">
-                  <span className="font-mono text-[12px] font-bold leading-none">FR</span>
-                  <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
-                </div>
+                <span className="transition-transform group-hover:rotate-[-6deg] duration-300">
+                  <Logo variant="mark" />
+                </span>
                 <div className="leading-tight">
                   <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
                     個人作品集
