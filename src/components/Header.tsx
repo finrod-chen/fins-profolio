@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Logo } from "@/components/Logo";
+import { LiveStatus } from "@/components/LiveStatus";
 
 /**
  * Header — v5 bold
@@ -49,26 +50,37 @@ export function Header() {
       >
         {/* 手機版：rectangular full-width */}
         <div
-          className={`md:hidden h-14 px-5 flex items-center justify-between`}
+          className={`md:hidden h-14 px-4 sm:px-5 flex items-center justify-between gap-3`}
         >
           <Link
             to="/"
-            className="flex items-center gap-3"
+            className="flex items-center gap-2.5 min-w-0"
             onClick={() => setOpen(false)}
           >
-            <Logo variant="mark" />
+            <Logo variant="mark" className="!w-9 !h-9 shrink-0" />
+            <div className="leading-tight min-w-0">
+              <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
+                個人作品集
+              </div>
+              <div className="font-serif font-semibold text-[14px] tracking-tight text-[var(--color-ink)] truncate">
+                Finrod Chen
+              </div>
+            </div>
           </Link>
-          <button
-            type="button"
-            aria-label={open ? "關閉選單" : "開啟選單"}
-            aria-expanded={open}
-            className="-mr-2 p-2 text-[var(--color-ink)]"
-            onClick={() => setOpen((v) => !v)}
-          >
-            <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
-            <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
-            <span className="block w-5 h-[1.5px] bg-current" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <LiveStatus compact mode="inline" />
+            <button
+              type="button"
+              aria-label={open ? "關閉選單" : "開啟選單"}
+              aria-expanded={open}
+              className="-mr-2 p-2 text-[var(--color-ink)]"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
+              <span className="block w-5 h-[1.5px] bg-current mb-[5px]" />
+              <span className="block w-5 h-[1.5px] bg-current" />
+            </button>
+          </div>
         </div>
 
         {/* 桌面版：floating pill 在 top-3 scroll 時縮成 720 */}
@@ -98,7 +110,7 @@ export function Header() {
                 </div>
               </Link>
 
-              <nav className="flex items-center gap-6 text-[14px]">
+              <nav className="flex items-center gap-4 sm:gap-6 text-[14px]">
                 {navItems.map((item) => (
                   <NavLink
                     key={item.to}
@@ -115,7 +127,13 @@ export function Header() {
                     {item.label}
                   </NavLink>
                 ))}
-                <a href="mailto:me@finrod.xyz" className="ml-3 btn btn-coral">
+                <LiveStatus
+                  compact={shrunk}
+                  showLabel={shrunk}
+                  mode="inline"
+                  className="ml-1"
+                />
+                <a href="mailto:me@finrod.xyz" className="ml-2 btn btn-coral">
                   <span>聯絡</span>
                   <span className="hover-arrow" aria-hidden>↗</span>
                 </a>

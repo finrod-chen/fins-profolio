@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 /**
  * Logo — Finrod Chen 品牌元件 (SVG inline)
  * variant:
- *   - "mark"      72x72 monogram
+ *   - "mark"      72x72 monogram (default)
  *   - "lockup"    280x72 logo + tagline
  *   - "favicon"   32x32 給 share image / OG 用
  *   - "footer"    220x56 給 footer 用
@@ -21,6 +21,12 @@ const dims: Record<LogoVariant, { w: number; h: number }> = {
   lockup:  { w: 280, h: 72 },
 };
 
+/** 偵測 className 內是否已含 width/height Tailwind 重要修飾 */
+function hasCustomSize(c?: string): boolean {
+  if (!c) return false;
+  return /!w-|!h-|w-\[|h-\[/.test(c);
+}
+
 export function Logo({
   variant = "mark",
   invert = false,
@@ -35,17 +41,20 @@ export function Logo({
   asLink?: boolean;
 }) {
   const { w, h } = dims[variant];
+  const useCustom = hasCustomSize(className);
+  const containerStyle: CSSProperties | undefined = useCustom
+    ? { display: "inline-block", lineHeight: 0 }
+    : { display: "inline-block", lineHeight: 0, width: w, height: h };
+
   const body: ReactNode =
     variant === "lockup" || variant === "footer"
-      ? <LockupSvg invert={invert} compact={variant === "footer"} />
-      : <MarkSvg size={w} invert={invert} />;
+      ? <LockupSvg invert={invert} compact={variant === "footer"} fill={useCustom} />
+      : <MarkSvg w={w} h={h} invert={invert} fill={useCustom} />;
 
   const el = (
     <span
-      className={`inline-block ${className}`}
-      style={className?.includes("!w-") || className?.includes("w-[")
-        ? undefined
-        : { width: w, height: h }}
+      className={`${useCustom ? className : `inline-block ${className}`}`}
+      style={containerStyle}
       role="img"
       aria-label="Finrod Chen"
     >
@@ -59,18 +68,18 @@ export function Logo({
   return el;
 }
 
-function MarkSvg({ size, invert }: { size: number; invert: boolean }) {
-  // 32 用 viewBox 32，72+ 用 viewBox 72 (內部抽象座標)
-  const vb = size <= 32 ? 32 : 72;
+function MarkSvg({ w, h, invert, fill }: { w: number; h: number; invert: boolean; fill: boolean }) {
+  const vb = w <= 32 ? 32 : 72;
   const bg = invert ? "#FAFAF7" : "#0A0E1A";
   const fg = invert ? "#0A0E1A" : "#FAFAF7";
 
   return (
     <svg
-      width={size}
-      height={size}
+      width={fill ? "100%" : w}
+      height={fill ? "100%" : h}
       viewBox={`0 0 ${vb} ${vb}`}
-      xmlns="http://www.w3.org/2003/svg"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
       style={{ display: "block" }}
     >
       <rect
@@ -111,15 +120,18 @@ function MarkSvg({ size, invert }: { size: number; invert: boolean }) {
   );
 }
 
-function LockupSvg({ invert, compact }: { invert: boolean; compact: boolean }) {
+function LockupSvg({ invert, compact, fill }: { invert: boolean; compact: boolean; fill: boolean }) {
   const fg = invert ? "#FAFAF7" : "#0A0E1A";
   const bg = invert ? "#0A0E1A" : "#FAFAF7";
+  const W = compact ? 220 : 280;
+  const H = compact ? 56 : 72;
   return (
     <svg
-      width="100%"
-      height="100%"
+      width={fill ? "100%" : W}
+      height={fill ? "100%" : H}
       viewBox={compact ? "0 0 220 56" : "0 0 280 72"}
-      xmlns="http://www.w3.org/2003/svg"
+      xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
       style={{ display: "block" }}
     >
       {/* monogram block */}

@@ -3,7 +3,6 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CursorDot } from "@/components/CursorDot";
-import { LiveStatus } from "@/components/LiveStatus";
 import { HomePage } from "@/pages/HomePage";
 
 // Route-level code splitting: keep the landing page lean. The About page,
@@ -48,7 +47,6 @@ function App() {
     <div className="min-h-svh flex flex-col bg-[var(--color-paper)] text-[var(--color-ink)]">
       <ScrollToTop />
       <CursorDot />
-      <LiveStatus />
       <Header />
       <main className="flex-1">
         <Suspense fallback={<RouteFallback />}>
