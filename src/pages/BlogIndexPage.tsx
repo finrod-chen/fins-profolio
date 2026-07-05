@@ -2,11 +2,11 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 import { posts, categories } from "@/data/blog";
 import { useReveal } from "@/hooks/useReveal";
+import { BigSectionNumber } from "@/components/BigSectionNumber";
 
 /**
- * BlogIndexPage — list of articles, sorted newest-first, with
- * a category filter above. No spreads, no standfirsts —
- * just a working reading list.
+ * BlogIndexPage — v5 bold
+ * 巨型章節編號 02 + 彩色 disc 背景 + 多色 stat rail。
  */
 export function BlogIndexPage() {
   useReveal();
@@ -47,25 +47,41 @@ export function BlogIndexPage() {
         content={`從 2013 到現在累積的 ${posts.length} 篇文章，散落在生技法規、細胞治療實務、side project 紀錄、與一些雜談。`}
       />
 
-      <header
-        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-6 sm:pb-10 relative"
-        data-reveal
-      >
-        <span className="sticker is-amber absolute top-10 right-5 sm:right-8 lg:right-12 rotate-[-3deg]">Blog ✦</span>
-        <h1 className="font-serif text-[clamp(40px,6vw,68px)] font-semibold leading-[1.1] tracking-tight text-[var(--color-ink)]">
-          文章<span className="text-[var(--color-coral)]">.</span>
-        </h1>
-        <p className="mt-3 text-[14px] text-[var(--color-mute)] max-w-prose">
+      <section className="px-5 sm:px-8 lg:px-12 pt-10 sm:pt-14 pb-6 sm:pb-10 relative">
+        <div
+          aria-hidden
+          className="absolute -top-10 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none opacity-15"
+          style={{ background: "radial-gradient(circle, var(--color-amber), transparent 70%)" }}
+        />
+        <span className="sticker is-amber absolute top-14 right-5 sm:right-8 lg:right-12 rotate-[-3deg] z-10 hidden sm:inline-block">Blog ✦</span>
+        <div data-reveal>
+          <BigSectionNumber
+            number="02"
+            label="文章"
+            title={
+              <>
+                文章<span className="hl-coral">.</span>
+              </>
+            }
+            tone="amber"
+            right={
+              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+                {posts.length} 篇文章 · {categories.length} 分類
+              </span>
+            }
+          />
+        </div>
+        <p className="mt-2 text-[14px] text-[var(--color-mute)] max-w-prose" data-reveal>
           從 2013 到現在累積的 {posts.length} 篇文章, 散落在生技法規、
           細胞治療實務、side project 紀錄、與一些雜談。
         </p>
-        <dl className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-[13px] border-t border-[var(--color-line)] pt-6">
+        <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-[13px] border-t border-[var(--color-line)] pt-6" data-reveal>
           <Stat k="篇數" v={String(posts.length)} rail="var(--color-accent)" />
           <Stat k="分類" v={String(categories.length)} rail="var(--color-coral)" />
           <Stat k="最早" v={formatDate(posts[posts.length - 1].date)} rail="var(--color-amber)" />
           <Stat k="最新" v={formatDate(posts[0].date)} rail="var(--color-accent-soft)" />
         </dl>
-      </header>
+      </section>
 
       {/* filter */}
       <section

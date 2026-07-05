@@ -7,6 +7,7 @@ import rehypeSlug from "rehype-slug";
 import GithubSlugger from "github-slugger";
 import { findPost, posts, relatedPosts } from "@/data/blog";
 import { SectionLabel } from "@/components/SectionLabel";
+import { BigSectionNumber } from "@/components/BigSectionNumber";
 import { useReveal } from "@/hooks/useReveal";
 
 interface Heading {
@@ -140,8 +141,8 @@ export function BlogPostPage() {
         className="px-5 sm:px-8 lg:px-12 mt-8 sm:mt-10 relative"
         data-reveal
       >
-        <span className="sticker is-coral absolute -top-2 right-5 sm:right-8 lg:right-12 rotate-[3deg] hidden sm:inline-block">Article ✦</span>
-        <div className="flex flex-wrap items-center gap-2 mb-4">
+        <span className="sticker is-coral absolute -top-2 right-5 sm:right-8 lg:right-12 rotate-[3deg] z-10 hidden sm:inline-block">Article ✦</span>
+        <div className="flex flex-wrap items-center gap-2 mb-6">
           <Link
             to={`/blog?cat=${post.category}`}
             className="chip is-blue"
@@ -155,11 +156,14 @@ export function BlogPostPage() {
             </span>
           ))}
         </div>
-        <h1 className="font-serif text-[clamp(36px,5.5vw,64px)] font-semibold leading-[1.15] tracking-tight text-[var(--color-ink)] max-w-4xl">
-          {post.title}
-        </h1>
+        <BigSectionNumber
+          number="02"
+          label={post.category}
+          title={<>{post.title}<span className="hl-coral">.</span></>}
+          tone="coral"
+        />
         {post.description && (
-          <p className="mt-5 max-w-3xl text-[16px] sm:text-[17px] leading-[1.8] text-[var(--color-ink-2)]">
+          <p className="mt-2 max-w-3xl text-[16px] sm:text-[18px] leading-[1.7] text-[var(--color-ink-2)]">
             {post.description}
           </p>
         )}

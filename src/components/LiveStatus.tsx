@@ -1,6 +1,6 @@
 /**
- * LiveStatus — 桌機頁面右上角浮動即時狀態。
- * 格式：「● live · 永和 · 19:24 · 🌙 在家寫程式」
+ * LiveStatus — 桌機頁面右上角浮動即時狀態 (無地名)。
+ * 「● live · HH:MM · 🌙 在家寫程式」
  * 每分鐘更新一次。
  */
 import { useEffect, useState } from "react";
@@ -24,7 +24,6 @@ export function LiveStatus() {
     return () => clearInterval(id);
   }, []);
 
-  // 不閃 SSR mismatch：前一刻渲染純框架，掛載後填值。
   if (!now) {
     return (
       <div className="hidden md:flex fixed top-20 right-5 z-40 chip is-out">
@@ -36,13 +35,12 @@ export function LiveStatus() {
 
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
-  const city = "永和, TW";
   const desc = describe(now.getHours());
 
   return (
     <div className="hidden md:flex fixed top-20 right-5 z-40 chip is-out">
       <span className="live-dot inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-success)]" />
-      <span>live · {city}</span>
+      <span>live</span>
       <span className="opacity-50">·</span>
       <span className="font-mono tabular-nums">{hh}:{mm}</span>
       <span className="opacity-50">·</span>

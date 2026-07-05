@@ -19,7 +19,7 @@ export function Footer() {
             </div>
             <p className="mt-4 text-[14px] text-[var(--color-ink-2)] leading-relaxed max-w-md">
               個人作品集 — 網站、雲端、3D 列印、Arduino，以及細胞治療的種種紀錄。<br />
-              <span className="text-[var(--color-mute)]">永和, TW · 平常 9–17 點在研究室</span>
+              <span className="text-[var(--color-mute)]">平常 9–17 點在研究室</span>
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               <span className="chip is-blue">個人</span>

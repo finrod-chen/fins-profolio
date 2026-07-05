@@ -369,3 +369,154 @@ body {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
 }
+
+/* ============================================================
+   v5 bold additions
+   ============================================================ */
+
+/* Giant hero circle — semi-transparent backing disc behind H1 */
+.giant-disc {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: -1;
+}
+.giant-disc.is-coral { background: radial-gradient(circle at 30% 30%, var(--color-coral), transparent 70%); }
+.giant-disc.is-blue  { background: radial-gradient(circle at 30% 30%, var(--color-accent), transparent 70%); }
+.giant-disc.is-amber { background: radial-gradient(circle at 30% 30%, var(--color-amber), transparent 70%); }
+
+/* Hand-drawn circle brush */
+.brush-circle {
+  border-radius: 9999px;
+  border: 2px solid var(--color-ink);
+  display: inline-block;
+}
+
+/* Stats card — v5: ring + huge number */
+.stat-card {
+  position: relative;
+  border-radius: 16px;
+  padding: 24px;
+  background: linear-gradient(180deg, var(--color-paper), var(--color-paper-2));
+  border: 1px solid var(--color-line);
+  overflow: hidden;
+  isolation: isolate;
+}
+.stat-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -30% -50% auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 9999px;
+  background: var(--rail, var(--color-accent));
+  opacity: 0.18;
+  z-index: -1;
+}
+.stat-card .stat-number {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  font-size: clamp(56px, 7vw, 96px);
+  color: var(--color-ink);
+}
+.stat-card .stat-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+  margin-top: 12px;
+}
+
+/* Faux highlight marker pen effect */
+.marker-highlight {
+  background: linear-gradient(180deg, transparent 50%, var(--color-amber) 50%, var(--color-amber) 90%, transparent 90%);
+  padding: 0 4px;
+}
+
+/* Section prologue — huge 編號 */
+.prologue {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.prologue .prologue-number {
+  font-family: var(--font-mono);
+  font-size: clamp(48px, 6vw, 88px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--color-accent);
+  opacity: 0.85;
+}
+.prologue .prologue-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+/* ProjectCard 3D prep — JSX 用 transform-style */
+.preserve-3d { transform-style: preserve-3d; }
+
+/* Marquee 大字版本 (v5) */
+.marquee-bigs {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(40px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.marquee-bigs-serif {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(40px, 6vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+/* Hero H1 color spans v5 — explicit color-helper */
+.hl-accent  { color: var(--color-accent); }
+.hl-coral   { color: var(--color-coral); }
+.hl-amber   { color: #E89A0A; } /* amber deeper for legibility */
+.hl-ink     { color: var(--color-ink); }
+.hl-mute    { color: var(--color-mute); }
+
+.hl-underline {
+  text-decoration: underline;
+  text-decoration-color: var(--color-amber);
+  text-decoration-thickness: 0.18em;
+  text-underline-offset: 0.08em;
+  text-decoration-skip-ink: none;
+}
+.hl-marker { background: linear-gradient(180deg, transparent 60%, var(--color-amber) 60%, var(--color-amber) 92%, transparent 92%); padding: 0 4px; }
+
+/* Wavy divider svg 容器 */
+.wave-divider { display: block; width: 100%; height: auto; }
+
+/* Dotted bg pattern (decorative) */
+.bg-dots {
+  background-image: radial-gradient(circle, var(--color-line) 1px, transparent 1px);
+  background-size: 18px 18px;
+  background-position: 0 0;
+}
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-line-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line-soft) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Finrod Mark — footer 上方巨型 SVG 包容器 */
+.finrod-mark {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  font-size: clamp(96px, 18vw, 280px);
+  user-select: none;
+}
