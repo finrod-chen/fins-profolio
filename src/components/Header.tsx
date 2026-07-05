@@ -3,7 +3,8 @@ import { Link, NavLink } from "react-router-dom";
 
 /**
  * Header — sticky, three-zone: logo left, nav center, CTA right.
- * No issue-strip, no masthead. Just a clean working nav.
+ * Logo 用電光藍方塊 + amber 焦點點綴，活潑版。
+ * 桌面 CTA 是 coral pill。
  */
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -23,8 +24,9 @@ export function Header() {
           className="flex items-center gap-3 group"
           onClick={() => setOpen(false)}
         >
-          <div className="w-9 h-9 grid place-items-center bg-[var(--color-accent)] text-white">
-            <span className="font-mono text-[12px] font-semibold leading-none">FR</span>
+          <div className="relative w-9 h-9 grid place-items-center bg-[var(--color-accent)] text-white transition-transform group-hover:rotate-[-6deg] duration-300">
+            <span className="font-mono text-[12px] font-bold leading-none">FR</span>
+            <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[var(--color-amber)] ring-2 ring-[var(--color-paper)]" />
           </div>
           <div className="leading-tight">
             <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
@@ -36,17 +38,17 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7 text-[14px]">
+        <nav className="hidden md:flex items-center gap-6 text-[14px]">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
               className={({ isActive }) =>
-                `link-line ${
+                `link-line transition-colors ${
                   isActive
                     ? "text-[var(--color-ink)] font-medium"
-                    : "text-[var(--color-ink-2)]"
+                    : "text-[var(--color-ink-2)] hover:text-[var(--color-accent)]"
                 }`
               }
             >
@@ -55,9 +57,10 @@ export function Header() {
           ))}
           <a
             href="mailto:me@finrod.xyz"
-            className="ml-3 inline-flex items-center gap-1.5 px-4 h-9 bg-[var(--color-ink)] text-white text-[12px] font-medium hover:bg-[var(--color-accent)] transition-colors"
+            className="ml-3 btn btn-coral"
           >
-            聯絡
+            <span>聯絡</span>
+            <span className="hover-arrow" aria-hidden>↗</span>
           </a>
         </nav>
 
@@ -85,21 +88,21 @@ export function Header() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `py-3 border-b border-[var(--color-line-soft)] flex items-center justify-between ${
-                    isActive ? "font-medium" : "text-[var(--color-ink-2)]"
+                    isActive ? "font-medium text-[var(--color-accent)]" : "text-[var(--color-ink-2)]"
                   }`
                 }
               >
                 <span>{item.label}</span>
-                <span className="text-[var(--color-mute)]">→</span>
+                <span className="text-[var(--color-mute)] hover-arrow">→</span>
               </NavLink>
             ))}
             <a
               href="mailto:me@finrod.xyz"
               onClick={() => setOpen(false)}
-              className="py-3 border-b border-[var(--color-line-soft)] flex items-center justify-between"
+              className="py-3 border-b border-[var(--color-line-soft)] flex items-center justify-between text-[var(--color-coral)]"
             >
               <span>聯絡</span>
-              <span className="text-[var(--color-mute)]">↗</span>
+              <span className="hover-arrow">↗</span>
             </a>
           </nav>
         </div>

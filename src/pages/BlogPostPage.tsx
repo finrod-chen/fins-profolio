@@ -99,9 +99,9 @@ export function BlogPostPage() {
         </p>
         <Link
           to="/blog"
-          className="mt-7 inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-white text-[13px] font-medium hover:bg-[var(--color-accent)] transition-colors"
+          className="mt-7 btn btn-primary"
         >
-          ← 回到文章列表
+          <span aria-hidden>←</span> 回到文章列表
         </Link>
       </div>
     );
@@ -137,24 +137,25 @@ export function BlogPostPage() {
       </div>
 
       <header
-        className="px-5 sm:px-8 lg:px-12 mt-8 sm:mt-10"
+        className="px-5 sm:px-8 lg:px-12 mt-8 sm:mt-10 relative"
         data-reveal
       >
+        <span className="sticker is-coral absolute -top-2 right-5 sm:right-8 lg:right-12 rotate-[3deg] hidden sm:inline-block">Article ✦</span>
         <div className="flex flex-wrap items-center gap-2 mb-4">
           <Link
             to={`/blog?cat=${post.category}`}
-            className="tag is-accent"
+            className="chip is-blue"
           >
             {post.category}
           </Link>
-          <span className="tag">{formatDate(post.date)}</span>
+          <span className="chip is-out">{formatDate(post.date)}</span>
           {post.tags.slice(0, 4).map((t) => (
-            <span key={t} className="tag">
-              {t}
+            <span key={t} className="chip is-amber">
+              #{t}
             </span>
           ))}
         </div>
-        <h1 className="font-serif text-[clamp(32px,5vw,56px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)] max-w-4xl">
+        <h1 className="font-serif text-[clamp(36px,5.5vw,64px)] font-semibold leading-[1.15] tracking-tight text-[var(--color-ink)] max-w-4xl">
           {post.title}
         </h1>
         {post.description && (

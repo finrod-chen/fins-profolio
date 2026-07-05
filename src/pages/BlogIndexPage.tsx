@@ -48,21 +48,22 @@ export function BlogIndexPage() {
       />
 
       <header
-        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-6 sm:pb-10"
+        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-6 sm:pb-10 relative"
         data-reveal
       >
-        <h1 className="font-serif text-[clamp(32px,5vw,52px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)]">
-          文章
+        <span className="sticker is-amber absolute top-10 right-5 sm:right-8 lg:right-12 rotate-[-3deg]">Blog ✦</span>
+        <h1 className="font-serif text-[clamp(40px,6vw,68px)] font-semibold leading-[1.1] tracking-tight text-[var(--color-ink)]">
+          文章<span className="text-[var(--color-coral)]">.</span>
         </h1>
         <p className="mt-3 text-[14px] text-[var(--color-mute)] max-w-prose">
           從 2013 到現在累積的 {posts.length} 篇文章, 散落在生技法規、
           細胞治療實務、side project 紀錄、與一些雜談。
         </p>
         <dl className="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-[13px] border-t border-[var(--color-line)] pt-6">
-          <Stat k="篇數" v={String(posts.length)} />
-          <Stat k="分類" v={String(categories.length)} />
-          <Stat k="最早" v={formatDate(posts[posts.length - 1].date)} />
-          <Stat k="最新" v={formatDate(posts[0].date)} />
+          <Stat k="篇數" v={String(posts.length)} rail="var(--color-accent)" />
+          <Stat k="分類" v={String(categories.length)} rail="var(--color-coral)" />
+          <Stat k="最早" v={formatDate(posts[posts.length - 1].date)} rail="var(--color-amber)" />
+          <Stat k="最新" v={formatDate(posts[0].date)} rail="var(--color-accent-soft)" />
         </dl>
       </header>
 
@@ -82,20 +83,14 @@ export function BlogIndexPage() {
                 key={c.name}
                 type="button"
                 onClick={() => setActive(c.name)}
-                className={`shrink-0 inline-flex items-center gap-2 h-9 px-3.5 text-[12px] font-mono uppercase tracking-[0.12em] transition-colors border ${
+                className={`shrink-0 chip transition-colors ${
                   isActive
-                    ? "bg-[var(--color-ink)] text-white border-[var(--color-ink)]"
-                    : "bg-transparent text-[var(--color-ink-2)] border-[var(--color-line)] hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
+                    ? "is-blue !text-[var(--color-accent-hover)]"
+                    : "is-out hover:border-[var(--color-ink)]"
                 }`}
               >
                 <span>{c.name}</span>
-                <span
-                  className={
-                    isActive
-                      ? "text-white/60"
-                      : "text-[var(--color-mute)]"
-                  }
-                >
+                <span className={`font-mono ${isActive ? "opacity-60" : "opacity-50"}`}>
                   {String(c.count).padStart(2, "0")}
                 </span>
               </button>
@@ -163,9 +158,9 @@ export function BlogIndexPage() {
   );
 }
 
-function Stat({ k, v }: { k: string; v: string }) {
+function Stat({ k, v, rail }: { k: string; v: string; rail?: string }) {
   return (
-    <div>
+    <div className={rail ? "pl-3 border-l-2" : ""} style={rail ? { borderColor: rail } : undefined}>
       <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
         {k}
       </dt>

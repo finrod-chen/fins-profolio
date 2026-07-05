@@ -48,11 +48,12 @@ export function RecommendsPage() {
       />
 
       <header
-        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-10"
+        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-10 relative"
         data-reveal
       >
-        <h1 className="font-serif text-[clamp(32px,5vw,52px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)]">
-          好物
+        <span className="sticker is-coral absolute top-12 right-5 sm:right-8 lg:right-12 rotate-[-3deg] hidden sm:inline-block">Goods ✦</span>
+        <h1 className="font-serif text-[clamp(40px,6vw,68px)] font-semibold leading-[1.1] tracking-tight text-[var(--color-ink)]">
+          好物<span className="text-[var(--color-coral)]">.</span>
         </h1>
         <p className="mt-4 max-w-2xl text-[16px] sm:text-[17px] leading-[1.8] text-[var(--color-ink-2)]">
           我用 Coupang 買了幾年生活用品, 這裡收的是{" "}
@@ -63,8 +64,9 @@ export function RecommendsPage() {
           商品價格對你不會變貴。
         </p>
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          <span className="tag is-accent">聯盟行銷 · 透明揭露</span>
-          <span className="tag">台北 / 台灣</span>
+          <span className="chip is-amber">聯盟行銷 · 透明揭露</span>
+          <span className="chip is-blue">台北 / 台灣</span>
+          <span className="chip is-coral">Coupang</span>
         </div>
       </header>
 

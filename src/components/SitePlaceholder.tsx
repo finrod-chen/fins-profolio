@@ -73,6 +73,24 @@ export function SitePlaceholder({
         <rect x="22" y="56" width="120" height="2" fill="var(--color-ink)" opacity="0.5" />
         <rect x="22" y="62" width="80" height="2" fill="var(--color-ink)" opacity="0.3" />
 
+        {/* big colorful disc (副色裝飾) */}
+        <circle cx="320" cy="120" r="56" fill={accent} opacity="0.16" />
+        <circle cx="320" cy="120" r="36" fill={accent} opacity="0.28" />
+        <circle cx="320" cy="120" r="14" fill={accent} />
+
+        {/* amber/coral 副色斑點 (根據 id 字串 hash 決定) */}
+        {(() => {
+          const h = project.id.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+          const dot = (cx: number, cy: number, r: number, color: string) => (
+            <circle cx={cx} cy={cy} r={r} fill={color} />
+          );
+          return h % 3 === 0
+            ? dot(290, 60, 6, "var(--color-amber)")
+            : h % 3 === 1
+            ? dot(355, 175, 8, "var(--color-coral)")
+            : dot(60, 220, 6, "var(--color-amber)");
+        })()}
+
         {/* title (Chinese-safe) */}
         <text
           x="22"

@@ -43,8 +43,9 @@ export function ProjectPage({ project }: { project: Project }) {
           <span className="tag">{project.year}</span>
           <span className="tag">{project.role}</span>
         </div>
-        <h1 className="font-serif text-[clamp(36px,6vw,64px)] font-semibold leading-[1.2] tracking-tight text-[var(--color-ink)]">
+        <h1 className="font-serif text-[clamp(44px,7vw,80px)] font-semibold leading-[1.05] tracking-tight text-[var(--color-ink)]">
           {project.title}
+          <span className="text-[var(--color-coral)]">.</span>
         </h1>
         <p className="mt-4 max-w-3xl text-[16px] sm:text-[17px] leading-[1.7] text-[var(--color-ink-2)]">
           {project.tagline}
@@ -103,10 +104,10 @@ export function ProjectPage({ project }: { project: Project }) {
                     href={project.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-between gap-2 h-11 px-4 bg-[var(--color-ink)] text-white text-[12px] font-medium hover:bg-[var(--color-accent)] transition-colors"
+                    className="btn btn-primary"
                   >
                     <span>前往網站</span>
-                    <span aria-hidden>↗</span>
+                    <span className="hover-arrow" aria-hidden>↗</span>
                   </a>
                 )}
                 {project.repoUrl && (
@@ -114,10 +115,10 @@ export function ProjectPage({ project }: { project: Project }) {
                     href={project.repoUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-between gap-2 h-11 px-4 border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] font-medium hover:bg-[var(--color-ink)] hover:text-white transition-colors"
+                    className="btn btn-ghost"
                   >
                     <span>原始碼</span>
-                    <span aria-hidden>↗</span>
+                    <span className="hover-arrow" aria-hidden>↗</span>
                   </a>
                 )}
               </div>

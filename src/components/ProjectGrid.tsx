@@ -30,6 +30,8 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
       <SectionLabel
         title="作品集"
         meta={`${filtered.length} / ${projects.length} 個`}
+        tone="blue"
+        icon="◣"
       />
 
       {/* filter chips */}
@@ -48,20 +50,14 @@ export function ProjectGrid({ projects }: { projects: Project[] }) {
               key={c}
               type="button"
               onClick={() => setActive(c)}
-              className={`shrink-0 inline-flex items-center gap-2 h-9 px-3.5 text-[12px] font-mono uppercase tracking-[0.12em] transition-colors border ${
+              className={`shrink-0 chip transition-colors ${
                 isActive
-                  ? "bg-[var(--color-ink)] text-white border-[var(--color-ink)]"
-                  : "bg-transparent text-[var(--color-ink-2)] border-[var(--color-line)] hover:border-[var(--color-ink)] hover:text-[var(--color-ink)]"
+                  ? "is-blue !text-[var(--color-accent-hover)]"
+                  : "is-out hover:border-[var(--color-ink)]"
               }`}
             >
               <span>{c}</span>
-              <span
-                className={
-                  isActive
-                    ? "text-white/60"
-                    : "text-[var(--color-mute)]"
-                }
-              >
+              <span className={`font-mono ${isActive ? "opacity-60" : "opacity-50"}`}>
                 {String(count).padStart(2, "0")}
               </span>
             </button>

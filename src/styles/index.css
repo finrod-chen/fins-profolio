@@ -3,7 +3,7 @@
 @import "./animations.css";
 
 /* ============================================================
-   Base — 文件白頁面
+   Base — 米白頁面 + 電光藍
    ============================================================ */
 :root {
   color-scheme: light;
@@ -23,9 +23,13 @@ html, body {
 
 body {
   min-height: 100svh;
-  /* Chinese punctuation line-break */
   line-break: strict;
   word-break: break-word;
+  /* 全站關閉原生 cursor (desktop)，交給 cursor-dot 接管 */
+  cursor: none;
+}
+@media (hover: none) {
+  body { cursor: auto; }
 }
 
 * {
@@ -40,35 +44,19 @@ body {
 /* ============================================================
    Typography helpers
    ============================================================ */
-.font-sans {
-  font-family: var(--font-sans);
-}
-
-.font-serif {
-  font-family: var(--font-serif);
-}
-
-.font-display {
-  font-family: var(--font-display);
-}
-
-.font-mono {
-  font-family: var(--font-mono);
-  font-feature-settings: "ss01", "zero";
-}
+.font-sans    { font-family: var(--font-sans); }
+.font-serif   { font-family: var(--font-serif); }
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); font-feature-settings: "ss01", "zero"; }
 
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-mute);
 }
-
-/* ============================================================
-   Grids (skipped — too decorative for this design language)
-   ============================================================ */
 
 /* ============================================================
    Focus & scrollbar
@@ -84,12 +72,12 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--color-line);
   border: 2px solid var(--color-paper);
-  border-radius: 0;
+  border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-accent); }
 
 /* ============================================================
-   Tags & pills — 簡約文件用
+   Tags & pills — 文件 → 活性版：多色 pill
    ============================================================ */
 .tag {
   font-family: var(--font-mono);
@@ -114,66 +102,123 @@ body {
   color: white;
   border-color: var(--color-ink);
 }
-
-/* ============================================================
-   Card lift
-   ============================================================ */
-.lift {
-  transition:
-    transform 240ms var(--ease-out-quint),
-    border-color 240ms var(--ease-out-quint),
-    box-shadow 240ms var(--ease-out-quint);
+.tag.is-coral {
+  background: var(--color-coral);
+  color: white;
+  border-color: var(--color-coral);
 }
-.lift:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-accent);
-  box-shadow: 0 4px 12px -4px rgba(29, 78, 216, 0.18);
+.tag.is-amber {
+  background: var(--color-amber);
+  color: var(--color-ink);
+  border-color: var(--color-amber);
 }
-@media (max-width: 640px) {
-  .lift:hover { transform: none; box-shadow: none; }
+.tag.is-ghost {
+  border: 1px solid var(--color-ink);
+  background: transparent;
+  color: var(--color-ink);
 }
 
+/* 圓形 tag (小型章節標) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+.chip.is-blue   { background: var(--color-accent-tint); color: var(--color-accent-hover); }
+.chip.is-coral  { background: var(--color-coral-tint);  color: var(--color-coral-hover); }
+.chip.is-amber  { background: var(--color-amber-tint);  color: #92400E; }
+.chip.is-ink    { background: var(--color-ink); color: var(--color-paper); }
+.chip.is-out    { border: 1px solid var(--color-line); background: transparent; color: var(--color-ink-2); }
+
 /* ============================================================
-   Link underline (animated scan, gentle)
+   Sticker — 大膽色塊貼紙，hero 與 featured 用
    ============================================================ */
-.link-line {
-  position: relative;
+.sticker {
   display: inline-block;
-  text-decoration: none;
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transform: rotate(-2deg);
 }
-.link-line::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -2px;
-  height: 1px;
-  background: currentColor;
-  transform-origin: right;
-  transform: scaleX(1);
-  transition: transform 280ms cubic-bezier(0.7, 0, 0.2, 1);
+.sticker.is-coral { background: var(--color-coral); color: white; }
+.sticker.is-blue  { background: var(--color-accent); color: white; }
+.sticker.is-amber { background: var(--color-amber); color: var(--color-ink); }
+.sticker.is-ink   { background: var(--color-ink); color: var(--color-paper); }
+
+/* ============================================================
+   Button — 含 bloom hover lift
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 9999px;
+  transition: all 220ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1));
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
-.link-line:hover::after {
-  transform-origin: left;
-  transform: scaleX(0);
-  animation: link-rev 280ms cubic-bezier(0.7, 0, 0.2, 1) forwards 60ms;
+.btn-primary {
+  background: var(--color-accent);
+  color: white;
 }
-@keyframes link-rev {
-  from { transform: scaleX(0); transform-origin: left; }
-  to   { transform: scaleX(1); transform-origin: left; }
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -6px rgba(0, 102, 255, 0.5);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+.btn-ghost:hover {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  transform: translateY(-1px);
+}
+.btn-soft {
+  background: var(--color-accent-tint);
+  color: var(--color-accent-hover);
+}
+.btn-soft:hover {
+  background: var(--color-accent);
+  color: white;
+}
+.btn-coral {
+  background: var(--color-coral);
+  color: white;
+}
+.btn-coral:hover {
+  background: var(--color-coral-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px -6px rgba(255, 107, 92, 0.5);
 }
 
 /* ============================================================
-   Section header — 文件化章節標題（左名 / 右日期）
+   Section header — 簡潔化：左 pill + 右 meta
    ============================================================ */
 .section-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding-bottom: 12px;
-  margin-bottom: 32px;
-  border-bottom: 1px solid var(--color-ink);
+  margin-bottom: 28px;
 }
 .section-header .section-title {
   font-family: var(--font-serif);
@@ -206,50 +251,29 @@ body {
 .prose {
   color: var(--color-ink-2);
   font-size: 17px;
-  line-height: 1.9;  /* 較寬行距中文 */
+  line-height: 1.9;
   word-break: break-word;
 }
-
 .prose > * + * { margin-top: 1.1em; }
 .prose > * + h2 { margin-top: 2.4em; }
 .prose > * + h3 { margin-top: 2em; }
-
 .prose h1, .prose h2, .prose h3,
 .prose h4, .prose h5, .prose h6 {
   scroll-margin-top: 100px;
-}
-
-.prose h1 {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 3.6vw, 36px);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-  color: var(--color-ink);
-  margin-top: 0.6em;
-}
-.prose h2 {
-  font-family: var(--font-serif);
-  font-size: clamp(22px, 2.8vw, 28px);
-  font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.35;
   color: var(--color-ink);
+}
+.prose h1 { font-size: clamp(28px, 3.6vw, 36px); font-weight: 600; margin-top: 0.6em; }
+.prose h2 {
+  font-size: clamp(22px, 2.8vw, 28px);
+  font-weight: 600;
   padding-bottom: 0.3em;
   border-bottom: 1px solid var(--color-line);
 }
-.prose h3 {
-  font-family: var(--font-serif);
-  font-size: clamp(18px, 2.2vw, 22px);
-  font-weight: 600;
-  color: var(--color-ink);
-}
-.prose h4 {
-  font-weight: 600;
-  font-size: 17px;
-  color: var(--color-ink);
-  margin-top: 1.6em;
-}
+.prose h3 { font-size: clamp(18px, 2.2vw, 22px); font-weight: 600; }
+.prose h4 { font-weight: 600; font-size: 17px; margin-top: 1.6em; }
 .prose h5, .prose h6 {
   font-family: var(--font-mono);
   font-weight: 500;
@@ -258,9 +282,7 @@ body {
 }
 .prose h5 { font-size: 13px; }
 .prose h6 { font-size: 11px; color: var(--color-mute); }
-
 .prose p { margin: 0; }
-
 .prose a {
   color: var(--color-accent-hover);
   text-decoration: underline;
@@ -273,31 +295,15 @@ body {
   text-decoration-color: var(--color-accent);
   text-decoration-thickness: 2px;
 }
-
 .prose strong { color: var(--color-ink); font-weight: 600; }
 .prose em { font-style: italic; }
-
-.prose ul, .prose ol {
-  padding-left: 1.5em;
-  margin: 0;
-}
+.prose ul, .prose ol { padding-left: 1.5em; margin: 0; }
 .prose ul { list-style: none; }
-.prose ul > li {
-  position: relative;
-  padding-left: 1.2em;
-  margin: 0.3em 0;
-}
-.prose ul > li::before {
-  content: "—";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--color-accent);
-}
+.prose ul > li { position: relative; padding-left: 1.2em; margin: 0.3em 0; }
+.prose ul > li::before { content: "—"; position: absolute; left: 0; top: 0; color: var(--color-accent); }
 .prose ol { list-style: decimal; }
 .prose ol > li { margin: 0.3em 0; padding-left: 0.2em; }
 .prose ol > li::marker { color: var(--color-mute); font-variant-numeric: tabular-nums; }
-
 .prose blockquote {
   border-left: 3px solid var(--color-accent);
   background: var(--color-paper-2);
@@ -306,7 +312,6 @@ body {
   color: var(--color-ink-2);
 }
 .prose blockquote p { margin: 0; }
-
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.88em;
@@ -326,67 +331,41 @@ body {
   margin: 1.6em 0;
   border-left: 3px solid var(--color-accent);
 }
-.prose pre code {
-  background: transparent;
-  border: 0;
-  padding: 0;
-  color: inherit;
-  font-size: inherit;
-}
-
-.prose hr {
-  border: 0;
-  border-top: 1px solid var(--color-line);
-  margin: 2.4em 0;
-}
-
+.prose pre code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }
+.prose hr { border: 0; border-top: 1px solid var(--color-line); margin: 2.4em 0; }
 .prose img, .prose video, .prose iframe {
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 1.6em auto;
-  border: 1px solid var(--color-line);
+  max-width: 100%; height: auto; display: block;
+  margin: 1.6em auto; border: 1px solid var(--color-line);
 }
 .prose iframe { aspect-ratio: 16 / 9; }
-
 .prose table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-  margin: 1.6em 0;
-  border: 1px solid var(--color-line);
+  width: 100%; border-collapse: collapse; font-size: 14px;
+  margin: 1.6em 0; border: 1px solid var(--color-line);
   font-variant-numeric: tabular-nums;
 }
-.prose thead {
-  background: var(--color-accent);
-  color: white;
-}
+.prose thead { background: var(--color-accent); color: white; }
 .prose th, .prose td {
-  text-align: left;
-  padding: 10px 14px;
-  border: 1px solid var(--color-line);
-  vertical-align: top;
+  text-align: left; padding: 10px 14px;
+  border: 1px solid var(--color-line); vertical-align: top;
 }
 .prose th {
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.08em;
 }
-.prose tbody tr:nth-child(even) td {
-  background: var(--color-paper-2);
-}
-
+.prose tbody tr:nth-child(even) td { background: var(--color-paper-2); }
 .prose kbd {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  padding: 2px 6px;
-  background: var(--color-paper);
-  border: 1px solid var(--color-ink);
-  border-bottom-width: 2px;
-  color: var(--color-ink);
-  display: inline-block;
+  font-family: var(--font-mono); font-size: 12px;
+  padding: 2px 6px; background: var(--color-paper);
+  border: 1px solid var(--color-ink); border-bottom-width: 2px;
+  color: var(--color-ink); display: inline-block;
 }
-
 .prose del { color: var(--color-mute); }
+
+/* ============================================================
+   Utility: visually-hidden
+   ============================================================ */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}

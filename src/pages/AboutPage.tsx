@@ -6,15 +6,21 @@ export function AboutPage() {
   return (
     <article className="page-in">
       <header
-        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-8 sm:pb-12"
+        className="px-5 sm:px-8 lg:px-12 pt-12 sm:pt-16 pb-8 sm:pb-12 relative"
         data-reveal
       >
-        <h1 className="font-serif text-[clamp(32px,5vw,52px)] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)]">
-          關於
+        <span className="sticker is-blue absolute top-10 right-5 sm:right-8 lg:right-12 rotate-[3deg]">About ✦</span>
+        <h1 className="font-serif text-[clamp(40px,6vw,68px)] font-semibold leading-[1.1] tracking-tight text-[var(--color-ink)]">
+          關於<span className="text-[var(--color-coral)]">.</span>
         </h1>
         <p className="mt-3 text-[14px] text-[var(--color-mute)]">
           Finrod Chen · 個人簡介
         </p>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="chip is-blue">永和, TW</span>
+          <span className="chip is-coral">細胞治療</span>
+          <span className="chip is-amber">side project</span>
+        </div>
       </header>
 
       <section className="px-5 sm:px-8 lg:px-12 pb-16">
@@ -56,30 +62,30 @@ export function AboutPage() {
 
               <div className="mt-6 pt-6 border-t border-[var(--color-line)]">
                 <div className="eyebrow mb-3">其它連結</div>
-                <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-wrap gap-2">
                   <a
                     href="https://github.com/finrodchen"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 h-9 px-3 bg-[var(--color-ink)] text-white text-[12px] hover:bg-[var(--color-accent)] transition-colors"
+                    className="btn btn-primary"
                   >
-                    GitHub <span aria-hidden>↗</span>
+                    GitHub <span className="hover-arrow" aria-hidden>↗</span>
                   </a>
                   <a
                     href="https://linkedin.com/in/finrodchen"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 h-9 px-3 border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] hover:bg-[var(--color-ink)] hover:text-white transition-colors"
+                    className="btn btn-ghost"
                   >
-                    LinkedIn <span aria-hidden>↗</span>
+                    LinkedIn <span className="hover-arrow" aria-hidden>↗</span>
                   </a>
                   <a
                     href="https://astro.finrod.xyz"
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 h-9 px-3 border border-[var(--color-line)] text-[var(--color-ink-2)] text-[12px] hover:border-[var(--color-ink)] hover:text-[var(--color-ink)] transition-colors"
+                    className="btn btn-soft"
                   >
-                    部落格 <span aria-hidden>↗</span>
+                    部落格 <span className="hover-arrow" aria-hidden>↗</span>
                   </a>
                 </div>
               </div>
