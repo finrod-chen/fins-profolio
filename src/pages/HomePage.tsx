@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { projects } from "@/data/projects";
+import { posts as blogPosts } from "@/data/blog";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { Marquee } from "@/components/Marquee";
 import { BloBg } from "@/components/BloBg";
@@ -19,7 +20,7 @@ export function HomePage() {
   useReveal();
   const live = projects.filter((p) => p.status === "live").length;
   const total = projects.length;
-  const posts = 130;
+  const postCount = blogPosts.length;
 
   // Marquee 文字
   const bigMarqueeLeft: (string | React.ReactNode)[] = [
@@ -222,7 +223,7 @@ export function HomePage() {
           <StatCard n="12+" label="年 生技經驗" rail="var(--color-accent)" hint="從製程工程師到研發主任" />
           <StatCard n={total} label="個 side project" rail="var(--color-coral)" hint="網站、3D 列印、Arduino⋯" />
           <StatCard n="3" label="台 3D 印表機" rail="var(--color-amber)" hint="Bambu / Ender / 自行改機" />
-          <StatCard n={`${posts}+`} label="篇文章" rail="var(--color-coral-hover)" hint="從 2013 累積到現在" />
+          <StatCard n={`${postCount}+`} label="篇文章" rail="var(--color-coral-hover)" hint="從 2013 累積到現在" />
         </div>
       </section>
 

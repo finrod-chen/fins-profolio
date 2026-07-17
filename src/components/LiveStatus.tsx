@@ -51,8 +51,7 @@ export function LiveStatus({
     mode === "fixed"
       ? `chip is-out ${className}`
       : `chip ${className}`;
-  // mobile 預設 compact，桌面預設完整
-  const isCompact = compact || (mode === "fixed" && false); // 保留 caller 控制權
+  const isCompact = compact;
 
   if (!now) {
     if (isCompact) {
