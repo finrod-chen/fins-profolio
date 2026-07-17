@@ -20,9 +20,9 @@ export function WorkDetailPage() {
         </p>
         <Link
           to="/"
-          className="mt-7 inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-accent)] transition-colors"
+          className="mt-7 btn btn-primary"
         >
-          ← Back to all works
+          <span aria-hidden>←</span> 回作品列表
         </Link>
       </div>
     );

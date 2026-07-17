@@ -1,24 +1,25 @@
-import { useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useMemo } from "react";
 import { posts, categories } from "@/data/blog";
-import { SectionLabel } from "@/components/SectionLabel";
+import { useReveal } from "@/hooks/useReveal";
+import { BigSectionNumber } from "@/components/BigSectionNumber";
 
 /**
- * BlogIndexPage
- * 全部文章列表, 預設依新→舊; 可用 category chip 切換。
- * Mobile: 1 欄; Desktop: 2 欄 "spec sheet" 風表格, 像閱讀清單。
+ * BlogIndexPage — v5 bold
+ * 巨型章節編號 02 + 彩色 disc 背景 + 多色 stat rail。
  */
 export function BlogIndexPage() {
+  useReveal();
   const [searchParams, setSearchParams] = useSearchParams();
   const catParam = searchParams.get("cat") ?? "All";
-  const active = catParam === "All" || categories.some((c) => c.name === catParam) ? catParam : "All";
+  const active =
+    catParam === "All" || categories.some((c) => c.name === catParam)
+      ? catParam
+      : "All";
 
   const setActive = (cat: string) => {
-    if (cat === "All") {
-      setSearchParams({}, { replace: true });
-    } else {
-      setSearchParams({ cat }, { replace: true });
-    }
+    if (cat === "All") setSearchParams({}, { replace: true });
+    else setSearchParams({ cat }, { replace: true });
   };
 
   const filtered = useMemo(() => {
@@ -27,178 +28,161 @@ export function BlogIndexPage() {
   }, [active]);
 
   const formatDate = (d: Date) =>
-    d.toLocaleDateString("en-CA", { year: "numeric", month: "2-digit", day: "2-digit" });
+    d.toLocaleDateString("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
 
-  const pageTitle = active === "All"
-    ? "Writing — FIN / Finrod Chen"
-    : `${active} — FIN / Writing`;
+  const pageTitle =
+    active === "All"
+      ? "文章列表 — Finrod Chen"
+      : `${active} — 文章列表`;
 
   return (
-    <div className="page-in px-5 sm:px-6 lg:px-10 py-10 sm:py-14 max-w-7xl">
+    <article className="page-in">
       <title>{pageTitle}</title>
-      <meta name="description" content={`從 2013 到現在累積的 ${posts.length} 篇文章，散落在生技法規、細胞治療實務、side project 紀錄、與一些雜談。`} />
-      <SectionLabel index="04" label="Writing" meta={`${posts.length} entries · ${categories.length} categories`} />
+      <meta
+        name="description"
+        content={`從 2013 到現在累積的 ${posts.length} 篇文章，散落在生技法規、細胞治療實務、side project 紀錄、與一些雜談。`}
+      />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-14">
-        <div className="lg:col-span-8">
-          <h1 className="text-[clamp(36px,6vw,72px)] font-semibold leading-[1.05] tracking-[-0.02em]">
-            寫下來,
-            <br />
-            才算發生過。
-          </h1>
-          <p className="mt-5 max-w-2xl text-[15px] sm:text-[16px] leading-[1.7] text-[var(--color-ink-2)]">
-            從 2013 到現在累積的 {posts.length} 篇文章, 散落在生技法規、
-            細胞治療實務、side project 紀錄、與一些雜談。點開任一篇, 都是某個當下
-            試著把事情想清楚的痕跡。
+      <section className="px-5 sm:px-8 lg:px-12 pt-10 sm:pt-14 pb-6 sm:pb-10 relative">
+        <div
+          aria-hidden
+          className="absolute -top-10 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none opacity-15"
+          style={{ background: "radial-gradient(circle, var(--color-amber), transparent 70%)" }}
+        />
+        <span className="sticker is-amber absolute top-14 right-5 sm:right-8 lg:right-12 rotate-[-3deg] z-10 hidden sm:inline-block">Blog ✦</span>
+        <div data-reveal>
+          <BigSectionNumber
+            number="02"
+            label="文章"
+            title={
+              <>
+                文章<span className="hl-coral">.</span>
+              </>
+            }
+            tone="amber"
+            right={
+              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+                {posts.length} 篇文章 · {categories.length} 分類
+              </span>
+            }
+          />
+        </div>
+        <p className="mt-2 text-[14px] text-[var(--color-mute)] max-w-prose" data-reveal>
+          從 2013 到現在累積的 {posts.length} 篇文章, 散落在生技法規、
+          細胞治療實務、side project 紀錄、與一些雜談。
+        </p>
+        <dl className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8 text-[13px] border-t border-[var(--color-line)] pt-6" data-reveal>
+          <Stat k="篇數" v={String(posts.length)} rail="var(--color-accent)" />
+          <Stat k="分類" v={String(categories.length)} rail="var(--color-coral)" />
+          <Stat k="最早" v={formatDate(posts[posts.length - 1].date)} rail="var(--color-amber)" />
+          <Stat k="最新" v={formatDate(posts[0].date)} rail="var(--color-accent-soft)" />
+        </dl>
+      </section>
+
+      {/* filter */}
+      <section
+        className="px-5 sm:px-8 lg:px-12 border-t border-[var(--color-line)] py-6 sm:py-8"
+        data-reveal
+      >
+        <div className="flex items-center flex-wrap gap-2">
+          {[
+            { name: "All", count: posts.length },
+            ...categories,
+          ].map((c) => {
+            const isActive = c.name === active;
+            return (
+              <button
+                key={c.name}
+                type="button"
+                onClick={() => setActive(c.name)}
+                className={`shrink-0 chip transition-colors ${
+                  isActive
+                    ? "is-blue !text-[var(--color-accent-hover)]"
+                    : "is-out hover:border-[var(--color-ink)]"
+                }`}
+              >
+                <span>{c.name}</span>
+                <span className={`font-mono ${isActive ? "opacity-60" : "opacity-50"}`}>
+                  {String(c.count).padStart(2, "0")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* article list */}
+      {filtered.length === 0 ? (
+        <div className="border-y border-dashed border-[var(--color-line)] py-16 mx-5 sm:mx-8 lg:mx-12 text-center">
+          <p className="text-[14px] text-[var(--color-ink-2)]">
+            這個分類目前還沒有文章。
           </p>
         </div>
-        <div className="lg:col-span-4">
-          <dl className="grid grid-cols-2 gap-y-3 gap-x-4 text-[13px]">
-            <Stat k="Total" v={String(posts.length)} />
-            <Stat k="Categories" v={String(categories.length)} />
-            <Stat k="Oldest" v={formatDate(posts[posts.length - 1].date)} />
-            <Stat k="Latest" v={formatDate(posts[0].date)} />
-          </dl>
-        </div>
-      </div>
-
-      {/* Category filter */}
-      <div className="flex items-center gap-2 mb-8 sm:mb-10 overflow-x-auto pb-2 -mx-5 sm:mx-0 px-5 sm:px-0">
-        <FilterChip
-          label="All"
-          count={posts.length}
-          active={active === "All"}
-          onClick={() => setActive("All")}
-        />
-        {categories.map((c) => (
-          <FilterChip
-            key={c.name}
-            label={c.name}
-            count={c.count}
-            active={active === c.name}
-            onClick={() => setActive(c.name)}
-          />
-        ))}
-      </div>
-
-      {/* List */}
-      {filtered.length === 0 ? (
-        <div className="border border-dashed border-[var(--color-line)] py-16 text-center">
-          <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)] mb-2">
-            No entries
-          </div>
-          <p className="text-[14px] text-[var(--color-ink-2)]">這個分類目前還沒有文章。</p>
-        </div>
       ) : (
-        <>
-          {/* Desktop "spec sheet" table */}
-          <div className="hidden md:block border border-[var(--color-line)]">
-            <div className="grid grid-cols-[110px_120px_1fr_140px] font-mono text-[10px] tracking-[0.16em] uppercase bg-[var(--color-ink)] text-[var(--color-paper)]">
-              <div className="px-3 py-2.5">Date</div>
-              <div className="px-3 py-2.5">Category</div>
-              <div className="px-3 py-2.5">Title</div>
-              <div className="px-3 py-2.5 text-right">Tags</div>
-            </div>
-            <ul className="divide-y divide-[var(--color-line)]">
-              {filtered.map((p) => (
-                <li key={p.slug}>
-                  <Link
-                    to={`/blog/${p.slug}`}
-                    className="grid grid-cols-[110px_120px_1fr_140px] items-baseline px-3 py-3.5 hover:bg-[var(--color-paper-2)] transition-colors group"
-                  >
-                    <span className="font-mono text-[12px] tabular-nums text-[var(--color-mute)]">
-                      {formatDate(p.date)}
-                    </span>
-                    <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--color-ink-2)]">
-                      {p.category}
-                    </span>
-                    <span className="min-w-0 pr-4">
-                      <span className="block text-[15px] font-medium leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors truncate">
-                        {p.title}
-                      </span>
-                      {p.description && (
-                        <span className="block text-[12px] text-[var(--color-mute)] line-clamp-1 mt-0.5">
-                          {p.description}
-                        </span>
-                      )}
-                    </span>
-                    <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[var(--color-mute)] text-right truncate">
-                      {p.tags.slice(0, 2).join(" · ")}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Mobile compact list */}
-          <ul className="md:hidden border-y border-[var(--color-line)] divide-y divide-[var(--color-line)]">
-            {filtered.map((p) => (
-              <li key={p.slug}>
-                <Link to={`/blog/${p.slug}`} className="block py-4 group">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--color-mute)]">
-                      {formatDate(p.date)}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-[var(--color-line)]" />
-                    <span className="font-mono text-[10px] tracking-[0.14em] uppercase text-[var(--color-ink-2)]">
-                      {p.category}
-                    </span>
+        <ul className="px-5 sm:px-8 lg:px-12 border-t border-[var(--color-line)]">
+          {filtered.map((p, i) => (
+            <li
+              key={p.slug}
+              data-reveal
+              data-reveal-delay={String((i % 5) + 1)}
+              className="border-b border-[var(--color-line)]"
+            >
+              <Link
+                to={`/blog/${p.slug}`}
+                className="group block py-6 sm:py-7 transition-colors hover:bg-[var(--color-paper-2)]"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-[110px_140px_1fr] gap-3 md:gap-8">
+                  <span className="font-mono text-[12px] tracking-[0.04em] text-[var(--color-mute)] tabular-nums">
+                    {formatDate(p.date)}
+                  </span>
+                  <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-[var(--color-accent-hover)]">
+                    {p.category}
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="font-serif text-[clamp(18px,2vw,22px)] font-medium leading-[1.3] tracking-tight text-[var(--color-ink)] group-hover:text-[var(--color-accent-hover)] transition-colors">
+                      {p.title}
+                    </h3>
+                    {p.description && (
+                      <p className="mt-2 text-[14px] text-[var(--color-mute)] line-clamp-2 leading-[1.65]">
+                        {p.description}
+                      </p>
+                    )}
+                    {p.tags && p.tags.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        {p.tags.slice(0, 3).map((t) => (
+                          <span
+                            key={t}
+                            className="font-mono text-[10px] tracking-[0.12em] uppercase text-[var(--color-mute)]"
+                          >
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <div className="text-[16px] font-semibold leading-snug text-[var(--color-ink)] group-hover:text-[var(--color-accent)] transition-colors">
-                    {p.title}
-                  </div>
-                  {p.description && (
-                    <p className="mt-1 text-[13px] text-[var(--color-mute)] line-clamp-2">
-                      {p.description}
-                    </p>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       )}
-    </div>
+    </article>
   );
 }
 
-function FilterChip({
-  label,
-  count,
-  active,
-  onClick,
-}: {
-  label: string;
-  count: number;
-  active: boolean;
-  onClick: () => void;
-}) {
+function Stat({ k, v, rail }: { k: string; v: string; rail?: string }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`shrink-0 inline-flex items-center gap-2 h-9 px-3.5 border text-[12px] font-mono uppercase tracking-[0.12em] transition-colors ${
-        active
-          ? "bg-[var(--color-ink)] text-[var(--color-paper)] border-[var(--color-ink)]"
-          : "bg-[var(--color-paper)] text-[var(--color-ink-2)] border-[var(--color-line)] hover:border-[var(--color-ink)]"
-      }`}
-    >
-      <span>{label}</span>
-      <span className={active ? "text-[var(--color-paper)]/70" : "text-[var(--color-mute)]"}>
-        {String(count).padStart(2, "0")}
-      </span>
-    </button>
-  );
-}
-
-function Stat({ k, v }: { k: string; v: string }) {
-  return (
-    <div>
-      <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+    <div className={rail ? "pl-3 border-l-2" : ""} style={rail ? { borderColor: rail } : undefined}>
+      <dt className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
         {k}
       </dt>
-      <dd className="font-mono text-[15px] tabular-nums text-[var(--color-ink)] mt-0.5">{v}</dd>
+      <dd className="mt-1 font-serif text-[18px] sm:text-[20px] font-medium leading-snug text-[var(--color-ink)] tabular-nums">
+        {v}
+      </dd>
     </div>
   );
 }

@@ -1,219 +1,311 @@
 import { Link } from "react-router-dom";
 import { projects } from "@/data/projects";
+import { posts as blogPosts } from "@/data/blog";
 import { ProjectGrid } from "@/components/ProjectGrid";
 import { Marquee } from "@/components/Marquee";
-import { SectionLabel } from "@/components/SectionLabel";
+import { BloBg } from "@/components/BloBg";
+import { BigSectionNumber } from "@/components/BigSectionNumber";
+import { StatCard } from "@/components/StatCard";
+import { FinrodMark } from "@/components/FinrodMark";
+import { Logo } from "@/components/Logo";
+import { useReveal } from "@/hooks/useReveal";
 
 /**
- * HomePage — Hero, About, Works, and a closing CTA.
- * Mobile-first stacking; on desktop the hero has a 2-column layout.
+ * HomePage — v5 bold
+ * 巨型 H1 (藍 / 桃紅 / 桃黃 inline highlights)、blob 漂浮背景、
+ * 巨型 marquee (大字 56px)、巨型編號章節、StatCard disc 裝飾、
+ * Finrod Mark footer 上方、彩色 sticky 收合。
  */
 export function HomePage() {
+  useReveal();
   const live = projects.filter((p) => p.status === "live").length;
   const total = projects.length;
-  const featured = projects.filter((p) => p.featured);
+  const postCount = blogPosts.length;
 
-  const marqueeItems = [
-    "Independent Web Works",
-    "Design × Engineering",
-    `${total} projects · ${live} live`,
-    "Taipei / Remote",
-    "Open to Collab",
+  // Marquee 文字
+  const bigMarqueeLeft: (string | React.ReactNode)[] = [
+    "Side project",
+    "細胞治療",
+    "Tinkering",
+    "Personal site",
+    "Cell therapy",
+    "永遠在學",
+  ];
+  const bigMarqueeRight: (string | React.ReactNode)[] = [
+    "Push it live ✦",
+    "再 push 一次",
+    "Break things",
+    "Fix them again",
+    "Ship anyway",
+    "It works on my machine",
   ];
 
   return (
     <div className="page-in">
-      {/* HERO */}
-      <section className="relative">
-        <div className="absolute inset-0 cross-grid pointer-events-none" aria-hidden />
-        <div className="relative px-5 sm:px-6 lg:px-10 pt-10 sm:pt-16 pb-12 sm:pb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-end">
-            <div className="lg:col-span-9">
-              <div className="flex items-center gap-3 mb-5">
-                <span className="stamp">FIN · PORTFOLIO · 2026</span>
-                <span className="hidden sm:inline-block font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-                  v1.0
-                </span>
-              </div>
-              <h1 className="text-[clamp(40px,9vw,128px)] font-semibold leading-[0.95] tracking-[-0.03em]">
-                <span>Side</span>
-                <br />
-                <span className="text-[var(--color-ink)]">projects,</span>{" "}
-                <span className="inline-flex items-baseline gap-3">
-                  <span>built</span>
-                  <span className="relative">
-                    <span className="absolute -inset-1 bg-[var(--color-accent)] -z-10" aria-hidden />
-                    <span className="relative">carefully</span>
-                  </span>
-                </span>
-                .
-              </h1>
-              <p className="mt-6 sm:mt-8 max-w-2xl text-[16px] sm:text-[18px] leading-[1.6] text-[var(--color-ink-2)]">
-                我是 <strong className="text-[var(--color-ink)] font-semibold">Finrod</strong>,
-                白天在生醫產業做細胞治療, 晚上用 side project 練手感 — 寫網站、
-                玩雲端、3D 列印、Arduino。這裡蒐集的就是這些「興趣使然」的小玩意,
-                每一個都是為一個很具體的理由而生。
-              </p>
+      {/* ─── HERO — 大 H1 ＋ blob 背景 ─────────────────────────────────── */}
+      <BloBg
+        className="px-5 sm:px-8 lg:px-12 pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-24"
+        variant="all"
+      >
+        {/* 漂浮 sticker */}
+        <div className="flex flex-wrap items-center gap-2 mb-6 sm:mb-10" data-reveal>
+          <span className="chip is-blue">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] pulse-soft inline-block" />
+            接受新合作
+          </span>
+          <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
+            Finrod · 2026 · v5
+          </span>
+        </div>
 
-              <div className="mt-7 sm:mt-9 flex flex-wrap items-center gap-3">
-                <a
-                  href="#works"
-                  className="inline-flex items-center gap-2 h-11 px-5 bg-[var(--color-ink)] text-[var(--color-paper)] text-[12px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-accent)] transition-colors"
-                >
-                  See works <span aria-hidden>↓</span>
-                </a>
-              <a
-                href="mailto:me@finrod.xyz"
-                className="inline-flex items-center gap-2 h-11 px-5 border border-[var(--color-ink)] text-[var(--color-ink)] text-[12px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)] transition-colors"
-              >
-                Say hi <span aria-hidden>↗</span>
+        {/* Logo plate — 大 mark + lockup tagline */}
+        <div
+          className="inline-flex items-stretch gap-0 border-2 border-[var(--color-ink)] bg-[var(--color-paper)] mb-10 sm:mb-14 group hover:-translate-y-0.5 transition-transform"
+          data-reveal
+        >
+          <Link to="/" className="flex items-center" aria-label="Finrod Chen — 回首頁">
+            <Logo variant="lockup" />
+          </Link>
+        </div>
+
+        <div className="relative">
+          <h1
+            className="font-serif font-semibold leading-[0.92] tracking-[-0.03em] text-[var(--color-ink)]"
+            style={{ fontSize: "clamp(56px, 9vw, 132px)" }}
+            data-reveal
+          >
+            <span className="block">白天做</span>
+            <span className="block">
+              <span className="text-[var(--color-coral)]">細胞治療</span>
+              <span>，</span>
+            </span>
+            <span className="block">晚上寫</span>
+            <span className="block">
+              <span>side&nbsp;</span>
+              <span className="text-[var(--color-coral)]">project</span>
+              <span>。</span>
+            </span>
+          </h1>
+
+          {/* right giant wave svg */}
+          <svg
+            aria-hidden
+            viewBox="0 0 600 600"
+            className="absolute -right-10 sm:-right-20 -top-10 w-[280px] sm:w-[420px] pointer-events-none select-none opacity-90"
+          >
+            <defs>
+              <linearGradient id="heroWave" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--color-coral)" stopOpacity="0.85" />
+                <stop offset="55%" stopColor="var(--color-amber)" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0.85" />
+              </linearGradient>
+            </defs>
+            <circle cx="300" cy="300" r="240" fill="url(#heroWave)" opacity="0.18" />
+            <circle cx="300" cy="300" r="190" fill="url(#heroWave)" opacity="0.32" />
+            <circle cx="300" cy="300" r="140" fill="url(#heroWave)" opacity="0.55" />
+            <circle cx="300" cy="300" r="80"  fill="url(#heroWave)" />
+            {/* ring outline */}
+            <circle cx="300" cy="300" r="262" fill="none" stroke="var(--color-ink)" strokeWidth="2" />
+            <circle cx="300" cy="300" r="220" fill="none" stroke="var(--color-coral)" strokeWidth="2" strokeDasharray="6 6" />
+            <circle cx="300" cy="300" r="178" fill="none" stroke="var(--color-ink)" strokeWidth="1" opacity="0.5" />
+          </svg>
+        </div>
+
+        {/* Hero 副文 + CTA + Sticker */}
+        <div
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-12 sm:mt-16"
+          data-reveal
+        >
+          <div className="lg:col-span-7">
+            <p className="font-serif text-[clamp(20px,2.4vw,28px)] leading-[1.55] tracking-tight text-[var(--color-ink-2)] max-w-2xl">
+              平常工作之餘做出來的網站作品 — 寫前端、玩雲端、3D 列印、Arduino。
+              每個都做到一個可以說得上來的階段。
+            </p>
+          </div>
+          <div className="lg:col-span-5 flex flex-col items-start lg:items-end gap-5">
+            <div className="flex flex-wrap gap-2">
+              <span className="sticker is-coral">v5 · Bold</span>
+              <span className="sticker is-blue" style={{ transform: "rotate(2deg)" }}>2026</span>
+              <span className="sticker is-amber" style={{ transform: "rotate(-1deg)" }}>Live ✦</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link to="/#works" className="btn btn-primary">
+                <span>看作品</span>
+                <span aria-hidden>↓</span>
+              </Link>
+              <a href="mailto:me@finrod.xyz" className="btn btn-ghost">
+                <span>來信聊聊</span>
+                <span className="hover-arrow" aria-hidden>↗</span>
               </a>
-              </div>
-            </div>
-
-            {/* spec sidebar */}
-            <aside className="lg:col-span-3">
-              <div className="border border-[var(--color-line)] bg-[var(--color-paper)] p-5">
-                <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] mb-3">
-                  Spec sheet
-                </div>
-                <dl className="space-y-3 text-[13px]">
-                  <Row k="Day job" v="R&D Lead · Cell therapy" />
-                  <Row k="Side" v="Web · Cloud · 3D print · Arduino" />
-                  <Row k="Location" v="永和 · 新北市, TW" />
-                  <Row k="Available" v="週末 / 業餘接觸" dotColor="var(--color-success)" />
-                  <Row k="Projects" v={`${total} (${live} live)`} />
-                </dl>
-              </div>
-            </aside>
-          </div>
-        </div>
-      </section>
-
-      <Marquee items={marqueeItems} speed={42} />
-
-      {/* ABOUT */}
-      <section className="px-5 sm:px-6 lg:px-10 pt-14 sm:pt-20 pb-10 sm:pb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          <div className="lg:col-span-4">
-            <SectionLabel index="01" label="About" meta="01/04" />
-            <h2 className="text-[clamp(28px,4vw,40px)] font-semibold leading-[1.1] tracking-tight">
-              白天做細胞,
-              <br />
-              晚上寫 side。
-            </h2>
-          </div>
-          <div className="lg:col-span-8 space-y-5 text-[15px] sm:text-[16px] leading-[1.8] text-[var(--color-ink-2)]">
-            <p>
-              研究所唸的是生物工程, 畢業後進到細胞治療產業, 從製程做到研發主任。
-              細胞治療是一個高度被法規框住、但又非常需要動手做的領域 —
-              每一個計畫都是「為了救一個病人」, 沒有犯錯的空間。
-            </p>
-            <p>
-              寫網站、做 3D 列印、玩 Arduino 是另一回事 — 沒人審查、可以失敗、可以亂改。
-              這裡放的每一個小玩意, 都是某個晚上「如果這樣做會怎樣」的具現化。
-              重視排版、效能與閱讀體驗, 因為這些是寫給未來的自己看的。
-            </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 pt-4 border-t border-[var(--color-line)]">
-              <Stat n="12+" label="Years in biotech" />
-              <Stat n="10+" label="Side projects" />
-              <Stat n="3" label="Printers" />
-              <Stat n="1" label="Blog since 2013" />
             </div>
           </div>
         </div>
+      </BloBg>
+
+      {/* ─── 大字 marquee (ink → coral) ─────────────────────────────── */}
+      <Marquee
+        items={bigMarqueeLeft}
+        speed={50}
+        variant="ink"
+        size="lg"
+      />
+      <Marquee
+        items={bigMarqueeRight}
+        speed={42}
+        variant="coral"
+        reverse
+        size="md"
+      />
+
+      {/* ─── 01 / About 區塊 ────────────────────────────────────────── */}
+      <section className="px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative">
+        {/* 背景光暈 */}
+        <div
+          aria-hidden
+          className="absolute -top-20 -left-20 w-[420px] h-[420px] rounded-full pointer-events-none opacity-25"
+          style={{ background: "radial-gradient(circle, var(--color-accent), transparent 70%)" }}
+        />
+        <div data-reveal>
+          <BigSectionNumber
+            number="01"
+            label="Chapter 01 · 關於"
+            title={
+              <>
+                我是 <span className="hl-coral">Finrod</span>
+              </>
+            }
+            tone="accent"
+            right={
+              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+                {total} 個作品 · {live} 個上線
+              </span>
+            }
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16" data-reveal>
+          <div className="lg:col-span-7 space-y-5 text-[16px] sm:text-[17px] leading-[1.85] text-[var(--color-ink-2)] max-w-prose">
+            <p>
+              研究所唸生物工程, 進到細胞治療產業後從製程工程師做到研發主任。
+              白天大部分時間都在跟 SOP、放行報告、品質系統打交道 —
+              每個計畫都是「為了救一個病人」, 沒有犯錯的空間。
+            </p>
+            <p>
+              寫網站、做 3D 列印、玩 Arduino 是另一回事 — 沒人審查、
+              可以失敗、可以亂改。這裡放的每一個小玩意,
+              都是某個晚上「如果這樣做<span className="text-[var(--color-coral)] font-semibold">會怎樣</span>」的具現化。
+            </p>
+            <div className="flex flex-wrap gap-2 pt-3">
+              <span className="chip is-blue">生物工程</span>
+              <span className="chip is-coral">細胞治療</span>
+              <span className="chip is-amber">品管 / 法規</span>
+              <span className="chip is-out">side project</span>
+            </div>
+          </div>
+
+          <aside className="lg:col-span-5">
+            <div className="border-2 border-[var(--color-ink)] p-6 sm:p-8 bg-[var(--color-paper)] relative rotate-[-1deg]">
+              <span className="sticker is-amber absolute -top-3 -left-3 rotate-[-5deg]">info</span>
+              <div className="eyebrow mb-4">基本資料</div>
+              <dl className="space-y-3 text-[14px]">
+                <Row k="工作" v="研發主任 · 細胞治療" />
+                <Row k="業餘" v="網站 · 雲端 · 3D 列印 · Arduino" />
+                <Row k="時段" v="週末 / 業餘" />
+              </dl>
+              {/* 角落 brush-circle 印章 */}
+              <div className="absolute -bottom-3 -right-3 w-16 h-16 rounded-full border-2 border-[var(--color-coral)] opacity-80" />
+            </div>
+          </aside>
+        </div>
+
+        {/* Stats — v5 disc */}
+        <div className="mt-14 sm:mt-20 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6" data-reveal>
+          <StatCard n="12+" label="年 生技經驗" rail="var(--color-accent)" hint="從製程工程師到研發主任" />
+          <StatCard n={total} label="個 side project" rail="var(--color-coral)" hint="網站、3D 列印、Arduino⋯" />
+          <StatCard n="3" label="台 3D 印表機" rail="var(--color-amber)" hint="Bambu / Ender / 自行改機" />
+          <StatCard n={`${postCount}+`} label="篇文章" rail="var(--color-coral-hover)" hint="從 2013 累積到現在" />
+        </div>
       </section>
 
-      {/* FEATURED */}
-      {featured.length > 0 && (
-        <section className="px-5 sm:px-6 lg:px-10 py-10 sm:py-14 bg-[var(--color-paper-2)] border-y border-[var(--color-line)]">
-          <SectionLabel index="01.5" label="Featured" meta="Highlights" />
-          <ul className="divide-y divide-[var(--color-line)] border-y border-[var(--color-line)]">
-            {featured.map((p, i) => (
-              <li key={p.id}>
-                <Link
-                  to={`/work/${p.id}`}
-                  className="group flex items-center gap-4 sm:gap-6 py-5 sm:py-6 hover:bg-[var(--color-paper)] transition-colors -mx-2 px-2"
-                >
-                  <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-10">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[20px] sm:text-[24px] font-semibold tracking-tight truncate">
-                      {p.title}
-                    </span>
-                    <span className="block text-[13px] sm:text-[14px] text-[var(--color-mute)] truncate">
-                      {p.tagline}
-                    </span>
-                  </span>
-                  <span className="hidden sm:inline font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-24 text-right">
-                    {p.category}
-                  </span>
-                  <span className="hidden sm:inline font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)] w-16 text-right">
-                    {p.year}
-                  </span>
-                  <span className="ml-2 w-8 h-8 grid place-items-center border border-[var(--color-line)] group-hover:border-[var(--color-ink)] group-hover:bg-[var(--color-ink)] group-hover:text-[var(--color-paper)] transition-colors">
-                    <span aria-hidden>→</span>
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {/* ─── Works 區塊 ────────────────────────────────────────────── */}
+      <section id="works" className="border-t border-[var(--color-line)]">
+        <div data-reveal>
+          <ProjectGrid projects={projects} />
+        </div>
+      </section>
 
-      {/* WORKS GRID */}
-      <ProjectGrid projects={projects} />
+      {/* ─── 中場 marquee 彩色反向大字 ──────────────────────────────── */}
+      <Marquee
+        items={[
+          <span key="s" className="gradient-text-pan">Still shipping</span>,
+          "still breaking",
+          "still trying",
+          "still learning",
+          "still here",
+        ]}
+        speed={36}
+        variant="paper"
+        reverse
+        size="lg"
+      />
 
-      {/* CTA */}
-      <section className="border-t border-[var(--color-line)]">
-        <div className="px-5 sm:px-6 lg:px-10 py-16 sm:py-24 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+      {/* ─── 02 / Closing ──────────────────────────────────────────── */}
+      <section
+        className="border-t border-[var(--color-line)] px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative"
+        data-reveal
+      >
+        <div
+          aria-hidden
+          className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full pointer-events-none opacity-20"
+          style={{ background: "radial-gradient(circle, var(--color-coral), transparent 70%)" }}
+        />
+        <BigSectionNumber
+          number="02"
+          label="Chapter 02 · 聯絡"
+          title={
+            <>
+              想聊些什麼<span className="hl-coral">？</span>
+            </>
+          }
+          tone="coral"
+        />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-end">
           <div className="lg:col-span-8">
-            <SectionLabel index="99" label="Contact" />
-            <h2 className="text-[clamp(36px,7vw,84px)] font-semibold leading-[1.02] tracking-[-0.02em]">
-              交個朋友吧！
-              <br />
-              <span className="text-[var(--color-mute)]">來聊聊。</span>
-            </h2>
-          </div>
-          <div className="lg:col-span-4 lg:text-right">
+            <p className="font-serif text-[clamp(28px,3.2vw,48px)] leading-[1.2] tracking-tight text-[var(--color-ink)]">
+              技術的、做東西的、細胞治療的、<br className="hidden sm:block" />
+              或純粹好奇的 — 就寫信給我。
+            </p>
             <a
               href="mailto:me@finrod.xyz"
-              className="inline-flex items-center gap-2 h-12 px-6 bg-[var(--color-ink)] text-[var(--color-paper)] text-[13px] font-mono uppercase tracking-[0.12em] hover:bg-[var(--color-accent)] transition-colors"
+              className="mt-8 inline-block font-serif font-semibold leading-tight gradient-text-mix text-[clamp(32px,4vw,60px)] link-line"
             >
-              me@finrod.xyz <span aria-hidden>↗</span>
+              me@finrod.xyz →
             </a>
-            <p className="mt-3 text-[12px] font-mono tracking-[0.14em] uppercase text-[var(--color-mute)]">
-              New Taipei · 永和 · TW
+            <p className="mt-4 text-[13px] text-[var(--color-mute)]">
+              通常 1 — 2 個工作天內回信 · 國定假日除外
             </p>
+          </div>
+
+          <div className="lg:col-span-4 flex flex-wrap gap-2 justify-start lg:justify-end">
+            <span className="sticker is-coral">來信</span>
+            <span className="sticker is-blue" style={{ transform: "rotate(2deg)" }}>合作</span>
+            <span className="sticker is-amber" style={{ transform: "rotate(-1deg)" }}>聊聊天</span>
           </div>
         </div>
       </section>
+
+      {/* ─── 03 / 巨型 monogram ──────────────────────────────────── */}
+      <FinrodMark />
     </div>
   );
 }
 
-function Row({ k, v, dotColor }: { k: string; v: string; dotColor?: string }) {
+function Row({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-[var(--color-line-soft)] pb-2 last:border-b-0 last:pb-0">
-      <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-        {k}
-      </dt>
-      <dd className="text-right text-[var(--color-ink-2)] font-medium flex items-center gap-2">
-        {dotColor && <span className="w-1.5 h-1.5 rounded-full" style={{ background: dotColor }} />}
-        {v}
-      </dd>
-    </div>
-  );
-}
-
-function Stat({ n, label }: { n: string; label: string }) {
-  return (
-    <div>
-      <div className="text-[clamp(28px,4vw,40px)] font-semibold tracking-tight leading-none">{n}</div>
-      <div className="mt-2 font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-        {label}
-      </div>
+    <div className="grid grid-cols-[70px_1fr] items-baseline gap-3">
+      <dt className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--color-mute)]">{k}</dt>
+      <dd className="text-[var(--color-ink)]">{v}</dd>
     </div>
   );
 }

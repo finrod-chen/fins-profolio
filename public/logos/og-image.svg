@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2003/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%"  stop-color="#FAFAF7"/>
+      <stop offset="100%" stop-color="#F4F4EE"/>
+    </linearGradient>
+    <radialGradient id="blobA" cx="0.85" cy="0.15" r="0.4">
+      <stop offset="0%"  stop-color="#FF6B5C" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#FF6B5C" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="blobB" cx="0.1" cy="0.85" r="0.4">
+      <stop offset="0%"  stop-color="#0066FF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0066FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#blobA)"/>
+  <rect width="1200" height="630" fill="url(#blobB)"/>
+
+  <!-- monogram (left) -->
+  <g transform="translate(96, 230)">
+    <rect width="170" height="170" rx="32" fill="#0A0E1A"/>
+    <g fill="#FAFAF7">
+      <rect x="38" y="38" width="30" height="94"/>
+      <rect x="38" y="38" width="94" height="30"/>
+      <rect x="38" y="68" width="56" height="24"/>
+    </g>
+    <circle cx="132" cy="132" r="14" fill="#FF6B5C"/>
+    <rect x="34" y="132" width="50" height="6" fill="#0066FF"/>
+  </g>
+
+  <!-- wordmark -->
+  <g transform="translate(310, 0)">
+    <text x="0" y="320" font-family="'Iowan Old Style', Georgia, 'Noto Serif TC', serif"
+          font-size="92" font-weight="700" letter-spacing="-2" fill="#0A0E1A">Finrod</text>
+    <rect x="2" y="350" width="500" height="2" fill="#0A0E1A" opacity="0.2"/>
+    <text x="0" y="396" font-family="ui-monospace, 'JetBrains Mono', monospace"
+          font-size="22" font-weight="600" letter-spacing="6" fill="#0A0E1A" opacity="0.55">CHEN · WORKS · 2026</text>
+
+    <!-- tagline -->
+    <text x="0" y="452" font-family="'Iowan Old Style', Georgia, 'Noto Serif TC', serif"
+          font-size="24" font-weight="400" fill="#0A0E1A" opacity="0.75">白天做細胞治療, 晚上寫 side project.</text>
+  </g>
+
+  <!-- bottom URL -->
+  <text x="96" y="572" font-family="ui-monospace, 'JetBrains Mono', monospace"
+        font-size="18" font-weight="500" letter-spacing="3" fill="#0A0E1A" opacity="0.45">finrod.xyz / finrod-portfolio.pages.dev</text>
+</svg>

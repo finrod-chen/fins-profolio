@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import type { Project } from "@/types";
 import { ProjectImage } from "./ProjectImage";
+import { useTilt } from "@/hooks/useTilt";
 
 /**
- * ProjectCard — used inside the grid.
- * Mobile: stacked, image on top, metadata below.
- * Desktop: image on top, metadata sits in a "spec sheet" footer.
+ * ProjectCard — v5 bold
+ * 三變體：default / featured / minimal，加上 3D tilt hover (cursor follow)。
  */
 export function ProjectCard({
   project,
@@ -14,89 +14,172 @@ export function ProjectCard({
 }: {
   project: Project;
   index: number;
-  variant?: "default" | "wide";
+  variant?: "default" | "featured" | "minimal";
 }) {
-  const wide = variant === "wide";
-
-  return (
-    <Link
-      to={`/work/${project.id}`}
-      className={`lift group block border border-[var(--color-line)] bg-[var(--color-paper)] ${
-        wide ? "md:col-span-2" : ""
-      }`}
-    >
-      {/* screenshot */}
-      <div className={`relative ${wide ? "ratio-16-9" : "ratio-16-10"} bg-[var(--color-paper-2)] overflow-hidden border-b border-[var(--color-line)]`}>
-        <ProjectImage project={project} loading="lazy" />
-
-        {/* index stamp */}
-        <div className="absolute top-3 left-3 stamp bg-[var(--color-paper)]/90 backdrop-blur-sm">
-          {String(index + 1).padStart(2, "0")} · {project.year}
-        </div>
-
-        {/* status */}
-        <div className="absolute top-3 right-3">
-          <StatusBadge status={project.status} />
-        </div>
-
-        {/* hover arrow */}
-        <div className="absolute bottom-3 right-3 w-9 h-9 grid place-items-center bg-[var(--color-paper)] border border-[var(--color-ink)] opacity-0 group-hover:opacity-100 transition-opacity">
-          <span className="text-[14px] leading-none">↗</span>
-        </div>
-      </div>
-
-      {/* meta */}
-      <div className="p-4 sm:p-5 flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <h3 className="text-[18px] sm:text-[20px] font-semibold tracking-tight leading-tight truncate">
-            {project.title}
-          </h3>
-          <p className="mt-1 text-[13px] sm:text-[14px] text-[var(--color-mute)] line-clamp-2">
-            {project.tagline}
-          </p>
-        </div>
-        <div className="hidden sm:block shrink-0 text-right">
-          <div className="font-mono text-[10px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-            Category
-          </div>
-          <div className="font-mono text-[12px] tracking-[0.1em] uppercase text-[var(--color-ink-2)] mt-0.5">
-            {project.category}
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
+  if (variant === "featured") return <FeaturedCard project={project} index={index} />;
+  if (variant === "minimal")  return <MinimalCard project={project} index={index} />;
+  return <DefaultCard project={project} index={index} />;
 }
 
 function StatusBadge({ status }: { status: Project["status"] }) {
-  const map: Record<Project["status"], { label: string; tone: "live" | "draft" | "off" }> = {
-    live: { label: "Live", tone: "live" },
-    draft: { label: "WIP", tone: "draft" },
-    archived: { label: "Archive", tone: "off" },
+  const map: Record<Project["status"], { label: string; bg: string; ring: string }> = {
+    live:     { label: "上線",   bg: "var(--color-success)", ring: "rgba(4,120,87,0.18)" },
+    draft:    { label: "進行中", bg: "var(--color-warn)",    ring: "rgba(180,83,9,0.18)" },
+    archived: { label: "歸檔",   bg: "var(--color-mute)",    ring: "rgba(107,114,128,0.18)" },
   };
   const item = map[status];
-
   return (
     <span
-      className="font-mono text-[9px] tracking-[0.18em] uppercase inline-flex items-center gap-1.5 px-2 h-6 border"
-      style={{
-        borderColor: "var(--color-ink)",
-        background: "var(--color-paper)",
-        color: "var(--color-ink-2)",
-      }}
+      className="absolute top-3 left-3 z-10 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.16em] uppercase bg-white/90 backdrop-blur px-2 h-6 text-[var(--color-ink-2)]"
+      style={{ boxShadow: `0 0 0 4px ${item.ring}` }}
     >
-      <span
-        className="w-1.5 h-1.5 rounded-full"
-        style={{
-          background:
-            item.tone === "live"
-              ? "var(--color-success)"
-              : item.tone === "draft"
-              ? "var(--color-warn)"
-              : "var(--color-mute)",
-        }}
-      />
+      <span className="w-1.5 h-1.5 rounded-full" style={{ background: item.bg }} />
       {item.label}
     </span>
+  );
+}
+
+function NumberStamp({ index }: { index: number }) {
+  const num = String(index + 1).padStart(2, "0");
+  return (
+    <span className="font-mono text-[11px] tracking-[0.18em] text-[var(--color-mute)]">
+      #{num}
+    </span>
+  );
+}
+
+function TiltWrap({ children }: { children: React.ReactNode }) {
+  const { ref, onMouseMove, onMouseLeave } = useTilt(5);
+  return (
+    <div
+      ref={ref}
+      className="preserve-3d transition-transform duration-200 ease-out"
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      style={{ transition: "transform 240ms ease-out" }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function FeaturedCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <TiltWrap>
+      <Link
+        to={`/work/${project.id}`}
+        className="hover-lift group block border border-[var(--color-ink)] bg-[var(--color-paper)] overflow-hidden"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-5">
+          <div className="relative ratio-4-3 lg:ratio-auto lg:h-full lg:col-span-3 bg-[var(--color-paper-2)] overflow-hidden border-b lg:border-b-0 lg:border-r border-[var(--color-line)]">
+            <div className="hover-img absolute inset-0">
+              <ProjectImage project={project} loading="lazy" />
+            </div>
+            <StatusBadge status={project.status} />
+            <span className="absolute top-3 right-3 z-10 sticker is-coral">
+              Featured
+            </span>
+          </div>
+          <div className="lg:col-span-2 p-6 sm:p-8 lg:p-10 flex flex-col justify-center">
+            <div className="flex items-center gap-2 mb-3">
+              <NumberStamp index={index} />
+              <span className="opacity-40">·</span>
+              <span className="tag is-accent">{project.category}</span>
+              <span className="opacity-40">·</span>
+              <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--color-mute)]">
+                {project.year}
+              </span>
+            </div>
+            <h3 className="font-serif text-[clamp(28px,3.4vw,40px)] font-semibold leading-[1.15] tracking-tight text-[var(--color-ink)]">
+              {project.title}
+            </h3>
+            <p className="mt-3 text-[15px] leading-[1.7] text-[var(--color-ink-2)] max-w-prose">
+              {project.tagline}
+            </p>
+            <div className="mt-5 inline-flex items-center gap-2 text-[13px] text-[var(--color-accent-hover)] font-medium">
+              閱讀全文
+              <span className="hover-arrow" aria-hidden>↗</span>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </TiltWrap>
+  );
+}
+
+function DefaultCard({ project, index }: { project: Project; index: number }) {
+  const rail =
+    index % 3 === 0 ? "var(--color-accent)" :
+    index % 3 === 1 ? "var(--color-coral)" :
+                       "var(--color-amber)";
+
+  return (
+    <TiltWrap>
+      <Link
+        to={`/work/${project.id}`}
+        className="hover-lift group block border border-[var(--color-line)] bg-[var(--color-paper)] overflow-hidden relative"
+      >
+        <div
+          aria-hidden
+          className="absolute left-0 top-0 bottom-0 w-1 z-10"
+          style={{ background: rail }}
+        />
+        <div className="relative ratio-3-2 bg-[var(--color-paper-2)] overflow-hidden border-b border-[var(--color-line)]">
+          <div className="hover-img absolute inset-0">
+            <ProjectImage project={project} loading="lazy" />
+          </div>
+          <StatusBadge status={project.status} />
+        </div>
+
+        <div className="p-5">
+          <div className="flex items-center gap-2 mb-2.5">
+            <NumberStamp index={index} />
+            <span aria-hidden className="text-[var(--color-line)]">·</span>
+            <span className="tag">{project.category}</span>
+            <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
+              {project.year}
+            </span>
+          </div>
+          <h3 className="font-serif text-[18px] sm:text-[20px] font-semibold leading-[1.25] tracking-tight text-[var(--color-ink)]">
+            {project.title}
+          </h3>
+          <p className="mt-2 text-[13px] text-[var(--color-ink-2)] leading-[1.6] line-clamp-2">
+            {project.tagline}
+          </p>
+          <div className="mt-3 inline-flex items-center gap-1 text-[12px] text-[var(--color-mute)]">
+            <span>看細節</span>
+            <span className="hover-arrow" aria-hidden>→</span>
+          </div>
+        </div>
+      </Link>
+    </TiltWrap>
+  );
+}
+
+function MinimalCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <TiltWrap>
+      <Link
+        to={`/work/${project.id}`}
+        className="hover-lift group block bg-[var(--color-paper)] p-5 sm:p-6 border border-[var(--color-line)] relative"
+      >
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <NumberStamp index={index} />
+          <span className="font-mono text-[10px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
+            {project.year}
+          </span>
+        </div>
+        <h3 className="font-serif text-[clamp(20px,2vw,24px)] font-semibold leading-[1.2] tracking-tight text-[var(--color-ink)]">
+          {project.title}
+        </h3>
+        <p className="mt-2 text-[13px] text-[var(--color-ink-2)] leading-[1.6] line-clamp-2">
+          {project.tagline}
+        </p>
+        <div className="mt-4 flex items-center justify-between">
+          <span className="chip is-blue">{project.category}</span>
+          <span className="hover-arrow text-[var(--color-accent)]" aria-hidden>↗</span>
+        </div>
+      </Link>
+    </TiltWrap>
   );
 }
