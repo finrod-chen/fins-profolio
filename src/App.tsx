@@ -3,6 +3,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { CursorDot } from "@/components/CursorDot";
+import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { HomePage } from "@/pages/HomePage";
 
 // Route-level code splitting: keep the landing page lean. The About page,
@@ -43,23 +44,28 @@ function RouteFallback() {
 }
 
 function App() {
+  const { pathname } = useLocation();
   return (
     <div className="min-h-svh flex flex-col bg-[var(--color-paper)] text-[var(--color-ink)]">
       <ScrollToTop />
       <CursorDot />
       <Header />
       <main className="flex-1">
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/work/:id" element={<WorkDetailPage />} />
-            <Route path="/blog" element={<BlogIndexPage />} />
-            <Route path="/blog/*" element={<BlogPostPage />} />
-            <Route path="/recommends" element={<RecommendsPage />} />
-            <Route path="*" element={<HomePage />} />
-          </Routes>
-        </Suspense>
+        {/* key={pathname} resets the boundary's error state on navigation,
+            so a one-off chunk failure doesn't lock out later routes. */}
+        <RouteErrorBoundary key={pathname}>
+          <Suspense fallback={<RouteFallback />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/work/:id" element={<WorkDetailPage />} />
+              <Route path="/blog" element={<BlogIndexPage />} />
+              <Route path="/blog/*" element={<BlogPostPage />} />
+              <Route path="/recommends" element={<RecommendsPage />} />
+              <Route path="*" element={<HomePage />} />
+            </Routes>
+          </Suspense>
+        </RouteErrorBoundary>
       </main>
       <Footer />
     </div>
