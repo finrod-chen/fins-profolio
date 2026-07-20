@@ -64,10 +64,16 @@
 }
 .marquee-track:hover { animation-play-state: paused; }
 
-/* ---------- Page-in ---------- */
+/* ---------- Page-in ----------
+   Deliberately does NOT animate opacity: if a page mounts while the tab
+   is backgrounded (e.g. opened via middle-click), some browsers throttle
+   the animation and never advance past its first frame — with opacity
+   that means the entire page stays invisible even after switching back
+   to the tab. A transform-only entrance can never hide content, only
+   ever nudge it a few pixels, so it's safe under that failure mode. */
 @keyframes page-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { transform: translateY(6px); }
+  to   { transform: translateY(0); }
 }
 .page-in {
   animation: page-in 240ms var(--ease-out-quint) both;
