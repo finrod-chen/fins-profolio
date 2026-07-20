@@ -31,6 +31,12 @@ body {
 @media (hover: none) {
   body { cursor: auto; }
 }
+/* cursor-dot 監聽 document 事件，跨來源 iframe (例如 /recommends 的
+   Coupang widget) 內的滑鼠事件不會冒泡出來 — 若不還原游標，滑到
+   iframe 上時畫面會完全沒有游標可見。 */
+iframe {
+  cursor: auto;
+}
 
 * {
   -webkit-tap-highlight-color: transparent;
@@ -48,6 +54,18 @@ body {
 .font-serif   { font-family: var(--font-serif); }
 .font-display { font-family: var(--font-display); }
 .font-mono    { font-family: var(--font-mono); font-feature-settings: "ss01", "zero"; }
+
+/* Centralized giant-headline scale — was previously a hand-copied
+   clamp() string duplicated (with drifting numbers) across pages. */
+.text-hero {
+  font-size: var(--text-hero);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+.text-hero-sub {
+  font-size: var(--text-hero-sub);
+  line-height: 1.5;
+}
 
 .eyebrow {
   font-family: var(--font-mono);

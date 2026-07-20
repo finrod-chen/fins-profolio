@@ -1,5 +1,14 @@
 import { useEffect } from "react";
 
+/** Shared prefers-reduced-motion check, reused by useReveal and useKineticReveal. */
+export function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== "undefined" &&
+    typeof window.matchMedia === "function" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 /**
  * useReveal — opt-in IntersectionObserver driver for `[data-reveal]`
  * elements. Adds `is-in` when an element first enters the viewport,
@@ -12,10 +21,7 @@ export function useReveal(rootMargin = "0px 0px -8% 0px") {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const reduce =
-      typeof window.matchMedia === "function" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
+    if (prefersReducedMotion()) {
       // Hard-set is-in so CSS sees it; transitions are already disabled.
       document
         .querySelectorAll<HTMLElement>("[data-reveal]")

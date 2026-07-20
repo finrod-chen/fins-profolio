@@ -8,6 +8,7 @@ import GithubSlugger from "github-slugger";
 import { findPost, posts, relatedPosts } from "@/data/blog";
 import { SectionLabel } from "@/components/SectionLabel";
 import { BigSectionNumber } from "@/components/BigSectionNumber";
+import { KineticText } from "@/components/KineticText";
 import { useReveal } from "@/hooks/useReveal";
 
 interface Heading {
@@ -159,7 +160,12 @@ export function BlogPostPage() {
         <BigSectionNumber
           number="02"
           label={post.category}
-          title={<>{post.title}<span className="hl-coral">.</span></>}
+          title={
+            <>
+              <KineticText as="span" text={post.title} />
+              <span className="hl-coral">.</span>
+            </>
+          }
           tone="coral"
         />
         {post.description && (

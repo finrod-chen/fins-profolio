@@ -8,12 +8,13 @@ import { BigSectionNumber } from "@/components/BigSectionNumber";
 import { StatCard } from "@/components/StatCard";
 import { FinrodMark } from "@/components/FinrodMark";
 import { Logo } from "@/components/Logo";
+import { KineticText } from "@/components/KineticText";
 import { useReveal } from "@/hooks/useReveal";
 
 /**
- * HomePage — v5 bold
- * 巨型 H1 (藍 / 桃紅 / 桃黃 inline highlights)、blob 漂浮背景、
- * 巨型 marquee (大字 56px)、巨型編號章節、StatCard disc 裝飾、
+ * HomePage — v6 kinetic editorial
+ * 巨型 H1 逐字浮現 (kinetic wipe-up)、克制版 blob 漂浮背景 (2 色)、
+ * 單一大字 marquee 開場 + 中場過場、巨型編號章節、StatCard disc 裝飾、
  * Finrod Mark footer 上方、彩色 sticky 收合。
  */
 export function HomePage() {
@@ -22,22 +23,15 @@ export function HomePage() {
   const total = projects.length;
   const postCount = blogPosts.length;
 
-  // Marquee 文字
-  const bigMarqueeLeft: (string | React.ReactNode)[] = [
+  // 開場 marquee 文字 — 原本拆成兩條 (ink/coral) 疊在一起，
+  // 現在合併成一條，把節奏留給後面的中場 marquee。
+  const heroMarquee: (string | React.ReactNode)[] = [
     "Side project",
     "細胞治療",
-    "Tinkering",
-    "Personal site",
-    "Cell therapy",
-    "永遠在學",
-  ];
-  const bigMarqueeRight: (string | React.ReactNode)[] = [
     "Push it live ✦",
-    "再 push 一次",
-    "Break things",
-    "Fix them again",
+    "Tinkering",
     "Ship anyway",
-    "It works on my machine",
+    "永遠在學",
   ];
 
   return (
@@ -45,7 +39,7 @@ export function HomePage() {
       {/* ─── HERO — 大 H1 ＋ blob 背景 ─────────────────────────────────── */}
       <BloBg
         className="px-5 sm:px-8 lg:px-12 pt-8 sm:pt-12 lg:pt-16 pb-16 sm:pb-24"
-        variant="all"
+        variant="warm"
       >
         {/* 漂浮 sticker */}
         <div className="flex flex-wrap items-center gap-2 mb-6 sm:mb-10" data-reveal>
@@ -54,7 +48,7 @@ export function HomePage() {
             接受新合作
           </span>
           <span className="font-mono text-[11px] tracking-[0.16em] uppercase text-[var(--color-mute)]">
-            Finrod · 2026 · v5
+            Finrod · 2026
           </span>
         </div>
 
@@ -69,21 +63,22 @@ export function HomePage() {
         </div>
 
         <div className="relative">
-          <h1
-            className="font-serif font-semibold leading-[0.92] tracking-[-0.03em] text-[var(--color-ink)]"
-            style={{ fontSize: "clamp(56px, 9vw, 132px)" }}
-            data-reveal
-          >
-            <span className="block">白天做</span>
+          <h1 className="text-hero font-serif font-semibold text-[var(--color-ink)]">
+            <KineticText as="span" text="白天做" className="block" />
+            <KineticText
+              as="span"
+              text="細胞治療，"
+              className="block text-[var(--color-coral)]"
+            />
+            <KineticText as="span" text="晚上寫" className="block" />
             <span className="block">
-              <span className="text-[var(--color-coral)]">細胞治療</span>
-              <span>，</span>
-            </span>
-            <span className="block">晚上寫</span>
-            <span className="block">
-              <span>side&nbsp;</span>
-              <span className="text-[var(--color-coral)]">project</span>
-              <span>。</span>
+              <KineticText as="span" text="side" stagger={45} />{" "}
+              <KineticText
+                as="span"
+                text="project。"
+                className="text-[var(--color-coral)]"
+                stagger={45}
+              />
             </span>
           </h1>
 
@@ -123,11 +118,7 @@ export function HomePage() {
             </p>
           </div>
           <div className="lg:col-span-5 flex flex-col items-start lg:items-end gap-5">
-            <div className="flex flex-wrap gap-2">
-              <span className="sticker is-coral">v5 · Bold</span>
-              <span className="sticker is-blue" style={{ transform: "rotate(2deg)" }}>2026</span>
-              <span className="sticker is-amber" style={{ transform: "rotate(-1deg)" }}>Live ✦</span>
-            </div>
+            <span className="sticker is-amber" style={{ transform: "rotate(-1deg)" }}>2026 ✦</span>
             <div className="flex flex-wrap items-center gap-3">
               <Link to="/#works" className="btn btn-primary">
                 <span>看作品</span>
@@ -142,23 +133,11 @@ export function HomePage() {
         </div>
       </BloBg>
 
-      {/* ─── 大字 marquee (ink → coral) ─────────────────────────────── */}
-      <Marquee
-        items={bigMarqueeLeft}
-        speed={50}
-        variant="ink"
-        size="lg"
-      />
-      <Marquee
-        items={bigMarqueeRight}
-        speed={42}
-        variant="coral"
-        reverse
-        size="md"
-      />
+      {/* ─── 大字 marquee ─────────────────────────────────────────── */}
+      <Marquee items={heroMarquee} speed={46} variant="ink" size="lg" />
 
       {/* ─── 01 / About 區塊 ────────────────────────────────────────── */}
-      <section className="px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative">
+      <section className="px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative overflow-hidden">
         {/* 背景光暈 */}
         <div
           aria-hidden
@@ -171,7 +150,8 @@ export function HomePage() {
             label="Chapter 01 · 關於"
             title={
               <>
-                我是 <span className="hl-coral">Finrod</span>
+                <KineticText as="span" text="我是" />{" "}
+                <span className="hl-coral">Finrod</span>
               </>
             }
             tone="accent"
@@ -251,7 +231,7 @@ export function HomePage() {
 
       {/* ─── 02 / Closing ──────────────────────────────────────────── */}
       <section
-        className="border-t border-[var(--color-line)] px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative"
+        className="border-t border-[var(--color-line)] px-5 sm:px-8 lg:px-12 py-20 sm:py-28 relative overflow-hidden"
         data-reveal
       >
         <div
@@ -264,7 +244,8 @@ export function HomePage() {
           label="Chapter 02 · 聯絡"
           title={
             <>
-              想聊些什麼<span className="hl-coral">？</span>
+              <KineticText as="span" text="想聊些什麼" />
+              <span className="hl-coral">？</span>
             </>
           }
           tone="coral"

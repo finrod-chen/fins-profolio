@@ -3,6 +3,7 @@ import { ProjectImage } from "./ProjectImage";
 import { SectionLabel } from "./SectionLabel";
 import { Link } from "react-router-dom";
 import { useReveal } from "@/hooks/useReveal";
+import { KineticText } from "@/components/KineticText";
 
 /**
  * ProjectPage — detail view for a single work.
@@ -43,10 +44,14 @@ export function ProjectPage({ project }: { project: Project }) {
           <span className="tag">{project.year}</span>
           <span className="tag">{project.role}</span>
         </div>
-        <h1 className="font-serif text-[clamp(44px,7vw,80px)] font-semibold leading-[1.05] tracking-tight text-[var(--color-ink)]">
-          {project.title}
-          <span className="text-[var(--color-coral)]">.</span>
-        </h1>
+        <span className="flex items-baseline gap-1 flex-wrap">
+          <KineticText
+            as="h1"
+            text={project.title}
+            className="font-serif text-[clamp(44px,7vw,80px)] font-semibold leading-[1.05] tracking-tight text-[var(--color-ink)]"
+          />
+          <span className="hl-coral text-[clamp(44px,7vw,80px)]">.</span>
+        </span>
         <p className="mt-4 max-w-3xl text-[16px] sm:text-[17px] leading-[1.7] text-[var(--color-ink-2)]">
           {project.tagline}
         </p>

@@ -1,5 +1,5 @@
 import { SectionLabel } from "@/components/SectionLabel";
-import { BigSectionNumber } from "@/components/BigSectionNumber";
+import { PageHero } from "@/components/PageHero";
 import { useReveal } from "@/hooks/useReveal";
 
 type Slot = {
@@ -48,28 +48,19 @@ export function RecommendsPage() {
         content="Finrod Chen 用過覺得值得的生活好物, 加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
       />
 
-      <section className="px-5 sm:px-8 lg:px-12 pt-10 sm:pt-14 pb-10 relative">
-        <div
-          aria-hidden
-          className="absolute -top-10 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none opacity-15"
-          style={{ background: "radial-gradient(circle, var(--color-coral), transparent 70%)" }}
-        />
-        <span className="sticker is-coral absolute top-14 right-5 sm:right-8 lg:right-12 rotate-[-3deg] z-10 hidden sm:inline-block">Goods ✦</span>
-        <div data-reveal>
-          <BigSectionNumber
-            number="03"
-            label="好物"
-            title={<>
-              好物<span className="hl-coral">.</span>
-            </>}
-            tone="coral"
-            right={
-              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-                聯盟行銷 · 透明揭露
-              </span>
-            }
-          />
-        </div>
+      <PageHero
+        number="03"
+        label="好物"
+        title="好物"
+        tone="coral"
+        sticker="Goods ✦"
+        blobSide="left"
+        meta={
+          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+            聯盟行銷 · 透明揭露
+          </span>
+        }
+      >
         <p className="mt-2 max-w-2xl text-[16px] sm:text-[17px] leading-[1.8] text-[var(--color-ink-2)]" data-reveal>
           我用 Coupang 買了幾年生活用品, 這裡收的是{" "}
           <strong className="font-semibold text-[var(--color-ink)]">
@@ -83,7 +74,7 @@ export function RecommendsPage() {
           <span className="chip is-blue">台灣</span>
           <span className="chip is-coral">Coupang</span>
         </div>
-      </section>
+      </PageHero>
 
       <section className="px-5 sm:px-8 lg:px-12 pb-14">
         <SectionLabel

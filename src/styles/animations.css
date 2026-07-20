@@ -26,6 +26,29 @@
 [data-reveal][data-reveal-delay="7"] { transition-delay: 420ms; }
 [data-reveal][data-reveal-delay="8"] { transition-delay: 480ms; }
 
+/* ---------- Kinetic typography (v6) ----------
+   Used by <KineticText>: each word is wrapped in an overflow-hidden
+   span (.kinetic-word) around an inner span (.kinetic-word-inner) that
+   wipes up into place. Per-word stagger is set inline by the component
+   (transition-delay), scaled by its `stagger` prop. */
+.kinetic-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.kinetic-word-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  transition:
+    transform 700ms var(--ease-kinetic, cubic-bezier(0.19,1,0.22,1)),
+    opacity 500ms var(--ease-kinetic, cubic-bezier(0.19,1,0.22,1));
+}
+.kinetic-text.is-in .kinetic-word-inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 /* ---------- Marquee ---------- */
 @keyframes marquee-x {
   from { transform: translateX(0); }
@@ -88,18 +111,26 @@
   .cursor-dot { display: none; }
 }
 
-/* ---------- Link underline sweep ---------- */
+/* ---------- Link underline sweep (v6: transform-based kinetic draw) ---------- */
 .link-line {
   position: relative;
   text-decoration: none;
-  background-image: linear-gradient(currentColor, currentColor);
-  background-size: 0% 1px;
-  background-repeat: no-repeat;
-  background-position: 0 100%;
-  transition: background-size 300ms var(--ease-out-expo, cubic-bezier(0.16,1,0.3,1));
 }
-.link-line:hover {
-  background-size: 100% 1px;
+.link-line::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 320ms var(--ease-kinetic, cubic-bezier(0.19,1,0.22,1));
+}
+.link-line:hover::after,
+.link-line:focus-visible::after {
+  transform: scaleX(1);
 }
 
 /* ---------- Hover lift (ProjectCard) ---------- */
@@ -221,7 +252,7 @@ a:hover .hover-arrow {
   position: absolute;
   border-radius: 9999px;
   filter: blur(60px);
-  opacity: 0.55;
+  opacity: 0.4;
   pointer-events: none;
   will-change: transform;
 }
@@ -248,7 +279,9 @@ a:hover .hover-arrow {
   .count-up.is-in,
   .gradient-text-pan,
   .blob,
-  .blob-1, .blob-2, .blob-3 {
+  .blob-1, .blob-2, .blob-3,
+  .kinetic-word-inner,
+  .kinetic-text.is-in .kinetic-word-inner {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
@@ -257,7 +290,7 @@ a:hover .hover-arrow {
   .marquee-track { animation: none !important; }
   .cursor-dot { display: none; }
   .hover-lift:hover { transform: none; }
-  .link-line { background-size: 100% 1px; }
+  .link-line::after { transition: none !important; }
   .floating-pill,
   .floating-pill.is-shrunk {
     transition: none !important;

@@ -1,42 +1,32 @@
-import { BigSectionNumber } from "@/components/BigSectionNumber";
+import { PageHero } from "@/components/PageHero";
 
 /**
- * AboutPage — v5 bold
- * 巨型章節編號 01 + 旋轉卡 + brush-circle 印章 + 章節彩色 disc。
+ * AboutPage — v6 kinetic editorial
+ * PageHero (章節編號 + 動態標題) + brush-circle 印章 + 章節彩色 disc。
  */
 export function AboutPage() {
   return (
     <article className="page-in">
-      <section className="px-5 sm:px-8 lg:px-12 pt-10 sm:pt-14 pb-8 sm:pb-12 relative">
-        <div
-          aria-hidden
-          className="absolute -top-10 -right-20 w-[360px] h-[360px] rounded-full pointer-events-none opacity-15"
-          style={{ background: "radial-gradient(circle, var(--color-coral), transparent 70%)" }}
-        />
-        <span className="sticker is-blue absolute top-14 right-5 sm:right-8 lg:right-12 rotate-[3deg] z-10 hidden sm:inline-block">About ✦</span>
-        <div data-reveal>
-          <BigSectionNumber
-            number="01"
-            label="關於"
-            title={
-              <>
-                關於<span className="hl-coral">.</span>
-              </>
-            }
-            tone="coral"
-            right={
-              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-                Finrod Chen · 個人簡介
-              </span>
-            }
-          />
-        </div>
+      <PageHero
+        number="01"
+        label="關於"
+        title="關於"
+        tone="coral"
+        stickerTone="accent"
+        sticker="About ✦"
+        blobSide="right"
+        meta={
+          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
+            Finrod Chen · 個人簡介
+          </span>
+        }
+      >
         <div className="mt-2 flex flex-wrap gap-2" data-reveal>
           <span className="chip is-blue">細胞治療</span>
           <span className="chip is-coral">side project</span>
           <span className="chip is-amber">台灣</span>
         </div>
-      </section>
+      </PageHero>
 
       <section className="px-5 sm:px-8 lg:px-12 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10" data-reveal>
