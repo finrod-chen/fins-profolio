@@ -1,10 +1,12 @@
 import { PageHero } from "@/components/PageHero";
+import { useReveal } from "@/hooks/useReveal";
 
 /**
  * AboutPage — v6 kinetic editorial
  * PageHero (章節編號 + 動態標題) + brush-circle 印章 + 章節彩色 disc。
  */
 export function AboutPage() {
+  useReveal();
   return (
     <article className="page-in">
       <PageHero
