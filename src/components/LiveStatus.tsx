@@ -39,10 +39,9 @@ export function LiveStatus({
   mode?: LiveStatusMode;
   className?: string;
 }) {
-  const [now, setNow] = useState<Date | null>(null);
+  const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
-    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(id);
   }, []);
@@ -52,23 +51,6 @@ export function LiveStatus({
       ? `chip is-out ${className}`
       : `chip ${className}`;
   const isCompact = compact;
-
-  if (!now) {
-    if (isCompact) {
-      return (
-        <span className={`${wrapperClass} !gap-1 !text-[10px] !px-2 !py-1`}>
-          <span className="live-dot inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-mute)]" />
-          <span>--:--</span>
-        </span>
-      );
-    }
-    return (
-      <div className={wrapperClass}>
-        <span className="live-dot inline-block w-1.5 h-1.5 rounded-full bg-[var(--color-mute)]" />
-        <span>loading</span>
-      </div>
-    );
-  }
 
   const hh = String(now.getHours()).padStart(2, "0");
   const mm = String(now.getMinutes()).padStart(2, "0");
