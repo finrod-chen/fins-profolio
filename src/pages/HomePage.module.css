@@ -1,0 +1,19 @@
+/* The hero's image sits in the same bordered frame the work cards use, so
+   the corner radius and the hairline read as one system. */
+.heroMedia {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-surface);
+  background: var(--surface-muted);
+}
+
+/* KPI row: equal heights, wrapping to one card per row on a phone. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+  align-items: stretch;
+  padding-block: clamp(32px, 5vw, 56px);
+}

@@ -1,4 +1,6 @@
 import { Component, type ReactNode } from "react";
+import { EmptyState } from "@/components/arc/empty-state/empty-state";
+import styles from "./RouteErrorBoundary.module.css";
 
 const RELOAD_FLAG = "route-error-reload-attempted";
 
@@ -39,31 +41,23 @@ export class RouteErrorBoundary extends Component<
 
   render() {
     if (this.state.error) {
-      if (isChunkLoadError(this.state.error)) {
-        // Reload is already in flight (or was already tried this
-        // session) — show a minimal message instead of a blank screen.
-        return (
-          <div className="px-5 sm:px-8 lg:px-12 py-20 sm:py-28 text-center">
-            <p className="text-[14px] text-[var(--color-mute)]">
-              頁面載入失敗，正在重新整理⋯
-            </p>
-            <a
-              href={window.location.href}
-              className="mt-4 inline-block btn btn-ghost"
-            >
-              手動重新整理
-            </a>
-          </div>
-        );
-      }
+      const chunk = isChunkLoadError(this.state.error);
       return (
-        <div className="px-5 sm:px-8 lg:px-12 py-20 sm:py-28 text-center">
-          <p className="text-[14px] text-[var(--color-mute)]">
-            這裡出了點問題。
-          </p>
-          <a href="/" className="mt-4 inline-block btn btn-ghost">
-            回首頁
-          </a>
+        <div className="page band">
+          <EmptyState
+            label={chunk ? "頁面載入失敗" : "發生錯誤"}
+            title={chunk ? "這一頁沒載進來" : "這裡出了點問題"}
+            description={
+              chunk
+                ? "通常是剛好碰上網站更新，重新整理一次就會好。"
+                : "可以重新整理，或先回首頁看看。"
+            }
+            action={
+              <a className={styles.action} href={chunk ? window.location.href : "/"}>
+                {chunk ? "重新整理" : "回首頁"}
+              </a>
+            }
+          />
         </div>
       );
     }

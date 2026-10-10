@@ -1,0 +1,282 @@
+/* ============================================================
+   Global stylesheet — Arc foundation + the few page-level rules
+   Arc's components own their own CSS modules; this file only
+   carries the reset, the font wiring, the page container, and
+   long-form markdown styles.
+   ============================================================ */
+@import "../components/arc/foundation.css";
+
+:root {
+  /* Arc resolves --font-display / --font-body from these two. Geist and
+     Inter carry no CJK glyphs, so Noto Sans TC follows for 中文. */
+  --font-geist: "Geist", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-inter: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+
+  /* One page container for the whole site (composition: never a second one). */
+  --page-width: 1120px;
+  --page-gutter: clamp(16px, 4vw, 32px);
+  --reading-width: 68ch;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 400;
+  letter-spacing: var(--tracking-body);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-display);
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+img,
+svg,
+video,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--accent-subtle);
+}
+
+/* ---------- Page shell ---------------------------------------------- */
+
+.page {
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+}
+
+.page > * {
+  min-width: 0;
+}
+
+/* A section of a marketing-weight page: generous, one idea each. */
+.band {
+  padding-block: clamp(64px, 9vw, 120px);
+}
+
+.band-tight {
+  padding-block: clamp(40px, 6vw, 64px);
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- Long-form prose (markdown posts, project notes) ---------- */
+
+.prose {
+  max-width: var(--reading-width);
+  font-size: var(--text-lg);
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose > * + h2 {
+  margin-top: 2.2em;
+}
+
+.prose > * + h3 {
+  margin-top: 1.8em;
+}
+
+.prose h1,
+.prose h2 {
+  font-family: var(--font-display);
+  color: var(--foreground);
+}
+
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-family: var(--font-body);
+  color: var(--foreground);
+}
+
+.prose h1 {
+  font-size: var(--text-3xl);
+}
+
+.prose h2 {
+  font-size: var(--text-2xl);
+  padding-top: 0.4em;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.prose h3 {
+  font-size: var(--text-xl);
+}
+
+.prose h4 {
+  font-size: var(--text-lg);
+}
+
+.prose h5,
+.prose h6 {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: var(--accent-subtle);
+  text-underline-offset: 3px;
+}
+
+.prose a:hover {
+  text-decoration-color: currentColor;
+}
+
+.prose strong {
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose li::marker {
+  color: var(--text-muted);
+}
+
+.prose blockquote {
+  padding-left: var(--space-5);
+  border-left: 2px solid var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-code);
+  font-size: 0.9em;
+  padding: 0.15em 0.4em;
+  border-radius: calc(var(--radius-control) - 10px);
+  background: var(--surface-muted);
+  color: var(--foreground);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin-block: 2.4em;
+}
+
+.prose img,
+.prose video,
+.prose iframe {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--border);
+}
+
+.prose iframe {
+  aspect-ratio: 16 / 9;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose th {
+  color: var(--foreground);
+  font-weight: 500;
+  border-bottom-color: var(--border-strong);
+}
+
+/* A wide table scrolls inside its own box, never the page. */
+.proseScroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.prose del {
+  color: var(--text-muted);
+}

@@ -1,0 +1,152 @@
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.columns {
+  display: grid;
+  gap: var(--space-12);
+  padding-bottom: clamp(48px, 7vw, 96px);
+}
+
+@media (min-width: 900px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--space-16);
+  }
+}
+
+.columns > * {
+  min-width: 0;
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-8);
+}
+
+.email {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-display);
+  color: var(--foreground);
+}
+
+.email:hover {
+  color: var(--accent);
+}
+
+.side {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.sideHeading {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.sideHeading + .sideHeading,
+.group + .sideHeading {
+  margin-top: var(--space-4);
+}
+
+/* One bordered group with hairline dividers, rather than a card per row. */
+.group {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  list-style: none;
+  overflow: hidden;
+}
+
+.row,
+.careerRow {
+  display: grid;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-4) var(--space-5);
+}
+
+.row + .row,
+.careerRow + .careerRow {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.row {
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: baseline;
+}
+
+.rowLabel {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.rowValue {
+  font-size: var(--text-sm);
+  color: var(--foreground);
+}
+
+.linkList {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.link {
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.career {
+  display: grid;
+  gap: var(--space-6);
+  padding-bottom: clamp(64px, 9vw, 120px);
+}
+
+.careerHeading {
+  font-size: var(--text-3xl);
+}
+
+.careerRow {
+  grid-template-columns: 72px minmax(0, 1fr);
+}
+
+.careerYear {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.careerBody {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.careerRole {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.careerPlace {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.careerNote {
+  max-width: var(--reading-width);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}

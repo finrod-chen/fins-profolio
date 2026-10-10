@@ -30,29 +30,53 @@ Node ≥ 20。
 
 ```
 src/
-├── main.tsx                 # 入口（含 React Router）
-├── App.tsx                  # 路由 + 版面
-├── index.css                # 設計系統（Tailwind v4 + 自訂 tokens）
+├── main.tsx                 # 入口（Router + ArcProvider）
+├── App.tsx                  # 路由 + 版面骨架
 ├── types.ts                 # Project 型別定義
 │
+├── components/arc/          # ★ Arc 元件庫（shadcn CLI 安裝，不要手改）
+│   ├── foundation.css       #   設計 token：顏色、間距、圓角、字級、動態
+│   └── blocks/              #   site-header / site-footer / hero-section / cta-section
+│
+├── components/              # 本站自己的組裝層
+│   ├── SiteNav.tsx          #   Arc site-header 接上 React Router
+│   ├── SiteFoot.tsx         #   Arc site-footer + 深色模式開關
+│   ├── PageIntro.tsx        #   內頁抬頭（麵包屑 + 標題 + 說明）
+│   ├── WorkList.tsx         #   作品列表 + 分類篩選
+│   ├── WorkCover.tsx        #   作品預覽圖（截圖 → OG 圖 → 文字卡）
+│   └── Markdown.tsx         #   文章內文（含 Arc code-block）
+│
+├── lib/
+│   ├── arc-link.tsx         # Arc 內部連結改走 React Router
+│   ├── theme.ts             # 淺色 / 深色切換
+│   └── format.ts            # 日期格式（固定 zh-TW + Asia/Taipei）
+│
+├── styles/global.css        # reset + 字型接線 + 頁面容器 + .prose
+├── shims/next-image.tsx     # Arc block 用到的 next/image 替身
+│
 ├── data/
-│   └── projects.ts          # ★ 作品資料（標題/簡介/截圖/連結⋯）
+│   ├── projects.ts          # ★ 作品資料
+│   └── blog.ts              # 文章載入（讀 src/content/**/*.md）
 │
-├── components/
-│   ├── Header.tsx           # 頂部導覽（桌機有 status bar）
-│   ├── Footer.tsx           # 底部資訊
-│   ├── SectionLabel.tsx     # 區塊編號標籤
-│   ├── Marquee.tsx          # 工業感跑馬燈
-│   ├── ProjectCard.tsx      # 作品卡片
-│   ├── ProjectGrid.tsx      # 作品 grid + 分類篩選
-│   ├── ProjectPage.tsx      # 作品詳情（hero + spec sheet + 內文）
-│   └── SitePlaceholder.tsx  # 沒截圖時的工業風 SVG 佔位圖
-│
-└── pages/
-    ├── HomePage.tsx         # Hero / About / Featured / Works / CTA
-    ├── AboutPage.tsx        # 關於頁 + 經歷時間軸
-    └── WorkDetailPage.tsx   # 作品詳情路由
+└── pages/                   # 首頁 / 關於 / 文章列表 / 文章內頁 / 作品內頁 / 好物
 ```
+
+---
+
+## Arc 元件庫
+
+介面全部建立在 [Arc](https://uiarc.dev) 上。新增元件用 shadcn CLI：
+
+```bash
+npx shadcn@latest add @uiarc/dialog
+```
+
+`components.json` 已註冊 `@uiarc` registry，檔案會裝進 `src/components/arc/`。
+這個資料夾是外來程式碼，CLI 重裝會覆寫，所以 **不要直接改裡面的檔案**，
+也已經在 `eslint.config.js` 的 ignore 清單中。需要客製時在外面包一層。
+
+幾條跟著 Arc 的規則：顏色只用語意 token（`--foreground`、`--accent`⋯）、
+字重只用 400 / 500、不用全大寫標籤、不用裝飾性漸層。
 
 ---
 
@@ -74,7 +98,7 @@ src/
   category: "Web",              // Web | Tool | Editorial | Brand | Experiment
   status: "live",               // live | draft | archived
   featured: true,               // 是否出現在首頁 Featured 區
-  screenshot: "/shots/my-new.png", // 放 public/ 目錄下, 沒填會用 SVG 佔位
+  screenshot: "/shots/my-new.png", // 放 public/ 目錄下, 沒填會用 ogImage 或文字卡
 }
 ```
 
@@ -82,11 +106,10 @@ src/
 
 ## 設計系統
 
-- **色票**：`#FAFAF9` (paper) · `#0A0A0A` (ink) · `#FF4D00` (accent)
-- **字體**：Inter（主） + JetBrains Mono（編號 / UPPERCASE 標籤）
-- **細節**：1px hairline、極少圓角、UPPERCASE + letter-spacing、stamp / spec sheet 元素
-
-所有 token 集中在 `src/index.css` 的 `@theme {}` 區塊, 改一處全站生效。
+- **Token**：全部來自 `src/components/arc/foundation.css`
+- **字體**：Geist（標題） + Inter（內文） + Noto Sans TC（中文） + JetBrains Mono（程式碼）
+- **深色模式**：`<html data-theme="dark">`，`index.html` 的 inline script 在首次繪製前就決定
+- **強調色**：`<html data-accent="blue">`，可換成 neutral / violet / green / amber / orange / coral / rose
 
 ---
 
@@ -98,7 +121,7 @@ src/
 screenshot: "/screenshots/aquaflow.png"
 ```
 
-若留空, `SitePlaceholder` 會自動生成一張藍圖風 SVG, 永遠不會出現空白卡片。
+若留空, `WorkCover` 會依序退回 `ogImage`、再退回一張寫著作品名稱的文字卡, 永遠不會出現空白。
 
 ---
 

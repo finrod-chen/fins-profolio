@@ -1,10 +1,11 @@
 import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import { CursorDot } from "@/components/CursorDot";
+import { SiteNav } from "@/components/SiteNav";
+import { SiteFoot } from "@/components/SiteFoot";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
+import { Skeleton } from "@/components/arc/skeleton/skeleton";
 import { HomePage } from "@/pages/HomePage";
+import styles from "./App.module.css";
 
 // Route-level code splitting: keep the landing page lean. The About page,
 // work detail, and especially the blog pages (which pull in react-markdown
@@ -34,11 +35,11 @@ function ScrollToTop() {
   return null;
 }
 
-/** Minimal fallback while a lazily-loaded route chunk arrives. */
+/** Placeholder in the shape of a page, while a lazily-loaded chunk arrives. */
 function RouteFallback() {
   return (
-    <div className="px-5 sm:px-6 lg:px-10 py-20 sm:py-28 font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-      Loading…
+    <div className="page band" aria-busy="true">
+      <Skeleton label="載入頁面" lines={6} />
     </div>
   );
 }
@@ -46,11 +47,10 @@ function RouteFallback() {
 function App() {
   const { pathname } = useLocation();
   return (
-    <div className="min-h-svh flex flex-col bg-[var(--color-paper)] text-[var(--color-ink)]">
+    <div className={styles.shell}>
       <ScrollToTop />
-      <CursorDot />
-      <Header />
-      <main className="flex-1">
+      <SiteNav />
+      <main className={styles.main}>
         {/* key={pathname} resets the boundary's error state on navigation,
             so a one-off chunk failure doesn't lock out later routes. */}
         <RouteErrorBoundary key={pathname}>
@@ -67,7 +67,7 @@ function App() {
           </Suspense>
         </RouteErrorBoundary>
       </main>
-      <Footer />
+      <SiteFoot />
     </div>
   );
 }

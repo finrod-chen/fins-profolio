@@ -1,0 +1,5 @@
+/* The code block brings its own surface and radius, so it only needs the
+   prose rhythm around it. */
+.code {
+  margin-block: 1.4em;
+}

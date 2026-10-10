@@ -1,0 +1,63 @@
+.list {
+  display: grid;
+  gap: clamp(32px, 5vw, 56px);
+  padding-block: clamp(32px, 5vw, 56px);
+}
+
+.slot {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.slotHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.slotTitle {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.slotMeta {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.slotBlurb {
+  max-width: var(--reading-width);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.frame {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+}
+
+.frame iframe {
+  display: block;
+  border: 0;
+  max-width: none;
+}
+
+.terms {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: clamp(40px, 6vw, 64px) clamp(64px, 9vw, 120px);
+  border-top: 1px solid var(--border);
+}
+
+.termsHeading {
+  font-family: var(--font-body);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--foreground);
+}

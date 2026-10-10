@@ -6,7 +6,9 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // src/components/arc is vendored: the shadcn CLI writes it and overwrites
+  // local edits, so it is not ours to lint.
+  globalIgnores(['dist', 'src/components/arc']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

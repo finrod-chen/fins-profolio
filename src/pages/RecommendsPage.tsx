@@ -1,187 +1,127 @@
-import { SectionLabel } from "@/components/SectionLabel";
-import { PageHero } from "@/components/PageHero";
-import { useReveal } from "@/hooks/useReveal";
+import { Alert } from "@/components/arc/alert/alert";
+import { Badge } from "@/components/arc/badge/badge";
+import { PageIntro } from "@/components/PageIntro";
+import styles from "./RecommendsPage.module.css";
 
-type Slot = {
+interface Slot {
   label: string;
   meta: string;
+  blurb: string;
   src: string;
   width: number;
   height: number;
-  blurb: string;
-};
+  /** Whether the pick is mine or the platform's, so the page never implies more than it should. */
+  mine: boolean;
+}
 
-const SLOTS: Slot[] = [
+const slots: Slot[] = [
   {
     label: "我用過的好物",
-    meta: "用超過一個月才放上來",
+    meta: "用超過一個月才會放上來",
+    blurb: "自己買過、長期使用，真的覺得不錯才放上來。",
     src: "https://ads-partners.tw.coupang.com/widgets.html?id=525&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
     width: 800,
     height: 120,
-    blurb: "自己買過、長期使用, 真的覺得不錯才放上來。",
+    mine: true,
   },
   {
     label: "依瀏覽推薦",
     meta: "平台自動產生",
+    blurb: "Coupang 根據瀏覽紀錄推薦，不代表我個人背書。",
     src: "https://ads-partners.tw.coupang.com/widgets.html?id=524&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
     width: 800,
     height: 120,
-    blurb: "Coupang 根據瀏覽紀錄推薦 — 不代表我個人背書。",
+    mine: false,
   },
   {
     label: "平台上熱銷",
     meta: "近期的熱賣商品",
+    blurb: "平台上大家最近都在買的東西。",
     src: "https://ads-partners.tw.coupang.com/widgets.html?id=526&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
     width: 800,
     height: 120,
-    blurb: "平台上大家最近都在買的東西。",
+    mine: false,
   },
 ];
 
 export function RecommendsPage() {
-  useReveal();
   return (
-    <article className="page-in">
-      <title>好物 — Finrod Chen</title>
+    <div className="page">
+      <title>好物 · Finrod Chen</title>
       <meta
         name="description"
-        content="Finrod Chen 用過覺得值得的生活好物, 加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
+        content="Finrod Chen 用過覺得值得的生活好物，加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
       />
 
-      <PageHero
-        number="03"
-        label="好物"
+      <PageIntro
         title="好物"
-        tone="coral"
-        sticker="Goods ✦"
-        blobSide="left"
-        meta={
-          <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[var(--color-mute)]">
-            聯盟行銷 · 透明揭露
-          </span>
-        }
-      >
-        <p className="mt-2 max-w-2xl text-[16px] sm:text-[17px] leading-[1.8] text-[var(--color-ink-2)]" data-reveal>
-          我用 Coupang 買了幾年生活用品, 這裡收的是{" "}
-          <strong className="font-semibold text-[var(--color-ink)]">
-            我實際用過覺得值得
-          </strong>{" "}
-          的東西 + 平台熱門。如果你透過連結購買, 我會收到一小筆推廣分潤 —
-          商品價格對你不會變貴。
-        </p>
-        <div className="mt-5 flex flex-wrap items-center gap-2" data-reveal>
-          <span className="chip is-amber">聯盟行銷 · 透明揭露</span>
-          <span className="chip is-blue">台灣</span>
-          <span className="chip is-coral">Coupang</span>
-        </div>
-      </PageHero>
+        description="我在 Coupang 買了幾年生活用品，這裡收的是實際用過覺得值得的東西，加上平台的熱門推薦。"
+        breadcrumbs={[{ label: "作品", href: "/" }, { label: "好物" }]}
+        meta={[`${slots.length} 組清單`, "聯盟行銷"]}
+      />
 
-      <section className="px-5 sm:px-8 lg:px-12 pb-14">
-        <SectionLabel
-          title="商品列表"
-          meta={`${SLOTS.length} 組 · 800 × 120`}
-        />
-        <div className="space-y-10 sm:space-y-14">
-          {SLOTS.map((slot, i) => (
-            <Slot key={slot.label} slot={slot} delayIndex={i + 1} />
-          ))}
-        </div>
-      </section>
+      <Alert tone="info" title="這頁含聯盟行銷連結">
+        透過頁面上的連結購買，我會收到一小筆推廣分潤，商品售價不會因此變貴。標成「我用過」的是我自己買來長期使用的，
+        其餘兩組由平台自動推薦，不代表我個人背書。
+      </Alert>
 
-      <section
-        className="border-t border-[var(--color-line)] bg-[var(--color-paper-2)]"
-        data-reveal
-      >
-        <div className="px-5 sm:px-8 lg:px-12 py-12 sm:py-14">
-          <SectionLabel title="透明聲明" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-4 text-[15px] leading-[1.8] text-[var(--color-ink-2)] max-w-prose">
-              <p>
-                本頁所有 Coupang 商品連結均為聯盟行銷連結。
-                當你透過這些連結完成購買, 我會從中獲得一小筆推廣分潤 —
-                <strong className="font-semibold text-[var(--color-ink)]">
-                  商品售價對你不會因此變貴
-                </strong>
-                。
-              </p>
-              <p>
-                「我用過的好物」是我實際購買、長期使用後真心覺得值得才會放上來的。
-                其它兩組為平台自動推薦, 不代表我個人背書。
-              </p>
-            </div>
-            <div className="space-y-3 text-[13px] leading-[1.75] text-[var(--color-mute)] border-t md:border-t-0 md:border-l border-[var(--color-line)] md:pl-8 pt-4 md:pt-0">
-              <p>
-                <strong className="text-[var(--color-ink-2)] font-medium">
-                  Coupang 公告：
-                </strong>{" "}
-                廣告內容之限制、應揭露事項及其他詳細規範, 請參閱平台{" "}
-                <a
-                  href="https://partners.tw.coupang.com/#help/terms"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-line text-[var(--color-ink-2)]"
-                >
-                  使用者條款
-                </a>{" "}
-                與{" "}
-                <a
-                  href="https://partners.tw.coupang.com/#help/operating-policy"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-line text-[var(--color-ink-2)]"
-                >
-                  營運政策
-                </a>
-                。
-              </p>
-              <p>※ 此頁為個人興趣性質的整理, 非商業廣告。</p>
-            </div>
-          </div>
-        </div>
-      </section>
-    </article>
-  );
-}
-
-function Slot({ slot, delayIndex }: { slot: Slot; delayIndex: number }) {
-  return (
-    <div
-      className="w-full flex flex-col items-start"
-      data-reveal
-      data-reveal-delay={String(delayIndex)}
-    >
-      <div className="w-full mb-3 flex items-baseline justify-between gap-4">
-        <h2 className="font-serif text-[20px] sm:text-[22px] font-semibold leading-tight text-[var(--color-ink)]">
-          {slot.label}
+      <section className={styles.list} aria-labelledby="recommends-heading">
+        <h2 id="recommends-heading" className="sr-only">
+          商品清單
         </h2>
-        <span className="font-mono text-[11px] tracking-[0.12em] uppercase text-[var(--color-mute)]">
-          {slot.meta}
-        </span>
-      </div>
+        {slots.map((slot) => (
+          <article key={slot.label} className={styles.slot}>
+            <div className={styles.slotHead}>
+              <h3 className={styles.slotTitle}>{slot.label}</h3>
+              <Badge tone={slot.mine ? "info" : "neutral"} size="sm">
+                {slot.mine ? "我用過" : "平台推薦"}
+              </Badge>
+              <span className={styles.slotMeta}>{slot.meta}</span>
+            </div>
+            <p className={styles.slotBlurb}>{slot.blurb}</p>
+            {/* The widget is a fixed 800px wide, so it scrolls inside its own
+                box rather than pushing the page sideways on a phone. */}
+            <div className={styles.frame}>
+              <iframe
+                src={slot.src}
+                width={slot.width}
+                height={slot.height}
+                title={slot.label}
+                loading="lazy"
+                scrolling="no"
+                referrerPolicy="unsafe-url"
+              />
+            </div>
+          </article>
+        ))}
+      </section>
 
-      <p className="mb-4 text-[14px] text-[var(--color-ink-2)] max-w-prose">
-        {slot.blurb}
-      </p>
-
-      <div
-        className="border border-[var(--color-line)] bg-[var(--color-paper)] overflow-x-auto max-w-full"
-      >
-        <iframe
-          src={slot.src}
-          width={slot.width}
-          height={slot.height}
-          scrolling="no"
-          frameBorder={0}
-          loading="lazy"
-          referrerPolicy="unsafe-url"
-          title={slot.label}
-          className="block"
-        />
-      </div>
-
-      <p className="mt-2 md:hidden font-mono text-[10px] text-[var(--color-mute)]">
-        ← 滑動查看完整 →
-      </p>
+      <section className={styles.terms} aria-labelledby="recommends-terms">
+        <h2 id="recommends-terms" className={styles.termsHeading}>
+          揭露與條款
+        </h2>
+        <div className="prose">
+          <p>
+            本頁所有 Coupang 商品連結均為聯盟行銷連結。當你透過這些連結完成購買，我會從中獲得一小筆推廣分潤，
+            <strong>商品售價對你不會因此變貴</strong>。
+          </p>
+          <p>
+            依 Coupang 公告，廣告內容之限制、應揭露事項及其他詳細規範，請參閱平台的{" "}
+            <a href="https://partners.tw.coupang.com/#help/terms" target="_blank" rel="noreferrer">
+              使用者條款
+            </a>{" "}
+            與{" "}
+            <a
+              href="https://partners.tw.coupang.com/#help/operating-policy"
+              target="_blank"
+              rel="noreferrer"
+            >
+              營運政策
+            </a>
+            。此頁為個人興趣性質的整理，非商業廣告。
+          </p>
+        </div>
+      </section>
     </div>
   );
 }

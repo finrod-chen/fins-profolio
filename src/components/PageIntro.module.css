@@ -1,0 +1,30 @@
+.intro {
+  padding-block: clamp(32px, 6vw, 64px) var(--space-10);
+}
+
+.path {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: var(--text-4xl);
+  font-weight: 500;
+}
+
+.description {
+  margin-top: var(--space-5);
+  max-width: var(--reading-width);
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+.meta {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.extra {
+  margin-top: var(--space-6);
+}

@@ -1,0 +1,14 @@
+.foot {
+  border-top: 1px solid var(--border);
+}
+
+/* The theme switch sits on its own line under the footer columns, aligned
+   to the same page column as everything above it. */
+.themeRow {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding: 0 var(--page-gutter) var(--space-8);
+}
