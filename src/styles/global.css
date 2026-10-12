@@ -231,6 +231,19 @@ a {
   color: var(--foreground);
 }
 
+.prose kbd {
+  display: inline-block;
+  padding: 0.1em 0.45em;
+  border: 1px solid var(--border-strong);
+  border-bottom-width: 2px;
+  border-radius: calc(var(--radius-control) - 12px);
+  background: var(--surface-muted);
+  color: var(--foreground);
+  font-family: var(--font-code);
+  font-size: 0.85em;
+  line-height: 1.5;
+}
+
 .prose hr {
   border: 0;
   border-top: 1px solid var(--border);
