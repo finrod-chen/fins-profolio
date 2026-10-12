@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, use, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import GithubSlugger from "github-slugger";
-import { findPost, posts, relatedPosts } from "@/data/blog";
+import { findPost, loadPostBody, posts, relatedPosts, type BlogPost } from "@/data/blog";
 import { Badge } from "@/components/arc/badge/badge";
 import { EmptyState } from "@/components/arc/empty-state/empty-state";
 import { Breadcrumb } from "@/components/arc/breadcrumb/breadcrumb";
 import { InViewTitle } from "@/components/arc/in-view-title/in-view-title";
+import { Skeleton } from "@/components/arc/skeleton/skeleton";
 import { Markdown } from "@/components/Markdown";
 import { formatDate } from "@/lib/format";
 import styles from "./BlogPostPage.module.css";
@@ -73,13 +74,88 @@ function useScrollSpy(ids: string[], offsetTop = 140) {
   return active;
 }
 
+/**
+ * Post bodies are split out of the bundle (see src/data/blog.ts), so each one
+ * is fetched the first time it is read. The promise is cached per slug, so a
+ * re-render, or coming back to a post, does not fetch it again.
+ */
+const bodyRequests = new Map<string, Promise<string>>();
+
+function requestBody(slug: string) {
+  let request = bodyRequests.get(slug);
+  if (!request) {
+    request = loadPostBody(slug);
+    bodyRequests.set(slug, request);
+  }
+  return request;
+}
+
+/**
+ * The reading column and the sidebar beside it, which both need the body:
+ * the article, and the table of contents built from its headings. Suspends
+ * until the body arrives; a failed fetch reaches the route's error boundary.
+ */
+function PostContent({ post }: { post: BlogPost }) {
+  const body = use(requestBody(post.slug));
+  const toc = useMemo(() => extractToc(body), [body]);
+  const tocIds = useMemo(() => toc.map((h) => h.id), [toc]);
+  const activeId = useScrollSpy(tocIds);
+  const related = relatedPosts(post, 4);
+
+  return (
+    <div className={styles.columns}>
+      <div className={styles.bodyColumn}>
+        <Markdown>{body}</Markdown>
+      </div>
+
+      <aside className={styles.side}>
+        <div className={styles.sideSticky}>
+          {toc.length > 1 && (
+            <nav aria-labelledby="toc-heading">
+              <h2 id="toc-heading" className={styles.sideHeading}>
+                目錄
+              </h2>
+              <ul className={styles.toc}>
+                {toc.map((heading) => (
+                  <li key={heading.id} data-level={Math.min(heading.level, 3)}>
+                    <a
+                      href={`#${heading.id}`}
+                      className={styles.tocLink}
+                      aria-current={heading.id === activeId ? "true" : undefined}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
+          {related.length > 0 && (
+            <div>
+              <h2 className={styles.sideHeading}>相關文章</h2>
+              <ul className={styles.related}>
+                {related.map((item) => (
+                  <li key={item.slug}>
+                    <Link to={`/blog/${item.slug}`} className={styles.relatedLink}>
+                      <span className={styles.relatedDate}>{formatDate(item.date)}</span>
+                      <span className={styles.relatedTitle}>{item.title}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 export function BlogPostPage() {
   const { "*": splat } = useParams();
   const slug = splat ?? "";
   const post = useMemo(() => findPost(slug), [slug]);
-  const toc = useMemo(() => (post ? extractToc(post.body) : []), [post]);
-  const tocIds = useMemo(() => toc.map((h) => h.id), [toc]);
-  const activeId = useScrollSpy(tocIds);
 
   if (!post) {
     return (
@@ -99,7 +175,6 @@ export function BlogPostPage() {
     );
   }
 
-  const related = relatedPosts(post, 4);
   const index = posts.findIndex((p) => p.slug === post.slug);
   const older = index < posts.length - 1 ? posts[index + 1] : null;
   const newer = index > 0 ? posts[index - 1] : null;
@@ -140,52 +215,19 @@ export function BlogPostPage() {
         </figure>
       )}
 
-      <div className={styles.columns}>
-        <div className={styles.bodyColumn}>
-          <Markdown>{post.body}</Markdown>
-        </div>
-
-        <aside className={styles.side}>
-          <div className={styles.sideSticky}>
-            {toc.length > 1 && (
-              <nav aria-labelledby="toc-heading">
-                <h2 id="toc-heading" className={styles.sideHeading}>
-                  目錄
-                </h2>
-                <ul className={styles.toc}>
-                  {toc.map((heading) => (
-                    <li key={heading.id} data-level={Math.min(heading.level, 3)}>
-                      <a
-                        href={`#${heading.id}`}
-                        className={styles.tocLink}
-                        aria-current={heading.id === activeId ? "true" : undefined}
-                      >
-                        {heading.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            )}
-
-            {related.length > 0 && (
-              <div>
-                <h2 className={styles.sideHeading}>相關文章</h2>
-                <ul className={styles.related}>
-                  {related.map((item) => (
-                    <li key={item.slug}>
-                      <Link to={`/blog/${item.slug}`} className={styles.relatedLink}>
-                        <span className={styles.relatedDate}>{formatDate(item.date)}</span>
-                        <span className={styles.relatedTitle}>{item.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+      {/* The header above is ready at once; only the reading column waits. */}
+      <Suspense
+        key={post.slug}
+        fallback={
+          <div className={styles.columns} aria-busy="true">
+            <div className={styles.bodyColumn}>
+              <Skeleton label="載入內文" lines={10} />
+            </div>
           </div>
-        </aside>
-      </div>
+        }
+      >
+        <PostContent post={post} />
+      </Suspense>
 
       <nav className={styles.nextPrev} aria-label="上下篇文章">
         {older && (

@@ -29,5 +29,8 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  /* src/plugins runs in Node as part of the Vite config, so it belongs to
+     tsconfig.node.json; a file may only live in one project. */
+  "exclude": ["src/plugins"]
 }

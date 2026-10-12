@@ -4,12 +4,19 @@ import { SiteNav } from "@/components/SiteNav";
 import { SiteFoot } from "@/components/SiteFoot";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { Skeleton } from "@/components/arc/skeleton/skeleton";
-import { HomePage } from "@/pages/HomePage";
 import styles from "./App.module.css";
 
-// Route-level code splitting: keep the landing page lean. The About page,
-// work detail, and especially the blog pages (which pull in react-markdown
-// and the full markdown corpus) load only when their route is visited.
+// Route-level code splitting: every page is its own chunk, so the entry
+// carries only the shell (header, footer, router). The blog pages are the
+// expensive ones, pulling in react-markdown and the full markdown corpus.
+//
+// The home page is split too, but it is also the most common entry point, so
+// its chunk is requested the moment this module is evaluated rather than
+// after React first renders. Visitors who landed somewhere else never pay for
+// it, and the duplicate call is free: Vite hands back the same promise.
+const importHome = () => import("@/pages/HomePage");
+if (window.location.pathname === "/") void importHome();
+const HomePage = lazy(() => importHome().then((m) => ({ default: m.HomePage })));
 const AboutPage = lazy(() =>
   import("@/pages/AboutPage").then((m) => ({ default: m.AboutPage }))
 );

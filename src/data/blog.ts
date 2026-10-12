@@ -2,16 +2,24 @@
 // Blog data layer
 //
 // Build-time loader for markdown posts under src/content.
-// - import.meta.glob pulls every .md in at build time as raw text
-// - tiny inline frontmatter parser (we don't need full YAML)
+// - the ?meta glob is eager and holds frontmatter only, so listing posts
+//   costs a few kB instead of the whole corpus (see src/plugins/markdown-meta.ts)
+// - the ?raw glob is lazy: a post's body arrives with the post that shows it
 // - filename pattern YYYY-MM-DD-... gives us the publish date
 // - relative path ../content/<category>/... gives us the category
 // - sorted newest first
 // ============================================================
+import { stripFrontmatter, type Frontmatter } from "./frontmatter";
 
-// eager:true, query:?raw → string at build time
-const rawFiles = import.meta.glob<string>("../content/**/*.md", {
+// Frontmatter for every post, resolved at build time.
+const metaFiles = import.meta.glob<Frontmatter>("../content/**/*.md", {
   eager: true,
+  query: "?meta",
+  import: "default",
+});
+
+// One loader per post body, each its own chunk.
+const bodyFiles = import.meta.glob<string>("../content/**/*.md", {
   query: "?raw",
   import: "default",
 });
@@ -33,47 +41,17 @@ export interface BlogPost {
   heroImage?: string;
   /** category (folder name) */
   category: string;
-  /** raw markdown body (frontmatter stripped) */
-  body: string;
 }
 
-/**
- * Tiny frontmatter parser — only handles the shape Astro uses:
- *   key: value
- *   tags: a, b, c           (comma-separated)
- *   heroImage: https://...
- * Lines starting with `---` delimit the block.
- */
-function parseFrontmatter(raw: string): { data: Record<string, string>; content: string } {
-  const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
-  if (!m) return { data: {}, content: raw };
-  const [, yamlBlock, content] = m;
-  const data: Record<string, string> = {};
-  for (const line of yamlBlock.split(/\r?\n/)) {
-    const idx = line.indexOf(":");
-    if (idx <= 0) continue;
-    const key = line.slice(0, idx).trim();
-    let value = line.slice(idx + 1).trim();
-    // strip surrounding quotes
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-    data[key] = value;
-  }
-  return { data, content };
-}
+/** The glob key a post's body lives under, kept out of the public type. */
+const bodyPathBySlug = new Map<string, string>();
 
 // parse + normalise
-const allPosts: BlogPost[] = Object.entries(rawFiles)
-  .map(([path, raw]) => {
+const allPosts: BlogPost[] = Object.entries(metaFiles)
+  .map(([path, data]) => {
     const m = path.match(/\/content\/([^/]+)\/([^/]+)\.md$/);
     if (!m) return null;
     const [, category, filename] = m;
-
-    const { data, content } = parseFrontmatter(raw);
 
     // date from filename or frontmatter
     const dateMatch = filename.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -90,8 +68,11 @@ const allPosts: BlogPost[] = Object.entries(rawFiles)
       ? data.tags.split(",").map((s) => s.trim()).filter(Boolean)
       : [];
 
+    const slug = `${category}/${filename}`;
+    bodyPathBySlug.set(slug, path);
+
     return {
-      slug: `${category}/${filename}`,
+      slug,
       title: data.title || filename,
       description: data.description || "",
       pubDate: isoDate,
@@ -99,7 +80,6 @@ const allPosts: BlogPost[] = Object.entries(rawFiles)
       tags,
       heroImage: data.heroImage || undefined,
       category,
-      body: content,
     } as BlogPost;
   })
   .filter((p): p is BlogPost => p !== null);
@@ -140,3 +120,10 @@ export function relatedPosts(post: BlogPost, n = 4): readonly BlogPost[] {
     .slice(0, n);
 }
 
+/** Fetches one post's markdown body. Rejects if the slug has no file. */
+export async function loadPostBody(slug: string): Promise<string> {
+  const path = bodyPathBySlug.get(slug);
+  const load = path ? bodyFiles[path] : undefined;
+  if (!load) throw new Error(`No markdown body for "${slug}"`);
+  return stripFrontmatter(await load());
+}
