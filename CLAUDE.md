@@ -1,8 +1,9 @@
 # fins-profolio
 
 Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://uiarc.dev) 上。
-部署在 Cloudflare Pages 的 Direct Upload 專案 `finrod-portfolio`：
-**沒有接 Git，push 不會自動部署**，要跑 `npm run deploy`（build + wrangler 上傳 `dist/`）。
+部署在 Cloudflare Pages 的 Direct Upload 專案 `finrod-portfolio`。這個專案沒有接 Git，
+所以是 `.github/workflows/deploy.yml` 在 push 到 main 時 build 並用 wrangler 上傳 `dist/`；
+本機後路是 `npm run deploy`。
 
 ## 專案慣例
 

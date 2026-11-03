@@ -1,0 +1,65 @@
+name: Deploy to Cloudflare Pages
+
+# The Pages project is Direct Upload, so nothing deploys on its own: this
+# workflow is what ships the site. It builds the same way a local
+# `npm run deploy` does, then uploads dist/ with wrangler.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# One deploy at a time. A newer push supersedes one still in flight, so the
+# last commit on main is always what ends up live.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  # Lets wrangler-action record the result under the repository's
+  # Deployments tab, which is where you would go looking for it.
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # Also runs tsc -b, so a type error stops the deploy.
+      - name: Build
+        run: npm run build
+
+      - name: Upload to Cloudflare Pages
+        id: deploy
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          # Pinned to the devDependency so CI and a local deploy behave alike.
+          wranglerVersion: "4.156.2"
+          # --branch main marks this a production deployment. If it lands as a
+          # preview instead, the project's production branch is set to
+          # something else in the Cloudflare dashboard.
+          command: pages deploy dist --project-name finrod-portfolio --branch main
+
+      - name: Summary
+        run: |
+          {
+            echo "### Deployed"
+            echo
+            echo "- Commit: \`${GITHUB_SHA::7}\`"
+            echo "- URL: ${{ steps.deploy.outputs.deployment-url }}"
+            echo "- Live: https://finrod-portfolio.pages.dev"
+          } >> "$GITHUB_STEP_SUMMARY"

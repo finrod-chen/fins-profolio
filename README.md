@@ -128,22 +128,33 @@ screenshot: "/screenshots/aquaflow.png"
 ## 部署
 
 線上站是 <https://finrod-portfolio.pages.dev>，跑在 Cloudflare Pages 的
-**Direct Upload** 專案上。這種專案沒有接 Git，**push 到 GitHub 不會觸發任何部署**，
-要自己上傳建置結果：
+**Direct Upload** 專案上。這種專案沒有接 Git，Cloudflare 自己不會因為你 push 就重新建置，
+所以部署由 GitHub Actions 代勞。
+
+### 自動（平常用這個）
+
+push 到 `main` 就會跑 [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)：
+lint → build → wrangler 上傳 `dist/`。結果會出現在 repo 的 **Actions** 與 **Deployments** 分頁。
+
+需要先在 GitHub 設兩個 secret（Settings → Secrets and variables → Actions）：
+
+| Secret | 哪裡拿 |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens，權限給 **Cloudflare Pages: Edit** |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard 右側欄，或網址列 `dash.cloudflare.com/<account-id>` 那一段 |
+
+### 手動（Actions 掛掉時的後路）
 
 ```bash
-# 第一次要先登入（開瀏覽器授權）
-npx wrangler login
-
-# build + 上傳 dist/ 到 finrod-portfolio 專案
-npm run deploy
+npx wrangler login   # 第一次要開瀏覽器授權
+npm run deploy       # build + 上傳 dist/
 ```
 
-`npm run deploy` 會先跑 `npm run build`，再用 wrangler 把 `dist/` 推上去。
-專案名稱寫死在 script 裡（`--project-name finrod-portfolio`），**不要打錯**：
+兩條路打的是同一個專案，`--project-name finrod-portfolio` **不要打錯**：
 名稱對不上時 wrangler 會問你要不要建一個新專案，按下去就會多出一個站。
 
 Node 版本由 `.nvmrc` 指定（22）。toolchain 需要 `^20.19 || >=22.12`。
+workflow 用 `node-version-file: .nvmrc`，所以 CI 跟本機一定同版。
 
 其它靜態主機也吃 `dist/`：
 
