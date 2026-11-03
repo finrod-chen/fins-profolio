@@ -31,6 +31,31 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: "idphoto",
+    title: "頭頭是道",
+    tagline: "線上證件照小幫手：拍一張、自動去背、照台灣規格排版列印。",
+    description:
+      "用瀏覽器就能完成一整套證件照流程：開相機拍或上傳一張正面照，自動去背修圖，輸出符合台灣規格的 1 吋與 2 吋，再把它們混排進一張 4×6 相紙，拿去沖印店直接印。整個過程都在本機瀏覽器完成，照片不會上傳到任何伺服器。",
+    url: "https://idphoto.finrod.xyz",
+    ogImage: "https://idphoto.finrod.xyz/og-image.png",
+    year: "2026",
+    role: "Design + Build",
+    stack: ["Vite", "TypeScript", "MediaPipe", "WebAssembly", "Canvas", "Cloudflare Pages"],
+    category: "Tool",
+    status: "live",
+    notes: [
+      { kind: "p", text: "起點是一件每隔幾年就要重做一次的雜事：為了換證件去拍一次大頭照，店家收一份錢給你一疊用不完的相片，尺寸還不一定是這次要的那種。這些步驟其實瀏覽器就做得完。" },
+      { kind: "p", text: "最重要的一個決定是：照片不離開這台裝置。去背跑的是 MediaPipe 的 WebAssembly 模型，在使用者自己的瀏覽器裡推論，裁切與排版用 Canvas，全程沒有任何一個上傳端點。人臉照片本來就不該為了去背而寄到別人的機器上。" },
+      { kind: "ul", items: [
+        "三步流程：拍攝、去背修圖、輸出，每一步都能退回去重來",
+        "取景框是虛線疊圖，對齊眉毛與雙耳的位置，拍的時候就知道會不會過關",
+        "輸出同時給 1 吋與 2 吋，並混排成一張 4×6，沖印店最低消費不會浪費",
+        "拍攝頁附上光線、背景、視線高度的提醒，大部分不合格的照片都壞在這幾件事",
+      ]},
+      { kind: "p", text: "規格的部分寫得保守：頁尾註明尺寸僅供參考，實際以受理機關公告為準。各機關規定會改，工具不該讓人以為它保證過件。" },
+    ],
+  },
+  {
     id: "ff14-calcnest",
     title: "艾歐澤亞助手",
     tagline: "FFXIV 玩家的小工具合輯 — 時計、掉落、查詢一把抓。",
