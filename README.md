@@ -127,7 +127,25 @@ screenshot: "/screenshots/aquaflow.png"
 
 ## 部署
 
-`npm run build` 會輸出 `dist/`, 任何靜態主機都吃:
+線上站是 <https://finrod-portfolio.pages.dev>，跑在 Cloudflare Pages 的
+**Direct Upload** 專案上。這種專案沒有接 Git，**push 到 GitHub 不會觸發任何部署**，
+要自己上傳建置結果：
 
-- **Vercel / Netlify / Cloudflare Pages**: 直接連結 repo, build command = `npm run build`, output = `dist`
-- **GitHub Pages**: 需把 `vite.config.ts` 的 `base` 設成 repo 名
+```bash
+# 第一次要先登入（開瀏覽器授權）
+npx wrangler login
+
+# build + 上傳 dist/ 到 finrod-portfolio 專案
+npm run deploy
+```
+
+`npm run deploy` 會先跑 `npm run build`，再用 wrangler 把 `dist/` 推上去。
+專案名稱寫死在 script 裡（`--project-name finrod-portfolio`），**不要打錯**：
+名稱對不上時 wrangler 會問你要不要建一個新專案，按下去就會多出一個站。
+
+Node 版本由 `.nvmrc` 指定（22）。toolchain 需要 `^20.19 || >=22.12`。
+
+其它靜態主機也吃 `dist/`：
+
+- **Vercel / Netlify / Cloudflare Pages（Git 連結版）**：build command = `npm run build`、output = `dist`
+- **GitHub Pages**：需把 `vite.config.ts` 的 `base` 設成 repo 名
