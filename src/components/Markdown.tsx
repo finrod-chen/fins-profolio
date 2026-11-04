@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
+import { rehypeSafeEmbeds } from "./rehype-safe-embeds";
 import { CodeBlock } from "@/components/arc/code-block/code-block";
 import styles from "./Markdown.module.css";
 
@@ -31,13 +32,16 @@ function toText(children: unknown): string {
  * Inline formatting comes from the shared `.prose` rules; fenced code goes
  * to Arc's `code-block` so copying, line limits and highlighting match the
  * rest of the site, and wide tables scroll inside their own box.
+ *
+ * `rehypeRaw` lets a post bring its own HTML, so `rehypeSafeEmbeds` runs
+ * straight after it and decides what that HTML may contain.
  */
 export function Markdown({ children }: { children: string }) {
   return (
     <div className="prose">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeSlug]}
+        rehypePlugins={[rehypeRaw, rehypeSafeEmbeds, rehypeSlug]}
         components={{
           pre({ children: inner }) {
             const code = Array.isArray(inner) ? inner[0] : inner;
