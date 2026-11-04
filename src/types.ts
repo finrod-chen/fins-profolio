@@ -54,3 +54,39 @@ export type NoteSection =
   | { kind: "ul"; items: string[] }
   | { kind: "quote"; text: string };
 
+
+// ============================================================
+// Recommends — written by the n8n workflow from the Coupang
+// Open API, read at build time. Nothing here is fetched at runtime.
+// ============================================================
+
+export interface RecommendProduct {
+  /** Coupang product id, or the name when the API omits one */
+  id: string;
+  title: string;
+  /** Product image on Coupang's CDN */
+  image: string;
+  price: number;
+  /** Affiliate link, already carrying the tracking code */
+  url: string;
+  rocket: boolean;
+  freeShipping: boolean;
+}
+
+export interface RecommendSlot {
+  /** Stable key for the section */
+  slot: string;
+  label: string;
+  /** Short qualifier shown next to the label */
+  meta: string;
+  blurb: string;
+  /** Whether the pick is mine or the platform's, so the page never implies more than it should. */
+  mine: boolean;
+  products: RecommendProduct[];
+}
+
+export interface RecommendFeed {
+  /** ISO timestamp of the last successful n8n run, empty before the first one */
+  updatedAt: string;
+  slots: RecommendSlot[];
+}

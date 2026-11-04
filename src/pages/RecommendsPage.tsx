@@ -1,50 +1,75 @@
 import { Alert } from "@/components/arc/alert/alert";
 import { Badge } from "@/components/arc/badge/badge";
+import { EmptyState } from "@/components/arc/empty-state/empty-state";
 import { PageIntro } from "@/components/PageIntro";
+import { recommends, hasProducts } from "@/data/recommends";
+import type { RecommendSlot } from "@/types";
 import styles from "./RecommendsPage.module.css";
 
-interface Slot {
-  label: string;
-  meta: string;
-  blurb: string;
-  src: string;
-  width: number;
-  height: number;
-  /** Whether the pick is mine or the platform's, so the page never implies more than it should. */
-  mine: boolean;
+const priceFormat = new Intl.NumberFormat("zh-TW");
+
+function Slot({ slot }: { slot: RecommendSlot }) {
+  return (
+    <article className={styles.slot}>
+      <div className={styles.slotHead}>
+        <h3 className={styles.slotTitle}>{slot.label}</h3>
+        <Badge tone={slot.mine ? "info" : "neutral"} size="sm">
+          {slot.mine ? "我用過" : "平台推薦"}
+        </Badge>
+        <span className={styles.slotMeta}>{slot.meta}</span>
+      </div>
+      <p className={styles.slotBlurb}>{slot.blurb}</p>
+
+      <ul className={styles.grid}>
+        {slot.products.map((product) => (
+          <li key={product.id} className={styles.cell}>
+            {/* Affiliate link: sponsored so search engines read it correctly,
+                noopener because it opens in a new tab. */}
+            <a
+              className={styles.card}
+              href={product.url}
+              target="_blank"
+              rel="sponsored nofollow noopener"
+            >
+              <span className={styles.thumb}>
+                <img
+                  className={styles.thumbImage}
+                  src={product.image}
+                  alt=""
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
+              <span className={styles.cardBody}>
+                <span className={styles.cardTitle}>{product.title}</span>
+                {(product.rocket || product.freeShipping) && (
+                  <span className={styles.tags}>
+                    {product.rocket && (
+                      <Badge tone="neutral" size="sm">
+                        火箭配送
+                      </Badge>
+                    )}
+                    {product.freeShipping && (
+                      <Badge tone="neutral" size="sm">
+                        免運
+                      </Badge>
+                    )}
+                  </span>
+                )}
+                <span className={styles.price}>NT$ {priceFormat.format(product.price)}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </article>
+  );
 }
 
-const slots: Slot[] = [
-  {
-    label: "我用過的好物",
-    meta: "用超過一個月才會放上來",
-    blurb: "自己買過、長期使用，真的覺得不錯才放上來。",
-    src: "https://ads-partners.tw.coupang.com/widgets.html?id=525&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
-    width: 800,
-    height: 120,
-    mine: true,
-  },
-  {
-    label: "依瀏覽推薦",
-    meta: "平台自動產生",
-    blurb: "Coupang 根據瀏覽紀錄推薦，不代表我個人背書。",
-    src: "https://ads-partners.tw.coupang.com/widgets.html?id=524&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
-    width: 800,
-    height: 120,
-    mine: false,
-  },
-  {
-    label: "平台上熱銷",
-    meta: "近期的熱賣商品",
-    blurb: "平台上大家最近都在買的東西。",
-    src: "https://ads-partners.tw.coupang.com/widgets.html?id=526&template=carousel&trackingCode=AF5690718&subId=&width=800&height=120&tsource=",
-    width: 800,
-    height: 120,
-    mine: false,
-  },
-];
-
 export function RecommendsPage() {
+  const { slots, updatedAt } = recommends;
+  const total = slots.reduce((sum, slot) => sum + slot.products.length, 0);
+
   return (
     <div className="page">
       <title>好物 · Finrod Chen</title>
@@ -69,31 +94,25 @@ export function RecommendsPage() {
         <h2 id="recommends-heading" className="sr-only">
           商品清單
         </h2>
-        {slots.map((slot) => (
-          <article key={slot.label} className={styles.slot}>
-            <div className={styles.slotHead}>
-              <h3 className={styles.slotTitle}>{slot.label}</h3>
-              <Badge tone={slot.mine ? "info" : "neutral"} size="sm">
-                {slot.mine ? "我用過" : "平台推薦"}
-              </Badge>
-              <span className={styles.slotMeta}>{slot.meta}</span>
-            </div>
-            <p className={styles.slotBlurb}>{slot.blurb}</p>
-            {/* The widget is a fixed 800px wide, so it scrolls inside its own
-                box rather than pushing the page sideways on a phone. */}
-            <div className={styles.frame}>
-              <iframe
-                src={slot.src}
-                width={slot.width}
-                height={slot.height}
-                title={slot.label}
-                loading="lazy"
-                scrolling="no"
-                referrerPolicy="unsafe-url"
-              />
-            </div>
-          </article>
-        ))}
+
+        {hasProducts ? (
+          <>
+            {slots.map((slot) => (
+              <Slot key={slot.slot} slot={slot} />
+            ))}
+            {updatedAt && (
+              <p className={styles.updated}>
+                清單更新於 {updatedAt.slice(0, 10)}，共 {total} 件商品。
+              </p>
+            )}
+          </>
+        ) : (
+          <EmptyState
+            title="清單正在重建"
+            description="原本這裡嵌的是 Coupang 的廣告 widget，已經整個移除。新的清單改由我自己抓 Coupang 的商品資料再渲染，排程跑完就會出現。"
+            label="目前沒有商品"
+          />
+        )}
       </section>
 
       <section className={styles.terms} aria-labelledby="recommends-terms">
@@ -104,6 +123,9 @@ export function RecommendsPage() {
           <p>
             本頁所有 Coupang 商品連結均為聯盟行銷連結。當你透過這些連結完成購買，我會從中獲得一小筆推廣分潤，
             <strong>商品售價對你不會因此變貴</strong>。
+          </p>
+          <p>
+            商品資料由 Coupang Partners Open API 取得，在建置時寫入本站，頁面上不會載入任何第三方腳本或嵌入內容。
           </p>
           <p>
             依 Coupang 公告，廣告內容之限制、應揭露事項及其他詳細規範，請參閱平台的{" "}

@@ -1,0 +1,29 @@
+{
+  "updatedAt": "",
+  "slots": [
+    {
+      "slot": "picks",
+      "label": "我用過的好物",
+      "meta": "自己買來長期使用的",
+      "blurb": "自己買過、長期使用，真的覺得不錯才放上來。",
+      "mine": true,
+      "products": []
+    },
+    {
+      "slot": "goldbox",
+      "label": "每日特價",
+      "meta": "每天上午 7:30 由 Coupang 更新",
+      "blurb": "Coupang 當日的特價商品，不代表我個人背書。",
+      "mine": false,
+      "products": []
+    },
+    {
+      "slot": "storage",
+      "label": "收納與整理",
+      "meta": "依關鍵字自動帶出",
+      "blurb": "依關鍵字從 Coupang 帶出的結果，不代表我個人背書。",
+      "mine": false,
+      "products": []
+    }
+  ]
+}
