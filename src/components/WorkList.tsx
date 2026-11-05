@@ -85,6 +85,18 @@ export function WorkList({ projects }: { projects: Project[] }) {
                     <span className={styles.tagline}>{project.tagline}</span>
                   </span>
                 </Link>
+                {/* A sibling of the card, not inside it: an <a> cannot nest in an <a>.
+                    Plain, followable link text says what the product is for. */}
+                {project.url && project.linkLabel && (
+                  <a
+                    className={styles.visit}
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {project.linkLabel}
+                  </a>
+                )}
               </li>
             );
           })}
