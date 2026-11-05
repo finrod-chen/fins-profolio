@@ -15,6 +15,7 @@ export const projects: Project[] = [
     description:
       "居家防災包的檢點工具：把家裡已經準備好的東西逐項建檔，標成已取得、評估中或暫不需要，再按背包分裝並盯住上限重量。會自動加總花費與總重、提醒 90 天內到期的品項，也能列印成紙本檢點表或用連結把清單分享到另一台裝置。整站是一份靜態 HTML，資料只存在使用者自己的瀏覽器。",
     url: "https://bob.finrod.xyz",
+    linkLabel: "前往 bob.finrod.xyz（防災包清單）",
     screenshot: "/screenshots/bob-og.png",
     year: "2026",
     role: "Design + Build",
@@ -44,6 +45,7 @@ export const projects: Project[] = [
     description:
       "台灣生活試算工具網站，收錄 36 種計算機與多張速查表：勞健保、薪資實領、特休、資遣費、所得稅、房貸、牌照稅，到工程計算機與單位換算。法定數字依官方公告逐年更新（2027 年，也就是 116 年的新制已上線），所有計算都在瀏覽器本地完成，不上傳任何資料。",
     url: "https://calcnest.tw",
+    linkLabel: "前往 calcnest.tw（勞健保、薪資試算）",
     ogImage: "https://calcnest.tw/og/default.png",
     year: "2025",
     role: "Design + Build",
@@ -70,6 +72,7 @@ export const projects: Project[] = [
     description:
       "用瀏覽器就能完成一整套證件照流程：開相機拍或上傳一張正面照，自動去背修圖，輸出符合台灣規格的 1 吋與 2 吋，再把它們混排進一張 4×6 相紙，拿去沖印店直接印。整個過程都在本機瀏覽器完成，照片不會上傳到任何伺服器。",
     url: "https://idphoto.finrod.xyz",
+    linkLabel: "前往 idphoto.finrod.xyz（線上證件照）",
     ogImage: "https://idphoto.finrod.xyz/og-image.png",
     year: "2026",
     role: "Design + Build",
@@ -95,6 +98,7 @@ export const projects: Project[] = [
     description:
       "掛在 calcnest.tw 子網域的 FFXIV 玩家工具集，整合 ET / LT 時鐘、市場價格追蹤、採集定點查詢等常用功能。零登入、可離線，為日常登入的艾歐澤亞冒險者省下切換視窗的時間。",
     url: "https://ff14-tw.xyz",
+    linkLabel: "前往 ff14-tw.xyz（FF14 工具箱）",
     ogImage: "https://ff14.calcnest.tw/og-image-compressed.jpg",
     year: "2026",
     role: "Build",

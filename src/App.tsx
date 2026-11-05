@@ -15,7 +15,8 @@ import styles from "./App.module.css";
 // after React first renders. Visitors who landed somewhere else never pay for
 // it, and the duplicate call is free: Vite hands back the same promise.
 const importHome = () => import("@/pages/HomePage");
-if (window.location.pathname === "/") void importHome();
+// typeof guard: the same module is rendered in Node by scripts/prerender.mjs.
+if (typeof window !== "undefined" && window.location.pathname === "/") void importHome();
 const HomePage = lazy(() => importHome().then((m) => ({ default: m.HomePage })));
 const AboutPage = lazy(() =>
   import("@/pages/AboutPage").then((m) => ({ default: m.AboutPage }))
@@ -28,6 +29,9 @@ const BlogIndexPage = lazy(() =>
 );
 const BlogPostPage = lazy(() =>
   import("@/pages/BlogPostPage").then((m) => ({ default: m.BlogPostPage }))
+);
+const NotFoundPage = lazy(() =>
+  import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
 );
 const RecommendsPage = lazy(() =>
   import("@/pages/RecommendsPage").then((m) => ({ default: m.RecommendsPage }))
@@ -69,7 +73,7 @@ function App() {
               <Route path="/blog" element={<BlogIndexPage />} />
               <Route path="/blog/*" element={<BlogPostPage />} />
               <Route path="/recommends" element={<RecommendsPage />} />
-              <Route path="*" element={<HomePage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </RouteErrorBoundary>

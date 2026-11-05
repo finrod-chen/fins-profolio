@@ -61,5 +61,5 @@ jobs:
             echo
             echo "- Commit: \`${GITHUB_SHA::7}\`"
             echo "- URL: ${{ steps.deploy.outputs.deployment-url }}"
-            echo "- Live: https://finrod-portfolio.pages.dev"
+            echo "- Live: https://finrod.xyz"
           } >> "$GITHUB_STEP_SUMMARY"

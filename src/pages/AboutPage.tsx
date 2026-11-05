@@ -1,4 +1,5 @@
 import { Badge } from "@/components/arc/badge/badge";
+import { Seo } from "@/components/Seo";
 import { CopyButton } from "@/components/arc/copy-button/copy-button";
 import { PageIntro } from "@/components/PageIntro";
 import styles from "./AboutPage.module.css";
@@ -53,10 +54,10 @@ const elsewhere = [
 export function AboutPage() {
   return (
     <div className="page">
-      <title>關於 · Finrod Chen</title>
-      <meta
-        name="description"
-        content="Finrod Chen，喜躍生醫研發主任。生物工程研究所畢業後一直在細胞治療產業，業餘寫網站、玩雲端、3D 列印與 Arduino。"
+      <Seo
+        title="關於 · Finrod Chen"
+        description="Finrod Chen，喜躍生醫研發主任。生物工程研究所畢業後一直在細胞治療產業，業餘寫網站、玩雲端、3D 列印與 Arduino。"
+        path="/about"
       />
 
       <PageIntro

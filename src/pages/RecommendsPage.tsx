@@ -1,4 +1,5 @@
 import { Alert } from "@/components/arc/alert/alert";
+import { Seo } from "@/components/Seo";
 import { Badge } from "@/components/arc/badge/badge";
 import { EmptyState } from "@/components/arc/empty-state/empty-state";
 import { PageIntro } from "@/components/PageIntro";
@@ -72,10 +73,10 @@ export function RecommendsPage() {
 
   return (
     <div className="page">
-      <title>好物 · Finrod Chen</title>
-      <meta
-        name="description"
-        content="Finrod Chen 用過覺得值得的生活好物，加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
+      <Seo
+        title="好物 · Finrod Chen"
+        description="Finrod Chen 用過覺得值得的生活好物，加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
+        path="/recommends"
       />
 
       <PageIntro

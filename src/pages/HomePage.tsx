@@ -1,4 +1,6 @@
 import { projects } from "@/data/projects";
+import { Seo } from "@/components/Seo";
+import { SITE_URL } from "@/lib/site";
 import { posts } from "@/data/blog";
 import { HeroContent } from "@/components/arc/blocks/hero-section/hero-content";
 import { MetricCard } from "@/components/arc/metric-card/metric-card";
@@ -15,6 +17,22 @@ export function HomePage() {
 
   return (
     <>
+      <Seo
+        title="Finrod Chen · 個人作品集"
+        description="Finrod Chen 的個人作品集。白天在生醫產業做細胞治療，晚上寫 side project：網站、雲端、3D 列印、Arduino。"
+        path="/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Finrod Chen",
+          url: `${SITE_URL}/`,
+          sameAs: [
+            "https://x.com/finrodchen",
+            "https://github.com/finrodchen",
+            "https://linkedin.com/in/finrodchen",
+          ],
+        }}
+      />
       {/* The hero carries the page's only entrance animation. */}
       <HeroContent
         layout="split"
