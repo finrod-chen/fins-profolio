@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Seo } from "@/components/Seo";
 import { Link, useSearchParams } from "react-router-dom";
 import { posts, categories } from "@/data/blog";
 import { Badge } from "@/components/arc/badge/badge";
@@ -66,10 +67,11 @@ export function BlogIndexPage() {
 
   return (
     <div className="page">
-      <title>{category === "All" ? "文章 · Finrod Chen" : `${category} · 文章`}</title>
-      <meta
-        name="description"
-        content={`從 2013 到現在累積的 ${posts.length} 篇文章，散落在生技法規、細胞治療實務、side project 紀錄，以及一些雜談。`}
+      {/* Filters are views of one list, so they all point canonical at /blog. */}
+      <Seo
+        title={category === "All" ? "文章 · Finrod Chen" : `${category} · 文章`}
+        description={`從 2013 到現在累積的 ${posts.length} 篇文章，散落在生技法規、細胞治療實務、side project 紀錄，以及一些雜談。`}
+        path="/blog"
       />
 
       <PageIntro

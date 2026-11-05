@@ -127,7 +127,7 @@ screenshot: "/screenshots/aquaflow.png"
 
 ## 部署
 
-線上站是 <https://finrod-portfolio.pages.dev>，跑在 Cloudflare Pages 的
+線上站是 <https://finrod.xyz>（也可從 <https://finrod-portfolio.pages.dev> 連到），跑在 Cloudflare Pages 的
 **Direct Upload** 專案上。這種專案沒有接 Git，Cloudflare 自己不會因為你 push 就重新建置，
 所以部署由 GitHub Actions 代勞。
 

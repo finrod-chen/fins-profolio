@@ -1,4 +1,5 @@
 import { Suspense, use, useEffect, useMemo, useState } from "react";
+import { NotFoundSeo, Seo } from "@/components/Seo";
 import { Link, useParams } from "react-router-dom";
 import GithubSlugger from "github-slugger";
 import { findPost, loadPostBody, posts, relatedPosts, type BlogPost } from "@/data/blog";
@@ -160,7 +161,7 @@ export function BlogPostPage() {
   if (!post) {
     return (
       <div className="page band">
-        <title>找不到這篇文章 · Finrod Chen</title>
+        <NotFoundSeo title="找不到這篇文章 · Finrod Chen" />
         <EmptyState
           title="找不到這篇文章"
           description="文章可能已經搬走、刪掉，或是連結拼錯了。"
@@ -181,8 +182,13 @@ export function BlogPostPage() {
 
   return (
     <article className="page">
-      <title>{`${post.title} · 文章`}</title>
-      <meta name="description" content={post.description || post.title} />
+      <Seo
+        title={`${post.title} · 文章`}
+        description={post.description || post.title}
+        path={`/blog/${post.slug}`}
+        image={post.heroImage}
+        type="article"
+      />
 
       <header className={styles.header}>
         <Breadcrumb

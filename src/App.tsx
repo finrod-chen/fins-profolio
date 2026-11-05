@@ -15,7 +15,8 @@ import styles from "./App.module.css";
 // after React first renders. Visitors who landed somewhere else never pay for
 // it, and the duplicate call is free: Vite hands back the same promise.
 const importHome = () => import("@/pages/HomePage");
-if (window.location.pathname === "/") void importHome();
+// typeof guard: the same module is rendered in Node by scripts/prerender.mjs.
+if (typeof window !== "undefined" && window.location.pathname === "/") void importHome();
 const HomePage = lazy(() => importHome().then((m) => ({ default: m.HomePage })));
 const AboutPage = lazy(() =>
   import("@/pages/AboutPage").then((m) => ({ default: m.AboutPage }))

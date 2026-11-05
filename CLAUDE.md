@@ -15,6 +15,11 @@ Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://u
 - Arc 的 block 是為 Next.js 寫的，`next/image` 由 `src/shims/next-image.tsx` 接手
   （在 `vite.config.ts` 與 `tsconfig.app.json` 設 alias）。
 - 文章來源是 `src/content/**/*.md`，由 `src/data/blog.ts` 在 build 時讀進來。
+- 正式網址是 `https://finrod.xyz`（`src/lib/site.ts`）。每個頁面用 `<Seo>`（`src/components/Seo.tsx`）
+  給 title、description、canonical 與 og 標籤，不要寫回 `index.html`。
+- `npm run build` 會預先渲染：`src/entry-server.tsx` 列出所有路由，`scripts/prerender.mjs`
+  在 Node 裡渲染成 `dist/<path>.html`，並產生 `sitemap.xml`、`robots.txt`。新增路由要記得加進
+  `routes`。元件的第一次 render 必須能在 Node 跑（不碰 `window`），否則 build 會失敗。
 
 ---
 

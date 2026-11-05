@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { NotFoundSeo, Seo } from "@/components/Seo";
 import type { Project } from "@/types";
 import { findProject } from "@/data/projects";
 import { Badge } from "@/components/arc/badge/badge";
@@ -22,7 +23,7 @@ export function WorkDetailPage() {
   if (!project) {
     return (
       <div className="page band">
-        <title>找不到這個作品 · Finrod Chen</title>
+        <NotFoundSeo title="找不到這個作品 · Finrod Chen" />
         <EmptyState
           title="找不到這個作品"
           description="連結可能已經失效，或這個作品還沒公開。"
@@ -46,11 +47,12 @@ export function WorkDetailPage() {
 
   return (
     <article className="page">
-      <title>{`${project.title} · 作品`}</title>
-      <meta name="description" content={project.tagline} />
-      <meta property="og:title" content={`${project.title} · 作品`} />
-      <meta property="og:description" content={project.tagline} />
-      {project.screenshot && <meta property="og:image" content={project.screenshot} />}
+      <Seo
+        title={`${project.title} · 作品`}
+        description={project.tagline}
+        path={`/work/${project.id}`}
+        image={project.screenshot}
+      />
 
       <header className={styles.header}>
         <Breadcrumb
