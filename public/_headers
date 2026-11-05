@@ -1,0 +1,7 @@
+# The pages.dev address serves the same site as finrod.xyz. Keep it out of the
+# index so search engines credit the real domain. Preview deployments
+# (<hash>.finrod-portfolio.pages.dev) are covered by the second rule.
+https://finrod-portfolio.pages.dev/*
+  X-Robots-Tag: noindex
+https://:sub.finrod-portfolio.pages.dev/*
+  X-Robots-Tag: noindex

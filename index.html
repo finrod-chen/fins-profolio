@@ -11,6 +11,18 @@
          them into every route's HTML at build time. -->
     <meta property="og:locale" content="zh_TW" />
 
+    <!-- Arc's hero title starts at opacity 0 and is revealed by script. Without
+         JS the prerendered text would stay invisible, so show it. -->
+    <noscript>
+      <style>
+        h1,
+        h1 * {
+          opacity: 1 !important;
+          filter: none !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Arc's two faces (Geist for display, Inter for body) plus Noto Sans TC,

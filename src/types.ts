@@ -15,6 +15,11 @@ export interface Project {
   description: string;
   /** Live URL of the site */
   url?: string;
+  /**
+   * What the live site is for, as link text ("前往 calcnest.tw（勞健保、薪資試算）").
+   * Falls back to a generic label when unset.
+   */
+  linkLabel?: string;
   /** Source code URL */
   repoUrl?: string;
   /** Year the project was built (or "2024 — 2025") */

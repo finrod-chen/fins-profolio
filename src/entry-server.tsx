@@ -21,6 +21,9 @@ export const routes: { path: string; lastmod?: string }[] = [
   ...posts.map((p) => ({ path: `/blog/${p.slug}`, lastmod: p.pubDate })),
 ];
 
+/** A path no route claims; renders the not-found page. */
+export const NOT_FOUND_PATH = "/404";
+
 /** Renders one path to HTML, waiting for every lazy page and post body. */
 export async function render(path: string): Promise<string> {
   const { prelude } = await prerender(

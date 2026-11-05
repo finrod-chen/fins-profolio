@@ -11,13 +11,15 @@ interface SeoProps {
   /** Path or absolute URL. Defaults to the site-wide OG image. */
   image?: string;
   type?: "website" | "article";
+  /** Structured data for the page, written out as one JSON-LD script. */
+  jsonLd?: Record<string, unknown>;
 }
 
 /**
  * Every head tag a page needs. React 19 hoists these into <head>, both in the
  * prerendered HTML (scripts/prerender.mjs) and on client-side navigation.
  */
-export function Seo({ title, description, path, image, type = "website" }: SeoProps) {
+export function Seo({ title, description, path, image, type = "website", jsonLd }: SeoProps) {
   const url = absoluteUrl(path);
   const imageUrl = absoluteUrl(image ?? DEFAULT_IMAGE);
   return (
@@ -35,6 +37,13 @@ export function Seo({ title, description, path, image, type = "website" }: SeoPr
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          // "<" is escaped so no string in the data can close the script tag.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+        />
+      )}
     </>
   );
 }

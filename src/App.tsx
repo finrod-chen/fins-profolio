@@ -30,6 +30,9 @@ const BlogIndexPage = lazy(() =>
 const BlogPostPage = lazy(() =>
   import("@/pages/BlogPostPage").then((m) => ({ default: m.BlogPostPage }))
 );
+const NotFoundPage = lazy(() =>
+  import("@/pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage }))
+);
 const RecommendsPage = lazy(() =>
   import("@/pages/RecommendsPage").then((m) => ({ default: m.RecommendsPage }))
 );
@@ -70,7 +73,7 @@ function App() {
               <Route path="/blog" element={<BlogIndexPage />} />
               <Route path="/blog/*" element={<BlogPostPage />} />
               <Route path="/recommends" element={<RecommendsPage />} />
-              <Route path="*" element={<HomePage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>
         </RouteErrorBoundary>

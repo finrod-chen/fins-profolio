@@ -8,8 +8,8 @@
 //
 // Files are written as /about -> about.html, which Cloudflare Pages serves at
 // the extensionless URL our links already use (no trailing-slash redirect).
-// Unknown paths keep falling back to index.html: with no 404.html at the root,
-// Pages treats the project as a single-page application.
+// dist/404.html is the not-found page: its presence turns off Pages' SPA
+// fallback, so an unknown path gets this page with a real 404 status.
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -18,7 +18,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
-const { render, routes, SITE_URL } = await import(
+const { render, routes, SITE_URL, NOT_FOUND_PATH } = await import(
   pathToFileURL(path.join(ssrDir, "entry-server.js")).href
 );
 const template = await readFile(path.join(dist, "index.html"), "utf8");
@@ -40,15 +40,20 @@ function fileFor(route) {
   return route === "/" ? path.join(dist, "index.html") : path.join(dist, `${decodeURI(route)}.html`);
 }
 
+// A 404.html makes Pages answer unknown paths with a real 404 (and this page),
+// instead of its single-page-app fallback of index.html with a 200.
+const targets = [...routes.map((r) => r.path), NOT_FOUND_PATH];
+
 let failures = 0;
-for (const { path: route } of routes) {
+for (const route of targets) {
   try {
     const { head, body } = splitHead(await render(route));
-    if (!head.includes('rel="canonical"')) throw new Error("rendered without <Seo>");
+    const marker = route === NOT_FOUND_PATH ? 'content="noindex"' : 'rel="canonical"';
+    if (!head.includes(marker)) throw new Error("rendered without its head tags");
     const html = template
       .replace("</head>", `${head}\n  </head>`)
       .replace("<!--app-html-->", body);
-    const file = fileFor(route);
+    const file = route === NOT_FOUND_PATH ? path.join(dist, "404.html") : fileFor(route);
     await mkdir(path.dirname(file), { recursive: true });
     await writeFile(file, html);
   } catch (err) {

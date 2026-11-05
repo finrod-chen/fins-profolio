@@ -145,7 +145,7 @@ export function WorkDetailPage() {
                 {project.url && (
                   <ActionLink
                     kind="primary"
-                    action={{ label: "前往網站", href: project.url, external: true }}
+                    action={{ label: project.linkLabel ?? "前往網站", href: project.url, external: true }}
                   />
                 )}
                 {project.repoUrl && (
