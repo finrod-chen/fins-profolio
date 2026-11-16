@@ -28,7 +28,7 @@ export function HomePage() {
           url: `${SITE_URL}/`,
           sameAs: [
             "https://x.com/finrodchen",
-            "https://github.com/finrodchen",
+            "https://github.com/finrod-chen",
             "https://linkedin.com/in/finrodchen",
           ],
         }}

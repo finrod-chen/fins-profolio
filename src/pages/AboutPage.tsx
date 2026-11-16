@@ -46,7 +46,7 @@ const facts = [
 ];
 
 const elsewhere = [
-  { label: "GitHub", href: "https://github.com/finrodchen" },
+  { label: "GitHub", href: "https://github.com/finrod-chen" },
   { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen" },
   { label: "舊部落格", href: "https://astro.finrod.xyz" },
 ];

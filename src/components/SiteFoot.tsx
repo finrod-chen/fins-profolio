@@ -6,7 +6,7 @@ import { useTheme } from "@/lib/theme";
 import styles from "./SiteFoot.module.css";
 
 const socials = [
-  { label: "GitHub", href: "https://github.com/finrodchen", external: true },
+  { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
   { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
 ];
 
@@ -23,7 +23,7 @@ const columns = [
   {
     title: "其它",
     links: [
-      { label: "GitHub", href: "https://github.com/finrodchen", external: true },
+      { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
       { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
       { label: "舊部落格", href: "https://astro.finrod.xyz", external: true },
       { label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" },
