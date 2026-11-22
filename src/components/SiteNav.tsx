@@ -1,6 +1,8 @@
+import { useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SiteHeader, type SiteHeaderDestination } from "@/components/arc/blocks/site-header/site-header";
 import { BrandMark } from "@/components/BrandMark";
+import { useClientNav } from "@/lib/client-nav";
 
 /** Top level destinations, in the order they read. `value` also drives `current`. */
 const items = [
@@ -27,6 +29,8 @@ function currentItem(pathname: string) {
 export function SiteNav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const header = useRef<HTMLElement>(null);
+  useClientNav(header);
 
   const onNavigate = (destination: SiteHeaderDestination) => {
     const href = destination.href;
@@ -36,6 +40,7 @@ export function SiteNav() {
 
   return (
     <SiteHeader
+      ref={header}
       variant="simple"
       label="主導覽"
       brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark /> }}

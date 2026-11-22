@@ -78,6 +78,14 @@
   border-color: var(--border-strong);
 }
 
+/* Long Cat: the cover is pulled wide, and the card's overflow clips it. Pointer
+   hover and keyboard focus only, and never under reduced motion. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .card:is(:hover, :focus-visible) [data-effect="stretch"] {
+    transform: scaleX(1.3);
+  }
+}
+
 .cover {
   display: block;
   overflow: hidden;

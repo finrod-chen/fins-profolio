@@ -34,6 +34,7 @@ export function WorkCover({
     <img
       className={styles.image}
       src={src}
+      data-effect={project.hoverEffect}
       alt={`${project.title} 的網站預覽`}
       loading={priority ? "eager" : "lazy"}
       decoding="async"

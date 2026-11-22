@@ -1,0 +1,104 @@
+.section {
+  display: grid;
+  gap: var(--space-4);
+  padding-bottom: clamp(64px, 9vw, 120px);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.heading {
+  font-size: var(--text-3xl);
+}
+
+.lede {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.desk {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-surface);
+  background: var(--surface-muted);
+}
+
+@media (min-width: 700px) {
+  .desk {
+    height: 360px;
+  }
+}
+
+.defs {
+  position: absolute;
+}
+
+/* A slot holds the position (and the drag offset); the button inside tilts and lifts. */
+.slot {
+  position: absolute;
+  left: var(--left);
+  top: var(--top);
+  width: 96px;
+  height: 96px;
+  transition: transform var(--duration-considered) var(--ease-standard);
+}
+
+@media (min-width: 700px) {
+  .slot {
+    left: var(--left-wide);
+    top: var(--top-wide);
+    width: 120px;
+    height: 120px;
+  }
+}
+
+/* While a sticker is in the hand it follows the pointer exactly. */
+.slot[data-dragging="true"] {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot {
+    transition: none;
+  }
+}
+
+.sticker {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: grab;
+  /* A finger that lands on a sticker moves it, so the page does not scroll under it. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sticker:active {
+  cursor: grabbing;
+}
+
+.sticker svg {
+  width: 100%;
+  height: auto;
+  filter: url("#sticker-edge");
+}
+
+/* The cat is 96 by 64, so it sits in the middle of the 96 square. */
+.catArt {
+  display: grid;
+  height: 100%;
+  align-items: center;
+}

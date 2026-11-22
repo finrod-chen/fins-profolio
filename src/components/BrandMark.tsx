@@ -9,6 +9,7 @@ export function BrandMark() {
       viewBox="0 0 24 24"
       width={24}
       height={24}
+      data-brand-mark=""
       role="img"
       aria-label="Finrod Chen"
       fill="none"

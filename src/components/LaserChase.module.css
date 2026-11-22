@@ -1,0 +1,92 @@
+.wrap {
+  display: grid;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+}
+
+/* A play area, not a card: one bordered surface, nothing nested in it. */
+.area {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--surface-muted);
+  cursor: crosshair;
+  /* Vertical scrolling stays with the page, so a swipe never gets trapped here. */
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.cat,
+.dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+}
+
+/* The cat's drawing is 96 by 64, so these margins center it. */
+.cat {
+  margin: -32px 0 0 -48px;
+}
+
+.flip {
+  display: block;
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.flip[data-facing="left"] {
+  transform: scaleX(-1);
+}
+
+.dot {
+  margin: -6px 0 0 -6px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+.count {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.hint {
+  flex: 1 1 240px;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flip {
+    transition: none;
+  }
+
+  /* The cat stays where it started and the count is hidden: no chase, no score.
+     The inline transform motion writes is overridden here, not removed. */
+  .cat {
+    transform: none !important;
+  }
+
+  .count {
+    display: none;
+  }
+}

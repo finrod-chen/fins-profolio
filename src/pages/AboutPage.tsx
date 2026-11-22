@@ -2,6 +2,7 @@ import { Badge } from "@/components/arc/badge/badge";
 import { Seo } from "@/components/Seo";
 import { CopyButton } from "@/components/arc/copy-button/copy-button";
 import { PageIntro } from "@/components/PageIntro";
+import { StickerDesk } from "@/components/StickerDesk";
 import styles from "./AboutPage.module.css";
 
 /** Career, oldest first: a résumé reads forward, not newest first. */
@@ -124,6 +125,8 @@ export function AboutPage() {
           </ul>
         </aside>
       </div>
+
+      <StickerDesk />
 
       <section className={styles.career} aria-labelledby="about-career">
         <h2 id="about-career" className={styles.careerHeading}>
