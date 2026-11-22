@@ -1,7 +1,9 @@
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiteFooter, type SiteFooterLink } from "@/components/arc/blocks/site-footer/site-footer";
 import { ThemeSwitch } from "@/components/arc/theme-switch/theme-switch";
 import { BrandMark } from "@/components/BrandMark";
+import { useClientNav } from "@/lib/client-nav";
 import { useTheme } from "@/lib/theme";
 import styles from "./SiteFoot.module.css";
 
@@ -38,6 +40,8 @@ const columns = [
  */
 export function SiteFoot() {
   const navigate = useNavigate();
+  const foot = useRef<HTMLElement>(null);
+  useClientNav(foot);
   const { theme, setTheme } = useTheme();
 
   const onNavigate = (link: SiteFooterLink) => {
@@ -47,7 +51,7 @@ export function SiteFoot() {
   };
 
   return (
-    <footer className={styles.foot}>
+    <footer ref={foot} className={styles.foot}>
       <SiteFooter
         variant="columns"
         brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark /> }}
