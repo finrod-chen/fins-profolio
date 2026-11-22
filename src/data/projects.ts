@@ -205,6 +205,7 @@ export const projects: Project[] = [
     category: "Design",
     status: "live",
     screenshot: "/screenshots/long-cat.png",
+    hoverEffect: "stretch",
     notes: [
       { kind: "p", text: "Long Cat 是 2000 年代後期日本 2ch 迷因圈的代表作：一隻被刻意拉長到不成比例的貓，「長い」跟「猫」拆開各自萌，合體之後反而有一種莫名的和諧。把這個概念做成桌上立體擺飾，視覺效果比預期好，同事看到都會笑出來。" },
       { kind: "p", text: "設計上有三件事特別處理：身體做得夠長才有迷因感，但要避免列印時頭部因重心不穩倒下，所以肚子底部有內凹的配重槽；眼睛做成圓盤外凸 (不挖洞)，列印不需要支撐，失敗率低；短手短腳刻意維持低多邊形手感，不追求細節，整體才有「Q 版迷因」的氣場。" },

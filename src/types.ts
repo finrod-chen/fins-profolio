@@ -32,6 +32,11 @@ export interface Project {
   category: "Web" | "Tool" | "Brand" | "Design" | "Experiment" | "Editorial";
   /** Current status */
   status: ProjectStatus;
+  /**
+   * A small bit of play on the work's card. "stretch" pulls the cover wide
+   * on hover, for the one work whose subject is a very long cat.
+   */
+  hoverEffect?: "stretch";
   /** Whether this is a featured work */
   featured?: boolean;
   /** Screenshot — local image path under /public. Highest priority. */

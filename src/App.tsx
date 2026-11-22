@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFoot } from "@/components/SiteFoot";
+import { CatWalker } from "@/components/CatWalker";
 import { RouteErrorBoundary } from "@/components/RouteErrorBoundary";
 import { Skeleton } from "@/components/arc/skeleton/skeleton";
 import styles from "./App.module.css";
@@ -79,6 +80,7 @@ function App() {
         </RouteErrorBoundary>
       </main>
       <SiteFoot />
+      <CatWalker />
     </div>
   );
 }

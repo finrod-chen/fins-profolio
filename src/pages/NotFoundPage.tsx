@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { NotFoundSeo } from "@/components/Seo";
 import { EmptyState } from "@/components/arc/empty-state/empty-state";
+import { LaserChase } from "@/components/LaserChase";
 import styles from "./NotFoundPage.module.css";
 
 /** Any path that is not a route. Prerendered to dist/404.html, which Pages serves with a 404. */
@@ -18,6 +19,9 @@ export function NotFoundPage() {
           </Link>
         }
       />
+      <div className={styles.play}>
+        <LaserChase />
+      </div>
     </div>
   );
 }

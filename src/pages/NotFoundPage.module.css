@@ -3,3 +3,7 @@
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.play {
+  margin-top: var(--space-12);
+}

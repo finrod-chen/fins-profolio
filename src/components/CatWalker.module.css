@@ -1,0 +1,17 @@
+/* Fixed to the bottom edge, above the page and below nothing that matters:
+   it never takes a click, so the page underneath stays usable. */
+.walker,
+.still {
+  position: fixed;
+  bottom: var(--space-2);
+  z-index: 40;
+  pointer-events: none;
+}
+
+.walker {
+  left: 0;
+}
+
+.still {
+  right: var(--space-6);
+}
