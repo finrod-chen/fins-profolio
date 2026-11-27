@@ -6,6 +6,7 @@ import type { Project } from "@/types";
 import { categories } from "@/data/projects";
 import { Badge } from "@/components/arc/badge/badge";
 import { ChipGroup } from "@/components/arc/chip-group/chip-group";
+import { EmptyState } from "@/components/arc/empty-state/empty-state";
 import { CtaLink } from "@/components/CtaLink";
 import { WorkCover } from "@/components/WorkCover";
 import { ScrambleText } from "@/components/ScrambleText";
@@ -17,7 +18,6 @@ const statusBadge: Record<Project["status"], { label: string; tone: "success" | 
   archived: { label: "歸檔", tone: "neutral" },
 };
 
-const options = [{ value: "All", label: "全部" }, ...categories.map((c) => ({ value: c, label: c }))];
 
 /**
  * Width of each card as a share of the deck, in percent. The current card is
@@ -54,6 +54,16 @@ export function WorkDeck({ projects }: { projects: Project[] }) {
   const [filter, setFilter] = useState("All");
   const [active, setActive] = useState(0);
   const swipeFrom = useRef<number | null>(null);
+
+  // Only categories that hold at least one work get a chip, so no filter
+  // ever comes up empty. A category gains its chip with its first work.
+  const options = useMemo(
+    () => [
+      { value: "All", label: "全部" },
+      ...categories.filter((c) => projects.some((p) => p.category === c)).map((c) => ({ value: c, label: c })),
+    ],
+    [projects],
+  );
 
   const list = useMemo(
     () => (filter === "All" ? projects : projects.filter((p) => p.category === filter)),
@@ -97,7 +107,7 @@ export function WorkDeck({ projects }: { projects: Project[] }) {
         </div>
         <div className={styles.controls}>
           <p className={`mono ${styles.counter}`} aria-hidden="true">
-            <span className={styles.counterNow}>{pad(active + 1)}</span> / {pad(list.length)}
+            <span className={styles.counterNow}>{pad(list.length ? active + 1 : 0)}</span> / {pad(list.length)}
           </p>
           <button
             type="button"
@@ -139,7 +149,16 @@ export function WorkDeck({ projects }: { projects: Project[] }) {
         {current ? `第 ${active + 1} 個，共 ${list.length} 個：${current.title}` : ""}
       </p>
 
+      {list.length === 0 && (
+        <EmptyState
+          title="這個分類還沒有作品"
+          description="換一個分類，或看看全部的作品。"
+          label="沒有符合的作品"
+        />
+      )}
+
       <ol
+        hidden={list.length === 0}
         className={styles.deck}
         aria-label="作品，用左右鍵切換"
         tabIndex={0}

@@ -361,3 +361,7 @@
 .card:not([data-state="active"]) .media span {
   visibility: hidden;
 }
+
+.deck[hidden] {
+  display: none;
+}
