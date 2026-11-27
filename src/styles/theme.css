@@ -81,3 +81,11 @@
   letter-spacing: .03em;
   text-transform: uppercase;
 }
+
+/* ---------- Counters take the size of the number they sit in ---------- */
+
+:root .animated-counter__counter {
+  font-size: inherit;
+  font-weight: 400;
+  letter-spacing: 0;
+}

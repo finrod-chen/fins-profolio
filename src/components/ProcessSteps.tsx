@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ScrambleText } from "@/components/ScrambleText";
 import styles from "./ProcessSteps.module.css";
 
 interface Step {
@@ -71,9 +72,7 @@ export function ProcessSteps() {
       <div className={styles.intro}>
         <p className="label">Process</p>
         <h2 id="process-heading" className={styles.heading}>
-          從一個麻煩，
-          <br />
-          到天天在用。
+          <ScrambleText lines={["從一個麻煩，", "到天天在用。"]} onView />
         </h2>
         <p className={styles.lede}>這裡的作品，大多走過同樣的五步。</p>
       </div>

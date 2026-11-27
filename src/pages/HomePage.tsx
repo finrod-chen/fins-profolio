@@ -5,7 +5,11 @@ import { SITE_URL } from "@/lib/site";
 import { posts } from "@/data/blog";
 import { CtaLink } from "@/components/CtaLink";
 import { ProcessSteps } from "@/components/ProcessSteps";
-import { WorkList } from "@/components/WorkList";
+import { WorkDeck } from "@/components/WorkDeck";
+import { Reveal } from "@/components/Reveal";
+import { ScrambleText } from "@/components/ScrambleText";
+import { StackTicker } from "@/components/StackTicker";
+import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter";
 import { WorkCover } from "@/components/WorkCover";
 import styles from "./HomePage.module.css";
 
@@ -13,10 +17,10 @@ import styles from "./HomePage.module.css";
 const featured = projects.find((p) => p.featured) ?? projects[0];
 
 const stats = [
-  { label: "In biotech", value: "14", unit: "年", note: "從製程工程師到研發主任" },
-  { label: "Side projects", value: String(projects.length), unit: "個", note: "網站、雲端、3D 列印、Arduino" },
-  { label: "3D printers", value: "3", unit: "台", note: "Bambu、Ender，以及一台自己改的" },
-  { label: "Posts", value: String(posts.length), unit: "篇", note: "從 2013 累積到現在" },
+  { label: "In biotech", value: 14, unit: "年", note: "從製程工程師到研發主任" },
+  { label: "Side projects", value: projects.length, unit: "個", note: "網站、雲端、3D 列印、Arduino" },
+  { label: "3D printers", value: 3, unit: "台", note: "Bambu、Ender，以及一台自己改的" },
+  { label: "Posts", value: posts.length, unit: "篇", note: "從 2013 累積到現在" },
 ];
 
 export function HomePage() {
@@ -45,9 +49,7 @@ export function HomePage() {
         <div className={styles.heroText}>
           <p className="label">Finrod Chen · Portfolio</p>
           <h1 className={styles.heroTitle}>
-            白天做細胞治療，
-            <br />
-            晚上寫 side project。
+            <ScrambleText lines={["白天做細胞治療，", "晚上寫 side project。"]} />
           </h1>
           <p className={styles.heroLede}>
             我是 Finrod Chen，在生醫產業做細胞治療的研發主任。工作之餘寫網站、玩雲端、3D 列印和
@@ -90,32 +92,42 @@ export function HomePage() {
         <h2 id="numbers-heading" className="sr-only">
           數字
         </h2>
-        <dl className={styles.stats}>
-          {stats.map((stat) => (
-            <div key={stat.label} className={styles.stat}>
-              <dt className={`mono ${styles.statLabel}`}>{stat.label}</dt>
-              <dd className={styles.statValue}>
-                {stat.value}
-                <span className={styles.statUnit}>{stat.unit}</span>
-              </dd>
-              <dd className={styles.statNote}>{stat.note}</dd>
-            </div>
-          ))}
-        </dl>
+        <Reveal>
+          <dl className={styles.stats}>
+            {stats.map((stat) => (
+              <div key={stat.label} className={styles.stat}>
+                <dt className={`mono ${styles.statLabel}`}>{stat.label}</dt>
+                <dd className={styles.statValue}>
+                  <AnimatedCounter value={stat.value} animateOnView />
+                  <span className={styles.statUnit}>{stat.unit}</span>
+                </dd>
+                <dd className={styles.statNote}>{stat.note}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
       </section>
 
+      <Reveal className={styles.ticker}>
+        <StackTicker />
+      </Reveal>
+
       <div className="page band" id="works">
-        <WorkList projects={projects} />
+        <Reveal>
+          <WorkDeck projects={projects} />
+        </Reveal>
       </div>
 
       <div className="page band">
-        <ProcessSteps />
+        <Reveal>
+          <ProcessSteps />
+        </Reveal>
       </div>
 
       <section className={`page band ${styles.contact}`} aria-labelledby="contact-heading">
         <p className="label">Contact</p>
         <h2 id="contact-heading" className={styles.contactTitle}>
-          想聊些什麼？
+          <ScrambleText lines={["想聊些什麼？"]} onView />
         </h2>
         <p className={styles.contactLede}>
           技術的、做東西的、細胞治療的，或純粹好奇的，寫信給我就好。通常 1 到 2 個工作天內回信。

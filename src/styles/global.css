@@ -410,3 +410,27 @@ h2 {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }
+
+/* Reveal (src/components/Reveal.tsx): hidden only once JavaScript is known to
+   run, so the content never depends on it. */
+[data-reveal] {
+  transition:
+    opacity 900ms var(--ease-enter) var(--reveal-delay, 0ms),
+    transform 900ms var(--ease-enter) var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal]:not([data-shown]) {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    transition: none;
+  }
+
+  .js [data-reveal]:not([data-shown]) {
+    opacity: 1;
+    transform: none;
+  }
+}

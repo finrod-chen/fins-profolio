@@ -200,3 +200,9 @@
   font-size: var(--text-lg);
   color: var(--text-secondary);
 }
+
+/* The tools strip runs the full width of the page, under the numbers. */
+.ticker {
+  position: relative;
+  margin-top: clamp(32px, 5vw, 56px);
+}

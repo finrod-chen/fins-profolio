@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Breadcrumb, type BreadcrumbItem } from "@/components/arc/breadcrumb/breadcrumb";
-import { InViewTitle } from "@/components/arc/in-view-title/in-view-title";
+import { ScrambleText } from "@/components/ScrambleText";
 import styles from "./PageIntro.module.css";
 
 export interface PageIntroProps {
@@ -21,8 +21,7 @@ export interface PageIntroProps {
 /**
  * The top of an inner page: path, title, one supporting line.
  *
- * The title is the page's single entrance animation, so no other region
- * animates in on scroll.
+ * The title settles out of pixel noise when the page opens.
  */
 export function PageIntro({ label, title, description, breadcrumbs, meta, children }: PageIntroProps) {
   return (
@@ -33,7 +32,9 @@ export function PageIntro({ label, title, description, breadcrumbs, meta, childr
         </div>
       )}
       {label && <p className={`label ${styles.label}`}>{label}</p>}
-      <InViewTitle as="h1" variant="blur" text={title} className={styles.title} />
+      <h1 className={styles.title}>
+        <ScrambleText lines={[title]} />
+      </h1>
       {description && <p className={styles.description}>{description}</p>}
       {meta && meta.length > 0 && (
         <p className={styles.meta}>
