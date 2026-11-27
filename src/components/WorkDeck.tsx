@@ -125,8 +125,10 @@ export function WorkDeck({ projects }: { projects: Project[] }) {
           label="作品分類"
           options={options}
           value={[filter]}
+          // One category at a time. Tapping the selected chip clears it, back to all.
+          multiple={false}
           onValueChange={(next) => {
-            setFilter(next.at(-1) ?? "All");
+            setFilter(next[0] ?? "All");
             setActive(0);
           }}
         />

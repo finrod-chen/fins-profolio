@@ -99,7 +99,9 @@ export function BlogIndexPage() {
           options={options}
           value={[category]}
           maxVisible={6}
-          onValueChange={(next) => update({ cat: next.at(-1) ?? "All", page: 1 })}
+          // One category at a time. Tapping the selected chip clears it, back to all.
+          multiple={false}
+          onValueChange={(next) => update({ cat: next[0] ?? "All", page: 1 })}
         />
       </div>
 
