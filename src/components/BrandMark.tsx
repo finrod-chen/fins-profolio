@@ -18,8 +18,8 @@ const wordmark = parse(wordmarkSvg);
  * the link around it already carries the name as text (visually hidden in
  * src/styles/theme.css), which is what screen readers announce.
  *
- * `symbolOnly` drops the wordmark, for places that already print the name
- * beside it (the footer). `data-brand-mark` is what the Long Cat egg counts
+ * `symbolOnly` drops the wordmark, for a place that already prints the name
+ * beside it. `data-brand-mark` is what the Long Cat egg counts
  * clicks on (CatWalker).
  */
 export function BrandMark({ symbolOnly = false }: { symbolOnly?: boolean }) {

@@ -3,3 +3,10 @@
   z-index: 1;
   border-top: 1px solid var(--border);
 }
+
+/* The footer lockup doubles as the home link: 44px tall for touch. */
+.brandLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}

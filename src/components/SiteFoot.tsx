@@ -50,7 +50,29 @@ export function SiteFoot() {
     <footer ref={foot} className={styles.foot}>
       <SiteFooter
         variant="columns"
-        brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark symbolOnly /> }}
+        brand={{
+          name: "Finrod Chen",
+          href: "/",
+          // The lockup is the home link here. Arc puts its own text link for
+          // the name beside the mark; theme.css hides that one so the name
+          // is not printed twice. A plain anchor that navigates itself: a
+          // router <Link> would skip navigating, because useClientNav has
+          // already cancelled the click's default by the time it sees it.
+          mark: (
+            <a
+              href="/"
+              className={styles.brandLink}
+              aria-label="Finrod Chen"
+              onClick={(event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                event.preventDefault();
+                navigate("/");
+              }}
+            >
+              <BrandMark />
+            </a>
+          ),
+        }}
         tagline="白天在生醫產業做細胞治療，晚上寫 side project。這裡收網站、雲端、3D 列印、Arduino，以及一些工作上的紀錄。"
         columns={columns}
         newsletter={null}

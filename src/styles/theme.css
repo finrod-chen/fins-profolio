@@ -112,3 +112,16 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Footer: the lockup is the home link (SiteFoot), so Arc's text link for the
+   name beside it would print "Finrod" twice. */
+:root .site-footer__brandRow > .site-footer__brand {
+  display: none;
+}
+
+/* Footer column titles are h2s but small, and pixel type blurs at that size,
+   so they keep the text face. */
+:root .site-footer__footer :is(h2, h3) {
+  font-family: var(--font-body);
+  font-weight: 500;
+}

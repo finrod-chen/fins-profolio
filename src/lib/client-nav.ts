@@ -12,6 +12,10 @@ import type { RefObject } from "react";
  *
  * Modified clicks (new tab, new window, download) and other origins are left
  * alone, so they behave as the browser intends.
+ *
+ * Inside `ref`, do not use a router <Link>: it skips navigating when the
+ * click's default is already cancelled, which this does first. Use a plain
+ * anchor whose onClick calls navigate() (see the footer lockup in SiteFoot).
  */
 export function useClientNav(ref: RefObject<HTMLElement | null>) {
   useEffect(() => {
