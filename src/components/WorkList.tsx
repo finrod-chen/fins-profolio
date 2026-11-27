@@ -32,9 +32,12 @@ export function WorkList({ projects }: { projects: Project[] }) {
   return (
     <section className={styles.section} aria-labelledby="works-heading">
       <div className={styles.head}>
-        <h2 id="works-heading" className={styles.heading}>
-          作品
-        </h2>
+        <div className={styles.titleBlock}>
+          <p className="label">Works</p>
+          <h2 id="works-heading" className={styles.heading}>
+            作品
+          </h2>
+        </div>
         <p className={styles.count}>
           {filtered.length} / {projects.length} 個
         </p>
@@ -73,6 +76,7 @@ export function WorkList({ projects }: { projects: Project[] }) {
                   </span>
                   <span className={styles.body}>
                     <span className={styles.meta}>
+                      <span className={`mono ${styles.index}`}>{String(index + 1).padStart(2, "0")}</span>
                       <Badge tone="neutral" size="sm">
                         {project.category}
                       </Badge>

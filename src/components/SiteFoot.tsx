@@ -1,10 +1,8 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiteFooter, type SiteFooterLink } from "@/components/arc/blocks/site-footer/site-footer";
-import { ThemeSwitch } from "@/components/arc/theme-switch/theme-switch";
 import { BrandMark } from "@/components/BrandMark";
 import { useClientNav } from "@/lib/client-nav";
-import { useTheme } from "@/lib/theme";
 import styles from "./SiteFoot.module.css";
 
 const socials = [
@@ -34,15 +32,13 @@ const columns = [
 ];
 
 /**
- * The site footer: Arc's `site-footer` block, with the theme switch in a
- * row under it. The block has no slot of its own, so the switch is
- * composed beside it rather than forked into its source.
+ * The site footer: Arc's `site-footer` block. The site is dark only, so
+ * there is no theme switch.
  */
 export function SiteFoot() {
   const navigate = useNavigate();
   const foot = useRef<HTMLElement>(null);
   useClientNav(foot);
-  const { theme, setTheme } = useTheme();
 
   const onNavigate = (link: SiteFooterLink) => {
     const href = link.href;
@@ -63,14 +59,6 @@ export function SiteFoot() {
         status={{ label: "接受新合作", tone: "success" }}
         onNavigate={onNavigate}
       />
-      <div className={styles.themeRow}>
-        <ThemeSwitch
-          theme={theme}
-          variant="reveal"
-          label="深色模式"
-          onThemeChange={(next) => setTheme(next)}
-        />
-      </div>
     </footer>
   );
 }

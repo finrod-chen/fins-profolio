@@ -1,19 +1,202 @@
-/* The hero's image sits in the same bordered frame the work cards use, so
-   the corner radius and the hairline read as one system. */
-.heroMedia {
-  display: block;
+/* ---------- Hero: big pixel type beside a framed panel ---------- */
+
+.hero {
+  display: grid;
+  gap: var(--space-12);
+  padding-block: clamp(56px, 10vw, 128px) clamp(48px, 8vw, 96px);
+}
+
+@media (min-width: 960px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+  }
+}
+
+.heroText {
+  display: grid;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 4.6vw, 4rem);
+  line-height: 1.02;
+}
+
+.heroLede {
+  max-width: 34rem;
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.heroMeta {
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  color: var(--text-muted);
+}
+
+/* The device: a hairline frame with a status bar, a screen and a caption bar. */
+.device {
+  display: grid;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: var(--radius-surface);
+  background: var(--surface);
+}
+
+.deviceBar,
+.deviceFoot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.deviceBar {
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--foreground);
+}
+
+.led {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+.screen {
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
   background: var(--surface-muted);
 }
 
-/* KPI row: equal heights, wrapping to one card per row on a phone. */
-.metrics {
+.deviceFoot {
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  background: var(--surface-raised);
+  text-transform: none;
+}
+
+.deviceLink {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--foreground);
+}
+
+.deviceLink:hover {
+  color: var(--accent);
+}
+
+.deviceTag {
+  flex-basis: 100%;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  letter-spacing: 0;
+  color: var(--text-secondary);
+}
+
+/* ---------- Numbers: one ruled strip, four cells ---------- */
+
+.stats {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
-  align-items: stretch;
-  padding-block: clamp(32px, 5vw, 56px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 960px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--space-6) var(--space-5) var(--space-6) 0;
+  min-width: 0;
+}
+
+.stat + .stat {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 959px) {
+  .stat:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.statUnit {
+  margin-left: var(--space-1);
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+.statNote {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ---------- Contact ---------- */
+
+.contact {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+  border-top: 1px solid var(--border);
+}
+
+.contactTitle {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.02;
+}
+
+.contactLede {
+  max-width: 36rem;
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
 }

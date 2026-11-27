@@ -4,6 +4,8 @@ import { InViewTitle } from "@/components/arc/in-view-title/in-view-title";
 import styles from "./PageIntro.module.css";
 
 export interface PageIntroProps {
+  /** A short mono label above the title, such as "About". */
+  label?: string;
   /** The page's one h1. */
   title: string;
   /** One or two lines saying what the page holds. */
@@ -22,7 +24,7 @@ export interface PageIntroProps {
  * The title is the page's single entrance animation, so no other region
  * animates in on scroll.
  */
-export function PageIntro({ title, description, breadcrumbs, meta, children }: PageIntroProps) {
+export function PageIntro({ label, title, description, breadcrumbs, meta, children }: PageIntroProps) {
   return (
     <header className={styles.intro}>
       {breadcrumbs && breadcrumbs.length > 0 && (
@@ -30,6 +32,7 @@ export function PageIntro({ title, description, breadcrumbs, meta, children }: P
           <Breadcrumb items={breadcrumbs} ariaLabel="頁面路徑" />
         </div>
       )}
+      {label && <p className={`label ${styles.label}`}>{label}</p>}
       <InViewTitle as="h1" variant="blur" text={title} className={styles.title} />
       {description && <p className={styles.description}>{description}</p>}
       {meta && meta.length > 0 && (

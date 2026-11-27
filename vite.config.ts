@@ -14,6 +14,15 @@ export default defineConfig({
       'next/image': path.resolve(__dirname, './src/shims/next-image.tsx'),
     },
   },
+  css: {
+    modules: {
+      // Stable names ("button__primary") instead of hashes, so the site theme
+      // (src/styles/theme.css) can restyle Arc components without editing them.
+      // Every *.module.css basename in src is unique, so names cannot collide.
+      generateScopedName: (name: string, filename: string) =>
+        `${path.basename(filename).replace(/\.module\.css(\?.*)?$/, '')}__${name}`,
+    },
+  },
   server: {
     host: true,
     port: 5173,

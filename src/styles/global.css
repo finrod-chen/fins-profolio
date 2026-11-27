@@ -1,17 +1,66 @@
 /* ============================================================
-   Global stylesheet — Arc foundation + the few page-level rules
-   Arc's components own their own CSS modules; this file only
-   carries the reset, the font wiring, the page container, and
-   long-form markdown styles.
+   Global stylesheet: Arc foundation, then the site's own look.
+   The site is dark only: black ground, thin rules, an orange accent,
+   pixel faces for display type and a mono face for labels.
+   Arc components keep their CSS modules; theme.css restyles them.
    ============================================================ */
 @import "../components/arc/foundation.css";
+@import "./theme.css";
 
-:root {
-  /* Arc resolves --font-display / --font-body from these two. Geist and
-     Inter carry no CJK glyphs, so Noto Sans TC follows for 中文. */
-  --font-geist: "Geist", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  --font-inter: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
-  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+/* Display faces. Geist Pixel carries Latin; Fusion Pixel carries 中文, and the
+   build (scripts/prerender.mjs) cuts it down to the characters headings use. */
+@font-face {
+  font-family: "Geist Pixel";
+  src: url("/fonts/GeistPixel-Square.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Fusion Pixel TC";
+  src: url("/fonts/pixel-tc.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root,
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --font-pixel: "Geist Pixel", "Fusion Pixel TC", "Geist Mono", monospace;
+  --font-mono: "Geist Mono", "Noto Sans TC", ui-monospace, Menlo, Consolas, monospace;
+  --font-text: "Geist", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-display: var(--font-pixel);
+  --font-body: var(--font-text);
+  --font-code: var(--font-mono);
+
+  --background: oklch(0% 0 0);
+  --surface: oklch(9% 0 0);
+  --surface-raised: oklch(13% 0 0);
+  --surface-muted: oklch(14% 0 0);
+  --foreground: oklch(96% 0 0);
+  --text-secondary: oklch(74% 0 0);
+  --text-muted: oklch(56% 0 0);
+  --border: oklch(100% 0 0 / .13);
+  --border-subtle: oklch(100% 0 0 / .07);
+  --border-strong: oklch(100% 0 0 / .26);
+  /* The grid of thin vertical rules behind every page. */
+  --grid-line: oklch(100% 0 0 / .055);
+
+  --accent: oklch(66% .2 42);
+  --accent-strong: oklch(74% .17 50);
+  --accent-subtle: oklch(66% .2 42 / .16);
+  --accent-foreground: oklch(100% 0 0);
+
+  /* Small, square-ish corners instead of Arc's soft ones. */
+  --radius-control: .5rem;
+  --radius-panel: .75rem;
+  --radius-surface: .875rem;
+
+  --tracking-display: 0;
+  --leading-display: 1.08;
 
   /* One page container for the whole site (composition: never a second one). */
   --page-width: 1120px;
@@ -292,4 +341,72 @@ a {
 
 .prose del {
   color: var(--text-muted);
+}
+
+/* ---------- Site look ---------------------------------------------- */
+
+/* Thin vertical rules that run the full height of the page, aligned to the
+   page container: six columns, like a drafting sheet. Fixed, so they stay put
+   while content scrolls over them. */
+.gridlines {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.gridlines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: min(100%, var(--page-width));
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
+  background:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px) content-box,
+    linear-gradient(to left, var(--grid-line) 1px, transparent 1px) content-box;
+  background-size: calc(100% / 6) 100%, 100% 100%;
+  background-repeat: repeat-x, no-repeat;
+}
+
+@media (max-width: 699px) {
+  .gridlines::before {
+    background-size: calc(100% / 2) 100%, 100% 100%;
+  }
+}
+
+/* Display type is pixel type: no negative tracking, and weight stays 400
+   because the pixel faces have one weight. */
+h1,
+h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* A mono label above a heading, led by a small accent square. */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--foreground);
+}
+
+.label::before {
+  content: "";
+  width: .5rem;
+  height: .5rem;
+  flex: none;
+  background: var(--accent);
+}
+
+/* Numbers that sit in a row of mono metadata. */
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }

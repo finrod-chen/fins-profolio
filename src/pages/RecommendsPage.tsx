@@ -80,6 +80,7 @@ export function RecommendsPage() {
       />
 
       <PageIntro
+        label="Picks"
         title="好物"
         description="我在 Coupang 買了幾年生活用品，這裡收的是實際用過覺得值得的東西，加上平台的熱門推薦。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "好物" }]}

@@ -24,7 +24,9 @@ export function WorkCover({
   if (!src || failed) {
     return (
       <div className={styles.fallback}>
-        <span className={styles.fallbackTitle}>{project.title}</span>
+        <span className={styles.fallbackTitle} data-pixel="">
+          {project.title}
+        </span>
         <span className={styles.fallbackMeta}>{project.year}</span>
       </div>
     );

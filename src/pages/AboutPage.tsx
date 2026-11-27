@@ -62,6 +62,7 @@ export function AboutPage() {
       />
 
       <PageIntro
+        label="About"
         title="關於"
         description="我是 Finrod Chen，喜躍生醫的研發主任。生物工程研究所畢業後一直待在細胞治療產業，從製程工程師做到生產主任、資訊管理，到現在帶研發團隊與特管辦法案件。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "關於" }]}

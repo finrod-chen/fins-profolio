@@ -11,8 +11,19 @@
   gap: var(--space-3);
 }
 
+.titleBlock {
+  display: grid;
+  gap: var(--space-4);
+}
+
 .heading {
-  font-size: var(--text-3xl);
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+}
+
+.index {
+  font-size: var(--text-xs);
+  color: var(--accent);
 }
 
 .count {
@@ -75,7 +86,7 @@
 }
 
 .card:hover {
-  border-color: var(--border-strong);
+  border-color: var(--accent);
 }
 
 /* Long Cat: the cover is pulled wide, and the card's overflow clips it. Pointer
@@ -115,12 +126,13 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Card titles stay in the text face: pixel type blurs at this size. */
 .title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-xl);
   font-weight: 500;
-  letter-spacing: var(--tracking-display);
-  line-height: var(--leading-display);
+  letter-spacing: -.01em;
+  line-height: 1.2;
   color: var(--foreground);
 }
 

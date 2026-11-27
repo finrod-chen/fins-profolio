@@ -1,0 +1,83 @@
+/* ============================================================
+   Site theme over Arc components.
+
+   Arc's components are installed code (src/components/arc) and are not
+   edited. CSS module classes are named "<file>__<class>" (vite.config.ts),
+   so they can be restyled here. Each selector starts with :root to outrank
+   the component's own rule, whichever stylesheet loads last.
+   ============================================================ */
+
+/* ---------- Buttons: the accent fills the one primary action ---------- */
+
+:root :is(.button__primary, .site-header__primary, .hero-content__primary) {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+:root :is(.button__button, .site-header__action, .hero-content__action) {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+:root :is(.button__secondary, .hero-content__secondary) {
+  border-color: var(--border-strong);
+  background: transparent;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root :is(.button__primary, .site-header__primary, .hero-content__primary):hover {
+    border-color: var(--accent-strong);
+    background: var(--accent-strong);
+    opacity: 1;
+  }
+
+  :root :is(.button__secondary, .hero-content__secondary):hover {
+    border-color: var(--foreground);
+    background: transparent;
+  }
+}
+
+/* ---------- Header and footer: black bars with a hairline ---------- */
+
+:root .site-header__header {
+  border-bottom-color: var(--border);
+  background: color-mix(in oklab, var(--background) 86%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+:root .site-header__header[data-scrolled] {
+  box-shadow: none;
+}
+
+:root .site-header__navItem {
+  font-weight: 400;
+}
+
+:root .site-footer__footer {
+  background: var(--background);
+}
+
+/* ---------- Chips, badges and quiet surfaces ---------- */
+
+:root .chip-group__chip {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+:root .chip-group__surface {
+  background: transparent;
+}
+
+:root .badge__badge {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+}

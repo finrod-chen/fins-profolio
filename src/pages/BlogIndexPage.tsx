@@ -75,6 +75,7 @@ export function BlogIndexPage() {
       />
 
       <PageIntro
+        label="Writing"
         title="文章"
         description="從 2013 到現在累積下來的紀錄，散落在生技法規、細胞治療實務、side project，以及一些雜談。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "文章" }]}
