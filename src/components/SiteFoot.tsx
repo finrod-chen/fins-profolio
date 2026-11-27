@@ -50,7 +50,7 @@ export function SiteFoot() {
     <footer ref={foot} className={styles.foot}>
       <SiteFooter
         variant="columns"
-        brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark /> }}
+        brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark symbolOnly /> }}
         tagline="白天在生醫產業做細胞治療，晚上寫 side project。這裡收網站、雲端、3D 列印、Arduino，以及一些工作上的紀錄。"
         columns={columns}
         newsletter={null}

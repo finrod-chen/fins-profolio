@@ -20,6 +20,9 @@ Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://u
 - 文章來源是 `src/content/**/*.md`，由 `src/data/blog.ts` 在 build 時讀進來。
 - 正式網址是 `https://finrod.xyz`（`src/lib/site.ts`）。每個頁面用 `<Seo>`（`src/components/Seo.tsx`）
   給 title、description、canonical 與 og 標籤，不要寫回 `index.html`。
+- Logo 的唯一來源是 `finrod-logo-pack/`（原始 PNG 和描好的 SVG，填色用 `currentColor`）。
+  `BrandMark.tsx` 以 `?raw` 讀 SVG；`scripts/generate-og.mjs` 也讀它們產生 `public/og-image.png`
+  （換 logo 後要重跑）；`public/logos/favicon.svg` 要手動更新。
 - 像素字：英文用 Geist Pixel Square（`public/fonts`），中文用縫合像素字型（Fusion Pixel 12px TC，
   `@fontsource` 套件）。build 時 `scripts/prerender.mjs` 收集所有 h1、h2 與 `data-pixel` 元素的字，
   裁成 `dist/fonts/pixel-tc.woff2`。`public/fonts/pixel-tc.woff2` 只是開發時的備用檔。

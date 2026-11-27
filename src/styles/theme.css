@@ -97,3 +97,18 @@
   -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
+
+/* ---------- Brand: the lockup replaces the name text ---------- */
+
+/* The header brand link keeps "Finrod Chen" as its text for screen readers
+   and search engines, but shows the logo lockup instead. (The footer prints
+   the name beside the symbol, so its text stays visible.) */
+:root .site-header__brand > span:not([aria-hidden]) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

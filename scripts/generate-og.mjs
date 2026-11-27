@@ -3,68 +3,110 @@
 //
 //   node scripts/generate-og.mjs   →   public/og-image.png
 //
-// Renders an on-brand "industrial / light" card via an inline SVG,
-// rasterised with @resvg/resvg-js (loads system fonts incl. CJK).
-// Re-run this whenever the headline / name / colours change.
+// The card follows the site: black ground, thin column rules, a mono label
+// with an orange square, the logo lockup and the tagline in pixel type.
+// The logo comes from finrod-logo-pack, so replacing the artwork there and
+// re-running this keeps the share image in step.
+//
+// resvg reads TTF/OTF, not the site's woff2 files, so the two pixel faces
+// are cut down to just this card's characters and converted on the fly.
+// Re-run whenever the logo, the tagline or the colors change.
 // ============================================================
 import { Resvg } from "@resvg/resvg-js";
-import { writeFileSync } from "node:fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { createRequire } from "node:module";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT = resolve(__dirname, "../public/og-image.png");
+const require = createRequire(import.meta.url);
+const subsetFont = require("subset-font");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const OUT = join(root, "public/og-image.png");
 
-// Design tokens (mirror src/index.css)
-const PAPER = "#FAFAF9";
-const INK = "#0A0A0A";
-const INK2 = "#1F1F1E";
-const MUTE = "#6B6B68";
-const LINE = "#D9D9D4";
-const ACCENT = "#FF4D00";
+// Colors, matching src/styles/global.css.
+const BG = "#000000";
+const FG = "#f5f5f5";
+const MUTED = "#8a8a8a";
+const LINE = "rgba(255,255,255,0.13)";
+const GRID = "rgba(255,255,255,0.06)";
+const ACCENT = "#f26b1d";
 
 const W = 1200;
 const H = 630;
+const PAD = 72;
 
-// faint cross-grid (every 48px)
+const LINES = ["白天做細胞治療，", "晚上寫 side project。"];
+const LABEL = "FINROD CHEN · PORTFOLIO";
+const FOOT_LEFT = "FINROD.XYZ";
+const FOOT_RIGHT = "WEB · CLOUD · 3D PRINT · ARDUINO";
+
+/** The viewBox and path data of a logo-pack SVG. */
+function logo(file) {
+  const svg = readFileSync(join(root, "finrod-logo-pack", file), "utf8");
+  const [, , vw, vh] = /viewBox="([^"]+)"/.exec(svg)[1].split(/\s+/).map(Number);
+  const paths = [...svg.matchAll(/<path d="([^"]+)"/g)].map((m) => m[1]);
+  return { vw, vh, paths };
+}
+
+/** A logo placed at (x, y) and scaled to a height. Returns its markup and width. */
+function place(art, x, y, height, fill) {
+  const k = height / art.vh;
+  const body = art.paths.map((d) => `<path d="${d}" fill-rule="evenodd"/>`).join("");
+  return { svg: `<g transform="translate(${x} ${y}) scale(${k})" fill="${fill}">${body}</g>`, width: art.vw * k };
+}
+
+// Pixel faces as TTF, holding only what this card draws.
+const cardText = LINES.join("");
+const fontDir = mkdtempSync(join(tmpdir(), "og-fonts-"));
+const fonts = [
+  ["public/fonts/GeistPixel-Square.woff2", "geist-pixel.ttf"],
+  [
+    require.resolve(
+      "@fontsource/fusion-pixel-12px-proportional-tc/files/fusion-pixel-12px-proportional-tc-latin-400-normal.woff2",
+    ),
+    "fusion-pixel.ttf",
+  ],
+];
+const fontFiles = [];
+for (const [src, name] of fonts) {
+  const ttf = await subsetFont(readFileSync(resolve(root, src)), cardText, { targetFormat: "sfnt" });
+  const file = join(fontDir, name);
+  writeFileSync(file, ttf);
+  fontFiles.push(file);
+}
+const PIXEL = "'Geist Pixel Square', 'Fusion Pixel 12px Proportional zh_hant'";
+const MONO = "'JetBrains Mono', 'DejaVu Sans Mono', monospace";
+
+// Six column rules inside the padding, like the site's grid lines.
 let grid = "";
-for (let x = 48; x < W; x += 48) {
-  grid += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${INK}" stroke-opacity="0.035" stroke-width="1"/>`;
+for (let i = 0; i <= 6; i++) {
+  const x = PAD + ((W - PAD * 2) / 6) * i;
+  grid += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="${GRID}" stroke-width="1"/>`;
 }
-for (let y = 48; y < H; y += 48) {
-  grid += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="${INK}" stroke-opacity="0.035" stroke-width="1"/>`;
-}
+
+const symbol = place(logo("finrod-symbol.svg"), PAD, 150, 76, ACCENT);
+const wordmark = place(logo("finrod-wordmark.svg"), PAD + symbol.width + 22, 156, 70, FG);
 
 const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="${W}" height="${H}" fill="${PAPER}"/>
+  <rect width="${W}" height="${H}" fill="${BG}"/>
   ${grid}
-  <rect x="32" y="32" width="${W - 64}" height="${H - 64}" fill="none" stroke="${INK}" stroke-width="1.5"/>
-
-  <!-- stamp -->
-  <g>
-    <rect x="72" y="66" width="346" height="40" fill="none" stroke="${INK}" stroke-width="1.5"/>
-    <rect x="88" y="80" width="12" height="12" fill="${ACCENT}"/>
-    <text x="112" y="93" font-family="Consolas, 'JetBrains Mono', monospace" font-size="17" letter-spacing="3" fill="${INK}">FIN · PORTFOLIO · 2026</text>
-  </g>
-
-  <!-- headline -->
-  <text x="70" y="296" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="96" letter-spacing="-3" fill="${INK}">Side projects,</text>
-  <text x="70" y="408" font-family="'Segoe UI', Arial, sans-serif" font-weight="800" font-size="96" letter-spacing="-3" fill="${INK}">built <tspan fill="${ACCENT}">carefully</tspan>.</text>
-
-  <!-- subtitle -->
-  <text x="74" y="476" font-family="'Segoe UI', Arial, sans-serif" font-weight="500" font-size="30" fill="${INK2}">Finrod - 白天做細胞，晚上寫 Side Project</text>
-
-  <!-- footer rule + mono row -->
-  <line x1="72" y1="540" x2="${W - 72}" y2="540" stroke="${LINE}" stroke-width="1.5"/>
-  <text x="72" y="572" font-family="Consolas, 'JetBrains Mono', monospace" font-size="20" letter-spacing="2" fill="${MUTE}">FINROD-PORTFOLIO.PAGES.DEV</text>
-  <text x="${W - 72}" y="572" text-anchor="end" font-family="Consolas, 'JetBrains Mono', monospace" font-size="20" letter-spacing="2" fill="${MUTE}">INDEPENDENT WEB WORKS</text>
+  <rect x="${PAD}" y="${PAD + 2}" width="12" height="12" fill="${ACCENT}"/>
+  <text x="${PAD + 24}" y="${PAD + 13}" font-family="${MONO}" font-size="19" letter-spacing="2.4" fill="${FG}">${LABEL}</text>
+  ${symbol.svg}
+  ${wordmark.svg}
+  <text font-family="${PIXEL}" font-size="58" fill="${FG}">
+    <tspan x="${PAD}" y="352">${LINES[0]}</tspan>
+    <tspan x="${PAD}" y="428">${LINES[1]}</tspan>
+  </text>
+  <line x1="${PAD}" y1="520" x2="${W - PAD}" y2="520" stroke="${LINE}" stroke-width="1"/>
+  <text x="${PAD}" y="566" font-family="${MONO}" font-size="20" letter-spacing="2.4" fill="${FG}">${FOOT_LEFT}</text>
+  <text x="${W - PAD}" y="566" text-anchor="end" font-family="${MONO}" font-size="18" letter-spacing="2.4" fill="${MUTED}">${FOOT_RIGHT}</text>
 </svg>`;
 
-const resvg = new Resvg(svg, {
+const png = new Resvg(svg, {
   fitTo: { mode: "width", value: W },
-  font: { loadSystemFonts: true },
-  background: PAPER,
-});
-const png = resvg.render().asPng();
-writeFileSync(OUT, png);
-console.log(`✓ wrote ${OUT} (${(png.length / 1024).toFixed(1)} KB)`);
+  font: { fontFiles, loadSystemFonts: true, defaultFontFamily: "DejaVu Sans" },
+}).render();
+writeFileSync(OUT, png.asPng());
+console.log(`wrote ${OUT} (${png.width}×${png.height})`);

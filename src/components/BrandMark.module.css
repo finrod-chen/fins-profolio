@@ -1,0 +1,21 @@
+.lockup {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: .45rem;
+  color: var(--foreground);
+}
+
+/* Heights set the size; widths follow each artwork's own proportions. */
+/* The arc carries the accent, as on the favicon and the share image. */
+.symbol {
+  color: var(--accent);
+  height: 20px;
+  width: auto;
+  flex: none;
+}
+
+.wordmark {
+  height: 18px;
+  width: auto;
+  flex: none;
+}
