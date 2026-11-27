@@ -89,3 +89,11 @@
   font-weight: 400;
   letter-spacing: 0;
 }
+
+/* ---------- Mobile menu: dim the page under the open sheet ---------- */
+
+:root .site-header__scrim {
+  background: oklch(0% 0 0 / .78);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
