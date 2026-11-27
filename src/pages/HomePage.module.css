@@ -1,31 +1,23 @@
-/* ---------- Hero: big pixel type beside a framed panel ---------- */
+/* ---------- Hero: big pixel type, nothing beside it ---------- */
 
 .hero {
-  display: grid;
-  gap: var(--space-12);
-  padding-block: clamp(56px, 10vw, 128px) clamp(48px, 8vw, 96px);
-}
-
-@media (min-width: 960px) {
-  .hero {
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    align-items: center;
-  }
+  padding-block: clamp(56px, 10vw, 136px) clamp(48px, 8vw, 96px);
 }
 
 .heroText {
   display: grid;
   gap: var(--space-6);
+  max-width: 64rem;
   min-width: 0;
 }
 
 .heroTitle {
-  font-size: clamp(2.5rem, 4.6vw, 4rem);
+  font-size: clamp(2.5rem, 7.4vw, 6rem);
   line-height: 1.02;
 }
 
 .heroLede {
-  max-width: 34rem;
+  max-width: 36rem;
   font-size: var(--text-lg);
   color: var(--text-secondary);
 }
@@ -37,84 +29,12 @@
 }
 
 .heroMeta {
+  max-width: 36rem;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border);
   font-size: var(--text-xs);
   letter-spacing: .04em;
   color: var(--text-muted);
-}
-
-/* The device: a hairline frame with a status bar, a screen and a caption bar. */
-.device {
-  display: grid;
-  overflow: hidden;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-surface);
-  background: var(--surface);
-}
-
-.deviceBar,
-.deviceFoot {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.deviceBar {
-  justify-content: space-between;
-  border-bottom: 1px solid var(--border);
-}
-
-.status {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  color: var(--foreground);
-}
-
-.led {
-  width: 7px;
-  height: 7px;
-  border-radius: var(--radius-pill);
-  background: var(--accent);
-}
-
-.screen {
-  display: block;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: var(--surface-muted);
-}
-
-.deviceFoot {
-  flex-wrap: wrap;
-  border-top: 1px solid var(--border);
-  background: var(--surface-raised);
-  text-transform: none;
-}
-
-.deviceLink {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  color: var(--foreground);
-}
-
-.deviceLink:hover {
-  color: var(--accent);
-}
-
-.deviceTag {
-  flex-basis: 100%;
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  letter-spacing: 0;
-  color: var(--text-secondary);
 }
 
 /* ---------- Numbers: one ruled strip, four cells ---------- */

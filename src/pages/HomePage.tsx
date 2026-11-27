@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { projects } from "@/data/projects";
 import { Seo } from "@/components/Seo";
 import { SITE_URL } from "@/lib/site";
@@ -10,11 +9,7 @@ import { Reveal } from "@/components/Reveal";
 import { ScrambleText } from "@/components/ScrambleText";
 import { StackTicker } from "@/components/StackTicker";
 import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter";
-import { WorkCover } from "@/components/WorkCover";
 import styles from "./HomePage.module.css";
-
-/** The first project worth showing, used as the hero's one image. */
-const featured = projects.find((p) => p.featured) ?? projects[0];
 
 const stats = [
   { label: "In biotech", value: 14, unit: "年", note: "從製程工程師到研發主任" },
@@ -66,26 +61,6 @@ export function HomePage() {
           </p>
         </div>
 
-        {/* A framed panel, like a device: the featured work on its screen. */}
-        <figure className={styles.device}>
-          <div className={styles.deviceBar}>
-            <span>Now showing</span>
-            <span className={styles.status}>
-              <span className={styles.led} aria-hidden="true" />
-              Live
-            </span>
-          </div>
-          <Link to={`/work/${featured.id}`} className={styles.screen}>
-            <WorkCover project={featured} priority />
-          </Link>
-          <figcaption className={styles.deviceFoot}>
-            <span className="mono">01</span>
-            <Link to={`/work/${featured.id}`} className={styles.deviceLink}>
-              {featured.title}
-            </Link>
-            <span className={styles.deviceTag}>{featured.tagline}</span>
-          </figcaption>
-        </figure>
       </section>
 
       <section className="page" aria-labelledby="numbers-heading">
