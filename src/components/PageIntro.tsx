@@ -3,13 +3,14 @@ import { Breadcrumb, type BreadcrumbItem } from "@/components/arc/breadcrumb/bre
 import { ScrambleText } from "@/components/ScrambleText";
 import { TypeText } from "@/components/TypeText";
 import { FlapText } from "@/components/FlapText";
+import { ScanText } from "@/components/ScanText";
 import styles from "./PageIntro.module.css";
 
 export interface PageIntroProps {
   /** A short mono label above the title, such as "About". */
   label?: string;
-  /** How the title arrives: scrambled into place, typed (the writing pages) or flipped in (About). */
-  titleEffect?: "scramble" | "type" | "flap";
+  /** How the title arrives: scrambled (home family), typed (writing), flipped (About) or scanned (好物). */
+  titleEffect?: "scramble" | "type" | "flap" | "scan";
   /** The page's one h1. */
   title: string;
   /** One or two lines saying what the page holds. */
@@ -41,6 +42,8 @@ export function PageIntro({ label, titleEffect = "scramble", title, description,
           <TypeText text={title} />
         ) : titleEffect === "flap" ? (
           <FlapText text={title} />
+        ) : titleEffect === "scan" ? (
+          <ScanText text={title} />
         ) : (
           <ScrambleText lines={[title]} />
         )}

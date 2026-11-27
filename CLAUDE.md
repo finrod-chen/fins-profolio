@@ -59,6 +59,11 @@ Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://u
    - 關於頁是「翻牌看板、時間軸」語彙：`FlapText`（標題逐字翻牌落下）、基本資料逐列翻牌、
      社群 logo 依序彈出（hover 換品牌色）、工作經歷時間軸（橘線往下畫、圓點彈出、內容從右滑入）。
      捲到才觸發的區塊用 `src/lib/use-in-view.ts`。
+   - 好物頁是「收銀機、條碼」語彙：`ScanText`（標題被橘色掃描線由上往下刷出）、價格用 `AnimatedCounter`
+     捲到時跳到正確數字、「我用過」大卡蓋印進場、hover 時掃描線掃過商品圖。平台推薦是橫向滑軌。
+- 好物資料由 n8n 工作流程「酷澎好物清單 → fins-profolio」每天 8:00（台北）寫回 `src/data/recommends.json`，
+  所以 main 每天會有一個 `chore(recommends)` commit。頁面上的價格時間戳用手動組字串，
+  不要改回 `Intl.DateTimeFormat`（Node 與瀏覽器的 ICU 在日期和時間之間放的空白不同，會造成 hydration 錯誤）。
 - 社群連結（關於頁的 logo）資料在 `src/data/socials.ts`，路徑取自 Simple Icons（CC0）。
 
 ## 一定要做
