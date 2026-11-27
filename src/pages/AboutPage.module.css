@@ -93,34 +93,153 @@
   color: var(--foreground);
 }
 
-.linkList {
-  display: grid;
+/* ---------- Profiles elsewhere, as logos ---------- */
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--space-2);
   list-style: none;
 }
 
-.link {
-  font-size: var(--text-sm);
-  color: var(--accent);
+.social {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-spring);
 }
 
-.link:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* Hover lifts the logo and gives it its brand color. */
+@media (hover: hover) and (pointer: fine) {
+  .social:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+    transform: translateY(-3px);
+  }
+}
+
+/* They pop in one after another when the list scrolls into view. */
+.socials[data-inview] li {
+  animation: pop 520ms var(--ease-spring) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
+:global(.js) .socials:not([data-inview]) li {
+  opacity: 0;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(.6) translateY(8px);
+  }
 }
 
 .career {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-4);
   padding-bottom: clamp(64px, 9vw, 120px);
 }
 
 .careerHeading {
-  font-size: var(--text-3xl);
+  margin-bottom: var(--space-4);
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+}
+
+/* ---------- Career as a timeline ----------
+   An accent line draws down the left edge as it scrolls into view; each
+   stop's dot pops and its entry slides in from the right, in turn. */
+.timeline {
+  position: relative;
+  list-style: none;
+  padding-left: var(--space-8);
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 7px;
+  width: 1px;
+  background: var(--border);
+}
+
+.timeline::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 7px;
+  width: 1px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1400ms var(--ease-in-out);
+}
+
+.timeline[data-inview]::after {
+  transform: scaleY(1);
 }
 
 .careerRow {
+  position: relative;
   grid-template-columns: 72px minmax(0, 1fr);
+  padding-inline: 0;
+}
+
+.careerRow::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--space-4) + .35em);
+  left: calc(var(--space-8) * -1 + 3px);
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-pill);
+  background: var(--background);
+  border: 1px solid var(--accent);
+}
+
+.timeline[data-inview] .careerRow::before {
+  animation: dot 480ms var(--ease-spring) both;
+  animation-delay: calc(var(--i) * 230ms);
+}
+
+.timeline[data-inview] .careerRow > * {
+  animation: from-right 620ms var(--ease-enter) both;
+  animation-delay: calc(var(--i) * 230ms + 80ms);
+}
+
+/* The latest stop is filled: where the line is now. */
+.careerRow:last-child::before {
+  background: var(--accent);
+}
+
+:global(.js) .timeline:not([data-inview]) .careerRow > *,
+:global(.js) .timeline:not([data-inview]) .careerRow::before {
+  opacity: 0;
+}
+
+@keyframes dot {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+}
+
+@keyframes from-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
 }
 
 .careerYear {
@@ -149,4 +268,80 @@
   max-width: var(--reading-width);
   font-size: var(--text-sm);
   color: var(--text-secondary);
+}
+
+/* ---------- Facts flip in like a split-flap board ---------- */
+
+.facts {
+  perspective: 800px;
+}
+
+.facts[data-inview] .row {
+  animation: row-flap 640ms cubic-bezier(.2, .7, .3, 1) both;
+  animation-delay: calc(var(--i) * 110ms);
+  transform-origin: 50% 0;
+}
+
+:global(.js) .facts:not([data-inview]) .row {
+  opacity: 0;
+}
+
+@keyframes row-flap {
+  0% {
+    opacity: 0;
+    transform: rotateX(-80deg);
+  }
+  60% {
+    opacity: 1;
+    transform: rotateX(10deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+/* ---------- Tags pop in after the title, and the email underlines ---------- */
+
+.tags > * {
+  animation: pop 480ms var(--ease-spring) both;
+  animation-delay: calc(400ms + var(--n, 0) * 70ms);
+}
+
+.tags > :nth-child(2) { --n: 1; }
+.tags > :nth-child(3) { --n: 2; }
+.tags > :nth-child(4) { --n: 3; }
+
+.email {
+  background: linear-gradient(var(--accent), var(--accent)) left bottom / 0 1px no-repeat;
+  transition: background-size 420ms var(--ease-enter), color var(--duration-fast) var(--ease-standard);
+}
+
+.email:hover {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socials[data-inview] li,
+  .facts[data-inview] .row,
+  .timeline[data-inview] .careerRow::before,
+  .timeline[data-inview] .careerRow > *,
+  .tags > * {
+    animation: none;
+  }
+
+  :global(.js) .socials:not([data-inview]) li,
+  :global(.js) .facts:not([data-inview]) .row,
+  :global(.js) .timeline:not([data-inview]) .careerRow > *,
+  :global(.js) .timeline:not([data-inview]) .careerRow::before {
+    opacity: 1;
+  }
+
+  .timeline::after {
+    transition: none;
+  }
+
+  .social,
+  .email {
+    transition: none;
+  }
 }

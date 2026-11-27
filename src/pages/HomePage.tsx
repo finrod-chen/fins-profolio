@@ -36,6 +36,8 @@ export function HomePage() {
             "https://x.com/finrodchen",
             "https://github.com/finrod-chen",
             "https://linkedin.com/in/finrodchen",
+            "https://finrod.gumroad.com",
+            "https://n8n.io/creators/finrod/",
           ],
         }}
       />

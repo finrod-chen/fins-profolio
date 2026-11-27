@@ -56,6 +56,10 @@ Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://u
      未打出的字只是透明，版面不跳）、`ReadingProgress`（頂端橘色閱讀進度線）、內文的 h2／h3、圖片、
      程式碼區塊捲到時以 `steps()` 一格一格刷出（`Markdown.tsx` 加 `data-inview`，樣式在 `global.css`）、
      列表依序滑入（切換篩選、搜尋、換頁時重播）。
+   - 關於頁是「翻牌看板、時間軸」語彙：`FlapText`（標題逐字翻牌落下）、基本資料逐列翻牌、
+     社群 logo 依序彈出（hover 換品牌色）、工作經歷時間軸（橘線往下畫、圓點彈出、內容從右滑入）。
+     捲到才觸發的區塊用 `src/lib/use-in-view.ts`。
+- 社群連結（關於頁的 logo）資料在 `src/data/socials.ts`，路徑取自 Simple Icons（CC0）。
 
 ## 一定要做
 
