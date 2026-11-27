@@ -3,15 +3,20 @@ name: Deploy to Cloudflare Pages
 # The Pages project is Direct Upload, so nothing deploys on its own: this
 # workflow is what ships the site. It builds the same way a local
 # `npm run deploy` does, then uploads dist/ with wrangler.
+#
+# main deploys to production (finrod.xyz). Any other branch deploys a
+# preview at <branch>.finrod-portfolio.pages.dev, which _headers keeps out
+# of search indexes.
 on:
   push:
-    branches: [main]
+    branches: ["**"]
   workflow_dispatch:
 
-# One deploy at a time. A newer push supersedes one still in flight, so the
-# last commit on main is always what ends up live.
+# One deploy at a time per branch. A newer push supersedes one still in
+# flight on the same branch, so the last commit is what ends up live, and a
+# preview never cancels a production deploy.
 concurrency:
-  group: pages-deploy
+  group: pages-deploy-${{ github.ref_name }}
   cancel-in-progress: true
 
 permissions:
@@ -49,10 +54,11 @@ jobs:
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           # Pinned to the devDependency so CI and a local deploy behave alike.
           wranglerVersion: "4.156.2"
-          # --branch main marks this a production deployment. If it lands as a
-          # preview instead, the project's production branch is set to
-          # something else in the Cloudflare dashboard.
-          command: pages deploy dist --project-name finrod-portfolio --branch main
+          # --branch main marks this a production deployment; any other branch
+          # name makes a preview. If main lands as a preview instead, the
+          # project's production branch is set to something else in the
+          # Cloudflare dashboard.
+          command: pages deploy dist --project-name finrod-portfolio --branch ${{ github.ref_name }}
 
       - name: Summary
         run: |
@@ -61,5 +67,9 @@ jobs:
             echo
             echo "- Commit: \`${GITHUB_SHA::7}\`"
             echo "- URL: ${{ steps.deploy.outputs.deployment-url }}"
-            echo "- Live: https://finrod.xyz"
+            if [ "${{ github.ref_name }}" = "main" ]; then
+              echo "- Live: https://finrod.xyz"
+            else
+              echo "- Preview: ${{ steps.deploy.outputs.deployment-alias-url }}"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
