@@ -25,7 +25,6 @@ const columns = [
     links: [
       { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
       { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
-      { label: "舊部落格", href: "https://astro.finrod.xyz", external: true },
       { label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" },
     ],
   },

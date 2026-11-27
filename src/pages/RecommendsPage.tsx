@@ -75,9 +75,9 @@ function ProductCard({ product, size }: { product: RecommendProduct; size: "larg
 function SlotHead({ slot, index }: { slot: RecommendSlot; index: number }) {
   return (
     <div className={styles.slotHead}>
-      <p className="label">{slot.mine ? "Picks" : `Platform ${String(index).padStart(2, "0")}`}</p>
+      <p className="label">{slot.mine ? "Picks" : index === 0 ? "Featured" : `Platform ${String(index).padStart(2, "0")}`}</p>
       <div className={styles.slotTitleRow}>
-        <h2 className={slot.mine ? styles.slotTitleLarge : styles.slotTitle}>{slot.label}</h2>
+        <h2 className={index === 0 ? styles.slotTitleLarge : styles.slotTitle}>{slot.label}</h2>
         <Badge tone={slot.mine ? "info" : "neutral"} size="sm">
           {slot.mine ? "我用過" : "平台推薦"}
         </Badge>
@@ -88,7 +88,7 @@ function SlotHead({ slot, index }: { slot: RecommendSlot; index: number }) {
   );
 }
 
-/** The featured list: large cards, three across, stamped in one by one. */
+/** The featured list (the first one): large cards, three across, stamped in one by one. */
 function FeaturedSlot({ slot }: { slot: RecommendSlot }) {
   const [gridRef, inView] = useInView<HTMLUListElement>();
   return (
@@ -146,7 +146,7 @@ export function RecommendsPage() {
     <div className="page">
       <Seo
         title="好物 · Finrod Chen"
-        description="Finrod Chen 用過覺得值得的生活好物，加上 Coupang 平台的熱門推薦。本頁含聯盟行銷連結。"
+        description="從 Coupang 依關鍵字與每日特價自動帶出的生活用品清單，價格每天更新。本頁含聯盟行銷連結。"
         path="/recommends"
       />
 
@@ -154,14 +154,14 @@ export function RecommendsPage() {
         label="Picks"
         titleEffect="scan"
         title="好物"
-        description="我在 Coupang 買了幾年生活用品，這裡收的是實際用過覺得值得的東西，加上平台的熱門推薦。"
+        description="從 Coupang 依關鍵字與每日特價自動帶出的生活用品清單，價格每天早上更新。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "好物" }]}
         meta={[`${slots.length} 組清單`, "聯盟行銷"]}
       />
 
       <Alert tone="info" title="這頁含聯盟行銷連結">
-        透過頁面上的連結購買，我會收到一小筆推廣分潤，商品售價不會因此變貴。標成「我用過」的是我自己買來長期使用的，
-        其餘兩組由平台自動推薦，不代表我個人背書。
+        透過頁面上的連結購買，我會收到一小筆推廣分潤，商品售價不會因此變貴。目前每一組都由平台依關鍵字或每日特價自動帶出，
+        不代表我個人背書。
       </Alert>
 
       <section className={styles.list} aria-labelledby="recommends-heading">
@@ -177,10 +177,12 @@ export function RecommendsPage() {
                 價格為 {taipeiStamp(updatedAt)} 的資料，每天早上 8:00 更新，實際價格以 Coupang 頁面為準
               </p>
             )}
+            {/* The first list is featured as large cards; the rest are rails. Each
+                list keeps its own badge, so a platform list never reads as mine. */}
             {slots
               .filter((slot) => slot.products.length > 0)
               .map((slot, i) =>
-                slot.mine ? (
+                i === 0 ? (
                   <FeaturedSlot key={slot.slot} slot={slot} />
                 ) : (
                   <RailSlot key={slot.slot} slot={slot} index={i} />
