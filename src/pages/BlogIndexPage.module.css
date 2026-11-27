@@ -28,12 +28,61 @@
   border-top: 1px solid var(--border-subtle);
 }
 
+/* Rows slide in one after another, and again whenever the filter, the search
+   or the page changes (the list is keyed on them). */
+.item {
+  animation: row-in 560ms var(--ease-enter) both;
+  animation-delay: calc(min(var(--i, 0), 14) * 40ms);
+}
+
+@keyframes row-in {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
 .row {
+  position: relative;
   display: grid;
   gap: var(--space-2) var(--space-8);
   padding: var(--space-5) var(--space-3);
   border-radius: var(--radius-panel);
   transition: background var(--duration-fast) var(--ease-standard);
+}
+
+/* On hover an accent line sweeps under the row. */
+.row::after {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: -1px;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 420ms var(--ease-enter);
+}
+
+.row:hover::after {
+  transform: scaleX(1);
+}
+
+.arrow {
+  display: none;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition:
+    opacity var(--duration-standard) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-standard);
+}
+
+.row:hover .arrow {
+  opacity: 1;
+  transform: none;
 }
 
 .row:hover {
@@ -42,8 +91,12 @@
 
 @media (min-width: 720px) {
   .row {
-    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-columns: 110px minmax(0, 1fr) auto;
     align-items: baseline;
+  }
+
+  .arrow {
+    display: block;
   }
 }
 
@@ -66,12 +119,29 @@
   gap: var(--space-3);
 }
 
+/* Titles stay in the text face: pixel type blurs at this size. They step
+   right a little on hover, with the date taking the accent. */
 .title {
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-size: var(--text-lg);
   font-weight: 500;
-  letter-spacing: var(--tracking-display);
+  letter-spacing: -.01em;
   color: var(--foreground);
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-standard);
+}
+
+.row:hover .title {
+  transform: translateX(6px);
+}
+
+.date {
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.row:hover .date {
+  color: var(--accent);
 }
 
 .row:hover .title {
@@ -96,4 +166,20 @@
 .pagination {
   display: flex;
   justify-content: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item {
+    animation: none;
+  }
+
+  .row::after,
+  .arrow,
+  .title {
+    transition: none;
+  }
+
+  .row:hover .title {
+    transform: none;
+  }
 }

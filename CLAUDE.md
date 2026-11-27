@@ -52,6 +52,10 @@ Vite + React + React Router 的個人作品集，介面建立在 [Arc](https://u
    - `Reveal`：區塊捲進畫面時浮入一次（`index.html` 加的 `js` class 決定要不要先藏起來）。
    - `WorkDeck`：作品的橫向疊卡，寬度切換動畫；收起的卡片是 `inert`，但連結都在 HTML 裡。
    - `StackTicker`：唯一的循環動畫，滑鼠移上去會暫停。
+   - 文章頁另有一套「終端機、打字機」語彙，不用首頁的亂碼：`TypeText`（標題逐字打出，方塊游標閃幾下後消失；
+     未打出的字只是透明，版面不跳）、`ReadingProgress`（頂端橘色閱讀進度線）、內文的 h2／h3、圖片、
+     程式碼區塊捲到時以 `steps()` 一格一格刷出（`Markdown.tsx` 加 `data-inview`，樣式在 `global.css`）、
+     列表依序滑入（切換篩選、搜尋、換頁時重播）。
 
 ## 一定要做
 

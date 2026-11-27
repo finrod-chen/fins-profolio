@@ -1,11 +1,14 @@
 import type { ReactNode } from "react";
 import { Breadcrumb, type BreadcrumbItem } from "@/components/arc/breadcrumb/breadcrumb";
 import { ScrambleText } from "@/components/ScrambleText";
+import { TypeText } from "@/components/TypeText";
 import styles from "./PageIntro.module.css";
 
 export interface PageIntroProps {
   /** A short mono label above the title, such as "About". */
   label?: string;
+  /** How the title arrives: scrambled into place, or typed (the writing pages). */
+  titleEffect?: "scramble" | "type";
   /** The page's one h1. */
   title: string;
   /** One or two lines saying what the page holds. */
@@ -23,7 +26,7 @@ export interface PageIntroProps {
  *
  * The title settles out of pixel noise when the page opens.
  */
-export function PageIntro({ label, title, description, breadcrumbs, meta, children }: PageIntroProps) {
+export function PageIntro({ label, titleEffect = "scramble", title, description, breadcrumbs, meta, children }: PageIntroProps) {
   return (
     <header className={styles.intro}>
       {breadcrumbs && breadcrumbs.length > 0 && (
@@ -33,7 +36,7 @@ export function PageIntro({ label, title, description, breadcrumbs, meta, childr
       )}
       {label && <p className={`label ${styles.label}`}>{label}</p>}
       <h1 className={styles.title}>
-        <ScrambleText lines={[title]} />
+        {titleEffect === "type" ? <TypeText text={title} /> : <ScrambleText lines={[title]} />}
       </h1>
       {description && <p className={styles.description}>{description}</p>}
       {meta && meta.length > 0 && (

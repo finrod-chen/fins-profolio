@@ -1,4 +1,4 @@
-import { Suspense, use, useEffect, useMemo, useState } from "react";
+import { Suspense, use, useEffect, useMemo, useRef, useState } from "react";
 import { NotFoundSeo, Seo } from "@/components/Seo";
 import { Link, useParams } from "react-router-dom";
 import GithubSlugger from "github-slugger";
@@ -6,9 +6,10 @@ import { findPost, loadPostBody, posts, relatedPosts, type BlogPost } from "@/da
 import { Badge } from "@/components/arc/badge/badge";
 import { EmptyState } from "@/components/arc/empty-state/empty-state";
 import { Breadcrumb } from "@/components/arc/breadcrumb/breadcrumb";
-import { InViewTitle } from "@/components/arc/in-view-title/in-view-title";
 import { Skeleton } from "@/components/arc/skeleton/skeleton";
 import { Markdown } from "@/components/Markdown";
+import { ReadingProgress } from "@/components/ReadingProgress";
+import { TypeText } from "@/components/TypeText";
 import { formatDate } from "@/lib/format";
 import styles from "./BlogPostPage.module.css";
 
@@ -157,6 +158,7 @@ export function BlogPostPage() {
   const { "*": splat } = useParams();
   const slug = splat ?? "";
   const post = useMemo(() => findPost(slug), [slug]);
+  const article = useRef<HTMLElement>(null);
 
   if (!post) {
     return (
@@ -181,7 +183,8 @@ export function BlogPostPage() {
   const newer = index > 0 ? posts[index - 1] : null;
 
   return (
-    <article className="page">
+    <article className="page" ref={article}>
+      <ReadingProgress target={article} />
       <Seo
         title={`${post.title} · 文章`}
         description={post.description || post.title}
@@ -200,7 +203,10 @@ export function BlogPostPage() {
             { label: post.title },
           ]}
         />
-        <InViewTitle as="h1" variant="blur" text={post.title} className={styles.title} />
+        <h1 className={styles.title}>
+          {/* key: a new post types its own title from the start. */}
+          <TypeText key={post.slug} text={post.title} />
+        </h1>
         {post.description && <p className={styles.standfirst}>{post.description}</p>}
         <div className={styles.meta}>
           <span className={styles.date}>{formatDate(post.date)}</span>

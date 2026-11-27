@@ -434,3 +434,65 @@ h2 {
     transform: none;
   }
 }
+
+/* ---------- Writing pages: entrances in the post body ----------
+   Markdown.tsx marks headings, images and code blocks with data-inview as
+   they scroll in. Each entrance steps rather than glides, like a terminal
+   drawing a line or a screen scanning an image. Hidden only once script is
+   known to run (the js class), and never under reduced motion. */
+
+.prose > :is(h2, h3) {
+  transition: clip-path 560ms steps(14, end);
+}
+
+/* An accent square leads each section heading and pops in after the wipe. */
+.prose > h2::before {
+  content: "";
+  display: inline-block;
+  width: .42em;
+  height: .42em;
+  margin-right: .5em;
+  vertical-align: .18em;
+  background: var(--accent);
+  transition: transform 360ms var(--ease-spring) 460ms;
+}
+
+.prose img {
+  transition: clip-path 900ms steps(18, end);
+}
+
+.prose pre {
+  transition: clip-path 700ms steps(28, end);
+}
+
+.js .prose > :is(h2, h3):not([data-inview]),
+.js .prose pre:not([data-inview]) {
+  clip-path: inset(0 100% 0 0);
+}
+
+.js .prose > h2:not([data-inview])::before {
+  transform: scale(0);
+}
+
+.js .prose img:not([data-inview]) {
+  clip-path: inset(0 0 100% 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose > :is(h2, h3),
+  .prose > h2::before,
+  .prose img,
+  .prose pre {
+    transition: none;
+  }
+
+  .js .prose > :is(h2, h3):not([data-inview]),
+  .js .prose pre:not([data-inview]),
+  .js .prose img:not([data-inview]) {
+    clip-path: none;
+  }
+
+  .js .prose > h2:not([data-inview])::before {
+    transform: none;
+  }
+}

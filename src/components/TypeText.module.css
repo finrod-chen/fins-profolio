@@ -1,0 +1,56 @@
+/* Not typed yet: present for layout and search, invisible on screen. */
+.rest {
+  color: transparent;
+}
+
+/* A block cursor the height of a pixel glyph, in the accent. */
+.cursor {
+  display: inline-block;
+  width: .5em;
+  height: .9em;
+  margin-left: .06em;
+  vertical-align: -.08em;
+  background: var(--accent);
+  opacity: 0;
+}
+
+.line[data-phase="typing"] .cursor {
+  opacity: 1;
+}
+
+/* Done: blink four times, then leave. */
+.line[data-phase="done"] .cursor {
+  animation: cursor-out 1.6s steps(1, end) both;
+}
+
+@keyframes cursor-out {
+  0%,
+  25%,
+  50%,
+  75% {
+    opacity: 1;
+  }
+  12.5%,
+  37.5%,
+  62.5%,
+  87.5%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Until the script takes over, keep the line hidden instead of showing it
+   whole and then typing it again. */
+:global(.js) .line[data-phase="idle"] {
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.js) .line[data-phase="idle"] {
+    color: inherit;
+  }
+
+  .line[data-phase="done"] .cursor {
+    animation: none;
+  }
+}
