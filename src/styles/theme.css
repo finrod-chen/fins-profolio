@@ -125,3 +125,9 @@
   font-family: var(--font-body);
   font-weight: 500;
 }
+
+/* Footer: SiteFoot draws its own bottom bar with the profile logos, which
+   Arc's bar (text links only) cannot hold. */
+:root .site-footer__bottom {
+  display: none;
+}

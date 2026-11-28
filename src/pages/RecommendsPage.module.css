@@ -65,11 +65,6 @@
   color: var(--text-muted);
 }
 
-.slotBlurb {
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
-
 /* ---------- Product cards ---------- */
 
 .card {

@@ -93,55 +93,6 @@
   color: var(--foreground);
 }
 
-/* ---------- Profiles elsewhere, as logos ---------- */
-
-.socials {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-}
-
-.social {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-control);
-  color: var(--text-secondary);
-  transition:
-    color var(--duration-fast) var(--ease-standard),
-    border-color var(--duration-fast) var(--ease-standard),
-    transform var(--duration-standard) var(--ease-spring);
-}
-
-/* Hover lifts the logo and gives it its brand color. */
-@media (hover: hover) and (pointer: fine) {
-  .social:hover {
-    color: var(--brand);
-    border-color: var(--brand);
-    transform: translateY(-3px);
-  }
-}
-
-/* They pop in one after another when the list scrolls into view. */
-.socials[data-inview] li {
-  animation: pop 520ms var(--ease-spring) both;
-  animation-delay: calc(var(--i) * 70ms);
-}
-
-:global(.js) .socials:not([data-inview]) li {
-  opacity: 0;
-}
-
-@keyframes pop {
-  from {
-    opacity: 0;
-    transform: scale(.6) translateY(8px);
-  }
-}
-
 .career {
   display: grid;
   gap: var(--space-4);
@@ -321,7 +272,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .socials[data-inview] li,
   .facts[data-inview] .row,
   .timeline[data-inview] .careerRow::before,
   .timeline[data-inview] .careerRow > *,
@@ -329,7 +279,6 @@
     animation: none;
   }
 
-  :global(.js) .socials:not([data-inview]) li,
   :global(.js) .facts:not([data-inview]) .row,
   :global(.js) .timeline:not([data-inview]) .careerRow > *,
   :global(.js) .timeline:not([data-inview]) .careerRow::before {
@@ -340,8 +289,14 @@
     transition: none;
   }
 
-  .social,
   .email {
     transition: none;
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(.6) translateY(8px);
   }
 }

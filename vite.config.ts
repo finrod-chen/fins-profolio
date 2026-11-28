@@ -6,6 +6,12 @@ import { markdownMeta } from './src/plugins/markdown-meta'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [markdownMeta(), react()],
+  define: {
+    // The year of the build, for the footer's copyright. A constant, so the
+    // prerendered page and the browser can never disagree (as they could
+    // with new Date() around New Year).
+    __BUILD_YEAR__: JSON.stringify(new Date().getFullYear()),
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

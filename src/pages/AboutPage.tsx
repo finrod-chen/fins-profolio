@@ -5,7 +5,7 @@ import { CopyButton } from "@/components/arc/copy-button/copy-button";
 import { PageIntro } from "@/components/PageIntro";
 import { StickerDesk } from "@/components/StickerDesk";
 import { FlapText } from "@/components/FlapText";
-import { socials } from "@/data/socials";
+import { SocialLinks } from "@/components/SocialLinks";
 import { useInView } from "@/lib/use-in-view";
 import styles from "./AboutPage.module.css";
 
@@ -52,7 +52,6 @@ const facts = [
 
 export function AboutPage() {
   const [factsRef, factsIn] = useInView<HTMLDListElement>();
-  const [linksRef, linksIn] = useInView<HTMLUListElement>();
   const [careerRef, careerIn] = useInView<HTMLOListElement>();
   return (
     <div className="page">
@@ -117,24 +116,7 @@ export function AboutPage() {
           </dl>
 
           <h2 className={styles.sideHeading}>其它連結</h2>
-          <ul ref={linksRef} className={styles.socials} data-inview={linksIn ? "" : undefined}>
-            {socials.map((social, index) => (
-              <li key={social.id} style={{ "--i": index, "--brand": social.hover } as CSSProperties}>
-                <a
-                  className={styles.social}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  title={social.label}
-                >
-                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true" focusable="false">
-                    <path d={social.path} />
-                  </svg>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <SocialLinks />
         </aside>
       </div>
 

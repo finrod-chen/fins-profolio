@@ -83,7 +83,6 @@ function SlotHead({ slot, index }: { slot: RecommendSlot; index: number }) {
         </Badge>
         <span className={styles.slotMeta}>{slot.meta}</span>
       </div>
-      <p className={styles.slotBlurb}>{slot.blurb}</p>
     </div>
   );
 }

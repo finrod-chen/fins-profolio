@@ -2,13 +2,9 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiteFooter, type SiteFooterLink } from "@/components/arc/blocks/site-footer/site-footer";
 import { BrandMark } from "@/components/BrandMark";
+import { SocialLinks } from "@/components/SocialLinks";
 import { useClientNav } from "@/lib/client-nav";
 import styles from "./SiteFoot.module.css";
-
-const socials = [
-  { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
-  { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
-];
 
 const columns = [
   {
@@ -21,18 +17,16 @@ const columns = [
     ],
   },
   {
-    title: "其它",
-    links: [
-      { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
-      { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
-      { label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" },
-    ],
+    title: "聯絡",
+    links: [{ label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" }],
   },
 ];
 
 /**
- * The site footer: Arc's `site-footer` block. The site is dark only, so
- * there is no theme switch.
+ * The site footer: Arc's `site-footer` block, with its bottom bar replaced
+ * by ours. Arc's bar takes text links only, and the profiles show as the
+ * same logo row as the About page, so theme.css hides Arc's bar and this
+ * one carries the copyright, the availability note and the logos.
  */
 export function SiteFoot() {
   const navigate = useNavigate();
@@ -75,11 +69,21 @@ export function SiteFoot() {
         tagline="白天在生醫產業做細胞治療，晚上寫 side project。這裡收網站、雲端、3D 列印、Arduino，以及一些工作上的紀錄。"
         columns={columns}
         newsletter={null}
-        socials={socials}
+        socials={[]}
         legal={[]}
-        status={{ label: "接受新合作", tone: "success" }}
+        status={null}
         onNavigate={onNavigate}
       />
+      <div className={styles.bottom}>
+        <span className={styles.copyright}>© {__BUILD_YEAR__} Finrod Chen</span>
+        <div className={styles.bottomEnd}>
+          <span className={styles.status}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            接受新合作
+          </span>
+          <SocialLinks size="sm" />
+        </div>
+      </div>
     </footer>
   );
 }
