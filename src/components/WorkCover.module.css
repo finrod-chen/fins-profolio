@@ -5,7 +5,7 @@
 }
 
 /* Motion for a card's hover effect. Only the transition lives here, since the
-   trigger is the card's own hover and that style belongs to WorkList. */
+   trigger is the open card's hover, and that style belongs to WorkDeck. */
 @media (prefers-reduced-motion: no-preference) {
   .image[data-effect="stretch"] {
     transition: transform var(--duration-considered) var(--ease-standard);

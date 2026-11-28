@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import { Seo } from "@/components/Seo";
 import { Link, useSearchParams } from "react-router-dom";
@@ -75,6 +76,8 @@ export function BlogIndexPage() {
       />
 
       <PageIntro
+        label="Writing"
+        titleEffect="type"
         title="文章"
         description="從 2013 到現在累積下來的紀錄，散落在生技法規、細胞治療實務、side project，以及一些雜談。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "文章" }]}
@@ -98,7 +101,9 @@ export function BlogIndexPage() {
           options={options}
           value={[category]}
           maxVisible={6}
-          onValueChange={(next) => update({ cat: next.at(-1) ?? "All", page: 1 })}
+          // One category at a time. Tapping the selected chip clears it, back to all.
+          multiple={false}
+          onValueChange={(next) => update({ cat: next[0] ?? "All", page: 1 })}
         />
       </div>
 
@@ -120,9 +125,10 @@ export function BlogIndexPage() {
           <p className={styles.resultCount} aria-live="polite">
             {filtering ? `符合 ${filtered.length} 篇` : `共 ${filtered.length} 篇`}
           </p>
-          <ul className={styles.list}>
-            {visible.map((post) => (
-              <li key={post.slug} className={styles.item}>
+          {/* Keyed by what is shown, so a new filter, search or page replays the entrance. */}
+          <ul key={`${category}|${query}|${current}`} className={styles.list}>
+            {visible.map((post, index) => (
+              <li key={post.slug} className={styles.item} style={{ "--i": index } as CSSProperties}>
                 <Link to={`/blog/${post.slug}`} className={styles.row}>
                   <span className={styles.date}>{formatDate(post.date)}</span>
                   <span className={styles.body}>
@@ -135,6 +141,9 @@ export function BlogIndexPage() {
                     {post.description && (
                       <span className={styles.description}>{post.description}</span>
                     )}
+                  </span>
+                  <span className={styles.arrow} aria-hidden="true">
+                    →
                   </span>
                 </Link>
               </li>

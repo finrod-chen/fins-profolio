@@ -1,9 +1,16 @@
 import type { ReactNode } from "react";
 import { Breadcrumb, type BreadcrumbItem } from "@/components/arc/breadcrumb/breadcrumb";
-import { InViewTitle } from "@/components/arc/in-view-title/in-view-title";
+import { ScrambleText } from "@/components/ScrambleText";
+import { TypeText } from "@/components/TypeText";
+import { FlapText } from "@/components/FlapText";
+import { ScanText } from "@/components/ScanText";
 import styles from "./PageIntro.module.css";
 
 export interface PageIntroProps {
+  /** A short mono label above the title, such as "About". */
+  label?: string;
+  /** How the title arrives: scrambled (home family), typed (writing), flipped (About) or scanned (好物). */
+  titleEffect?: "scramble" | "type" | "flap" | "scan";
   /** The page's one h1. */
   title: string;
   /** One or two lines saying what the page holds. */
@@ -19,10 +26,9 @@ export interface PageIntroProps {
 /**
  * The top of an inner page: path, title, one supporting line.
  *
- * The title is the page's single entrance animation, so no other region
- * animates in on scroll.
+ * The title settles out of pixel noise when the page opens.
  */
-export function PageIntro({ title, description, breadcrumbs, meta, children }: PageIntroProps) {
+export function PageIntro({ label, titleEffect = "scramble", title, description, breadcrumbs, meta, children }: PageIntroProps) {
   return (
     <header className={styles.intro}>
       {breadcrumbs && breadcrumbs.length > 0 && (
@@ -30,7 +36,18 @@ export function PageIntro({ title, description, breadcrumbs, meta, children }: P
           <Breadcrumb items={breadcrumbs} ariaLabel="頁面路徑" />
         </div>
       )}
-      <InViewTitle as="h1" variant="blur" text={title} className={styles.title} />
+      {label && <p className={`label ${styles.label}`}>{label}</p>}
+      <h1 className={styles.title}>
+        {titleEffect === "type" ? (
+          <TypeText text={title} />
+        ) : titleEffect === "flap" ? (
+          <FlapText text={title} />
+        ) : titleEffect === "scan" ? (
+          <ScanText text={title} />
+        ) : (
+          <ScrambleText lines={[title]} />
+        )}
+      </h1>
       {description && <p className={styles.description}>{description}</p>}
       {meta && meta.length > 0 && (
         <p className={styles.meta}>

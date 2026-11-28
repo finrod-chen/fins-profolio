@@ -6,8 +6,9 @@
 }
 
 .title {
-  font-size: var(--text-3xl);
-  font-weight: 500;
+  font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
 }
 
 .standfirst {
@@ -108,15 +109,31 @@
   border-left: 2px solid transparent;
   font-size: var(--text-sm);
   color: var(--text-muted);
+  transition:
+    color var(--duration-standard) var(--ease-standard),
+    border-color var(--duration-standard) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-standard);
 }
 
 .tocLink:hover {
   color: var(--foreground);
 }
 
+/* The section being read steps in a little, as if picked out of the list. */
 .tocLink[aria-current="true"] {
   border-left-color: var(--accent);
   color: var(--foreground);
+  transform: translateX(var(--space-2));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tocLink {
+    transition: none;
+  }
+
+  .tocLink[aria-current="true"] {
+    transform: none;
+  }
 }
 
 .related {

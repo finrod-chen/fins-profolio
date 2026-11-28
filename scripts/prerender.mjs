@@ -11,6 +11,7 @@
 // dist/404.html is the not-found page: its presence turns off Pages' SPA
 // fallback, so an unknown path gets this page with a real 404 status.
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
@@ -44,6 +45,23 @@ function fileFor(route) {
 // instead of its single-page-app fallback of index.html with a 200.
 const targets = [...routes.map((r) => r.path), NOT_FOUND_PATH];
 
+// Text set in the pixel face (h1, h2, and anything marked data-pixel), for
+// cutting the pixel CJK face down to size.
+const headingText = new Set();
+const PIXEL_TEXT = /<(h1|h2|[a-z]+(?=[^>]*\sdata-pixel))\b[^>]*>([\s\S]*?)<\/\1>/g;
+function collectHeadings(html) {
+  for (const [, , inner] of html.matchAll(PIXEL_TEXT)) {
+    const text = inner
+      .replace(/<[^>]+>/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;|&#39;/g, "'");
+    for (const ch of text) headingText.add(ch);
+  }
+}
+
 let failures = 0;
 for (const route of targets) {
   try {
@@ -53,6 +71,7 @@ for (const route of targets) {
     const html = template
       .replace("</head>", `${head}\n  </head>`)
       .replace("<!--app-html-->", body);
+    collectHeadings(body);
     const file = route === NOT_FOUND_PATH ? path.join(dist, "404.html") : fileFor(route);
     await mkdir(path.dirname(file), { recursive: true });
     await writeFile(file, html);
@@ -72,6 +91,20 @@ await writeFile(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
 );
 await writeFile(path.join(dist, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`);
+
+// Fusion Pixel carries 中文 for the pixel display type, but the whole face is
+// about 600 kB. Keep only the characters the headings above use, plus common
+// punctuation, so a new post's title is covered the next time the site builds.
+const require = createRequire(import.meta.url);
+const subsetFont = require("subset-font");
+const PIXEL_SOURCE = require.resolve(
+  "@fontsource/fusion-pixel-12px-proportional-tc/files/fusion-pixel-12px-proportional-tc-latin-400-normal.woff2",
+);
+for (const ch of "，。、：；！？「」『』（）·…－—～") headingText.add(ch);
+const pixel = await subsetFont(await readFile(PIXEL_SOURCE), [...headingText].join(""), { targetFormat: "woff2" });
+await mkdir(path.join(dist, "fonts"), { recursive: true });
+await writeFile(path.join(dist, "fonts", "pixel-tc.woff2"), pixel);
+console.log(`pixel font: ${headingText.size} characters, ${(pixel.length / 1024).toFixed(1)} kB`);
 
 await rm(ssrDir, { recursive: true, force: true });
 console.log(`prerendered ${routes.length} routes, wrote sitemap.xml and robots.txt`);

@@ -1,19 +1,128 @@
-/* The hero's image sits in the same bordered frame the work cards use, so
-   the corner radius and the hairline read as one system. */
-.heroMedia {
-  display: block;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-surface);
-  background: var(--surface-muted);
+/* ---------- Hero: big pixel type, nothing beside it ---------- */
+
+.hero {
+  padding-block: clamp(56px, 10vw, 136px) clamp(48px, 8vw, 96px);
 }
 
-/* KPI row: equal heights, wrapping to one card per row on a phone. */
-.metrics {
+.heroText {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: var(--space-4);
-  align-items: stretch;
-  padding-block: clamp(32px, 5vw, 56px);
+  gap: var(--space-6);
+  max-width: 64rem;
+  min-width: 0;
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 7.4vw, 6rem);
+  line-height: 1.02;
+}
+
+.heroLede {
+  max-width: 36rem;
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.heroMeta {
+  max-width: 36rem;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  color: var(--text-muted);
+}
+
+/* ---------- Numbers: one ruled strip, four cells ---------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+@media (min-width: 960px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.stat {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--space-6) var(--space-5) var(--space-6) 0;
+  min-width: 0;
+}
+
+.stat + .stat {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--border);
+}
+
+@media (max-width: 959px) {
+  .stat:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .stat:nth-child(n + 3) {
+    border-top: 1px solid var(--border);
+  }
+}
+
+.statLabel {
+  font-size: var(--text-xs);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.statUnit {
+  margin-left: var(--space-1);
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+.statNote {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+/* ---------- Contact ---------- */
+
+.contact {
+  display: grid;
+  gap: var(--space-6);
+  justify-items: start;
+  border-top: 1px solid var(--border);
+}
+
+.contactTitle {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.02;
+}
+
+.contactLede {
+  max-width: 36rem;
+  font-size: var(--text-lg);
+  color: var(--text-secondary);
+}
+
+/* The tools strip runs the full width of the page, under the numbers. */
+.ticker {
+  position: relative;
+  margin-top: clamp(32px, 5vw, 56px);
 }

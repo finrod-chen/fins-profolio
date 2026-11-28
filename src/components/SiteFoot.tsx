@@ -1,16 +1,10 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { SiteFooter, type SiteFooterLink } from "@/components/arc/blocks/site-footer/site-footer";
-import { ThemeSwitch } from "@/components/arc/theme-switch/theme-switch";
 import { BrandMark } from "@/components/BrandMark";
+import { SocialLinks } from "@/components/SocialLinks";
 import { useClientNav } from "@/lib/client-nav";
-import { useTheme } from "@/lib/theme";
 import styles from "./SiteFoot.module.css";
-
-const socials = [
-  { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
-  { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
-];
 
 const columns = [
   {
@@ -23,26 +17,21 @@ const columns = [
     ],
   },
   {
-    title: "其它",
-    links: [
-      { label: "GitHub", href: "https://github.com/finrod-chen", external: true },
-      { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen", external: true },
-      { label: "舊部落格", href: "https://astro.finrod.xyz", external: true },
-      { label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" },
-    ],
+    title: "聯絡",
+    links: [{ label: "me@finrod.xyz", href: "mailto:me@finrod.xyz" }],
   },
 ];
 
 /**
- * The site footer: Arc's `site-footer` block, with the theme switch in a
- * row under it. The block has no slot of its own, so the switch is
- * composed beside it rather than forked into its source.
+ * The site footer: Arc's `site-footer` block, with its bottom bar replaced
+ * by ours. Arc's bar takes text links only, and the profiles show as the
+ * same logo row as the About page, so theme.css hides Arc's bar and this
+ * one carries the copyright, the availability note and the logos.
  */
 export function SiteFoot() {
   const navigate = useNavigate();
   const foot = useRef<HTMLElement>(null);
   useClientNav(foot);
-  const { theme, setTheme } = useTheme();
 
   const onNavigate = (link: SiteFooterLink) => {
     const href = link.href;
@@ -54,22 +43,46 @@ export function SiteFoot() {
     <footer ref={foot} className={styles.foot}>
       <SiteFooter
         variant="columns"
-        brand={{ name: "Finrod Chen", href: "/", mark: <BrandMark /> }}
+        brand={{
+          name: "Finrod Chen",
+          href: "/",
+          // The lockup is the home link here. Arc puts its own text link for
+          // the name beside the mark; theme.css hides that one so the name
+          // is not printed twice. A plain anchor that navigates itself: a
+          // router <Link> would skip navigating, because useClientNav has
+          // already cancelled the click's default by the time it sees it.
+          mark: (
+            <a
+              href="/"
+              className={styles.brandLink}
+              aria-label="Finrod Chen"
+              onClick={(event) => {
+                if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                event.preventDefault();
+                navigate("/");
+              }}
+            >
+              <BrandMark />
+            </a>
+          ),
+        }}
         tagline="白天在生醫產業做細胞治療，晚上寫 side project。這裡收網站、雲端、3D 列印、Arduino，以及一些工作上的紀錄。"
         columns={columns}
         newsletter={null}
-        socials={socials}
+        socials={[]}
         legal={[]}
-        status={{ label: "接受新合作", tone: "success" }}
+        status={null}
         onNavigate={onNavigate}
       />
-      <div className={styles.themeRow}>
-        <ThemeSwitch
-          theme={theme}
-          variant="reveal"
-          label="深色模式"
-          onThemeChange={(next) => setTheme(next)}
-        />
+      <div className={styles.bottom}>
+        <span className={styles.copyright}>© {__BUILD_YEAR__} Finrod Chen</span>
+        <div className={styles.bottomEnd}>
+          <span className={styles.status}>
+            <span className={styles.statusDot} aria-hidden="true" />
+            接受新合作
+          </span>
+          <SocialLinks size="sm" />
+        </div>
       </div>
     </footer>
   );

@@ -1,124 +1,155 @@
 .list {
   display: grid;
-  gap: clamp(32px, 5vw, 56px);
+  gap: clamp(48px, 7vw, 88px);
   padding-block: clamp(32px, 5vw, 56px);
 }
 
 .slot {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-6);
+  min-width: 0;
 }
 
+/* ---------- Freshness: when the prices were read ---------- */
+
+.stamp {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  font-size: var(--text-xs);
+  letter-spacing: .03em;
+  color: var(--text-secondary);
+}
+
+.stampDot {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+/* ---------- Section heads ---------- */
+
 .slotHead {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.slotTitleRow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
 }
 
+.slotTitleLarge {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.05;
+}
+
+/* Platform lists are secondary: a smaller title in the text face. */
 .slotTitle {
   font-family: var(--font-body);
   font-size: var(--text-xl);
   font-weight: 500;
-  color: var(--foreground);
 }
 
 .slotMeta {
-  font-size: var(--text-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
   color: var(--text-muted);
 }
 
-.slotBlurb {
-  max-width: var(--reading-width);
-  font-size: var(--text-sm);
-  color: var(--text-secondary);
-}
+/* ---------- Product cards ---------- */
 
-/* Two up on a phone, then a fixed column count so the cards never get
-   narrower than their own thumbnail needs. */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: var(--space-4);
-  list-style: none;
-  align-items: stretch;
-}
-
-@media (min-width: 600px) {
-  .grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-.cell {
-  display: flex;
-  min-width: 0;
-}
-
-/* One product: a bordered surface with no shadow, the thumbnail inset by
-   the card's own padding so the corners stay concentric. */
 .card {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-2);
+  display: grid;
+  height: 100%;
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-surface);
   background: var(--surface);
-  text-decoration: none;
-  transition: border-color var(--duration-fast) var(--ease-standard);
+  transition:
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-standard);
 }
 
-.card:hover {
-  border-color: var(--border-strong);
+@media (hover: hover) and (pointer: fine) {
+  .card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+  }
 }
 
+/* A light tile, so white product shots do not glare on the black page. */
 .thumb {
+  position: relative;
   display: block;
+  aspect-ratio: 1;
   overflow: hidden;
-  aspect-ratio: 1 / 1;
-  border-radius: calc(var(--radius-surface) - var(--space-2));
-  background: var(--surface-muted);
+  background: oklch(95% 0 0);
 }
 
 .thumbImage {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 8%;
+  color: transparent;
+}
+
+/* Hover: a scan line sweeps down the photo, like a barcode reader. The layer
+   is as tall as the photo with the line along its top edge, so moving it by
+   100% carries the line to the bottom at any size. */
+.thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--accent), var(--accent)) top / 100% 2px no-repeat;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card:hover .thumb::after {
+    animation: sweep 900ms var(--ease-in-out) both;
+  }
+}
+
+@keyframes sweep {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
 }
 
 .cardBody {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
+  display: grid;
   gap: var(--space-2);
-  padding: 0 var(--space-2) var(--space-2);
+  align-content: start;
+  padding: var(--space-4);
 }
 
 .cardTitle {
-  font-size: var(--text-sm);
-  line-height: var(--leading-body);
-  color: var(--foreground);
   display: -webkit-box;
+  overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
-}
-
-.price {
-  margin-top: auto;
-  font-size: var(--text-base);
-  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: 1.45;
   color: var(--foreground);
-  font-variant-numeric: tabular-nums;
 }
 
 .tags {
@@ -126,6 +157,135 @@
   flex-wrap: wrap;
   gap: var(--space-1);
 }
+
+/* The price, in the pixel face, rolls up like a till when it scrolls in. */
+.price {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  line-height: 1;
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.large .price {
+  font-size: var(--text-2xl);
+}
+
+.large .cardTitle {
+  font-size: var(--text-base);
+}
+
+/* ---------- Featured: three across, stamped in ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  list-style: none;
+}
+
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.grid[data-inview] li {
+  animation: stamp 520ms cubic-bezier(.2, .9, .3, 1.15) both;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+:global(.js) .grid:not([data-inview]) li {
+  opacity: 0;
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: scale(1.12) rotate(-2deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(.98) rotate(.4deg);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+/* ---------- Platform rails ---------- */
+
+.railHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.railControls {
+  display: none;
+  gap: var(--space-2);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .railControls {
+    display: flex;
+  }
+}
+
+.arrow {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--foreground);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.arrow:hover {
+  border-color: var(--accent);
+}
+
+.rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 22%);
+  gap: var(--space-3);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-3);
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.rail li {
+  scroll-snap-align: start;
+}
+
+@media (max-width: 559px) {
+  .rail {
+    grid-auto-columns: 62%;
+  }
+}
+
+.small .cardBody {
+  padding: var(--space-3);
+}
+
+/* ---------- Footnotes ---------- */
 
 .updated {
   font-size: var(--text-sm);
@@ -145,4 +305,22 @@
   font-size: var(--text-lg);
   font-weight: 500;
   color: var(--foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid[data-inview] li {
+    animation: none;
+  }
+
+  :global(.js) .grid:not([data-inview]) li {
+    opacity: 1;
+  }
+
+  .card {
+    transition: none;
+  }
+
+  .card:hover {
+    transform: none;
+  }
 }

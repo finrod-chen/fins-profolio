@@ -60,6 +60,7 @@ function App() {
   const { pathname } = useLocation();
   return (
     <div className={styles.shell}>
+      <div className="gridlines" aria-hidden="true" />
       <ScrollToTop />
       <SiteNav />
       <main className={styles.main}>

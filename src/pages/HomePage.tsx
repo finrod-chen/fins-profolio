@@ -2,15 +2,21 @@ import { projects } from "@/data/projects";
 import { Seo } from "@/components/Seo";
 import { SITE_URL } from "@/lib/site";
 import { posts } from "@/data/blog";
-import { HeroContent } from "@/components/arc/blocks/hero-section/hero-content";
-import { MetricCard } from "@/components/arc/metric-card/metric-card";
-import { CtaSection } from "@/components/arc/blocks/cta-section/cta-section";
-import { WorkList } from "@/components/WorkList";
-import { WorkCover } from "@/components/WorkCover";
+import { CtaLink } from "@/components/CtaLink";
+import { ProcessSteps } from "@/components/ProcessSteps";
+import { WorkDeck } from "@/components/WorkDeck";
+import { Reveal } from "@/components/Reveal";
+import { ScrambleText } from "@/components/ScrambleText";
+import { StackTicker } from "@/components/StackTicker";
+import { AnimatedCounter } from "@/components/arc/animated-counter/animated-counter";
 import styles from "./HomePage.module.css";
 
-/** The first project worth showing, used as the hero's one image. */
-const featured = projects.find((p) => p.featured) ?? projects[0];
+const stats = [
+  { label: "In biotech", value: 14, unit: "年", note: "從製程工程師到研發主任" },
+  { label: "Side projects", value: projects.length, unit: "個", note: "網站、雲端、3D 列印、Arduino" },
+  { label: "3D printers", value: 3, unit: "台", note: "Bambu、Ender，以及一台自己改的" },
+  { label: "Posts", value: posts.length, unit: "篇", note: "從 2013 累積到現在" },
+];
 
 export function HomePage() {
   const liveCount = projects.filter((p) => p.status === "live").length;
@@ -30,60 +36,86 @@ export function HomePage() {
             "https://x.com/finrodchen",
             "https://github.com/finrod-chen",
             "https://linkedin.com/in/finrodchen",
+            "https://finrod.gumroad.com",
+            "https://n8n.io/creators/finrod/",
           ],
         }}
       />
-      {/* The hero carries the page's only entrance animation. */}
-      <HeroContent
-        layout="split"
-        title="白天做細胞治療，晚上寫 side project。"
-        description="我是 Finrod Chen，在生醫產業做細胞治療的研發主任。工作之餘寫網站、玩雲端、3D 列印和 Arduino，這裡收的是那些做到一個說得上來的階段的東西。"
-        primaryAction={{ label: "看作品", href: "#works" }}
-        secondaryAction={{ label: "來信聊聊", href: "mailto:me@finrod.xyz" }}
-        meta={[`${projects.length} 個作品`, `${liveCount} 個上線中`, "台灣"]}
-        media={
-          <span className={styles.heroMedia}>
-            <WorkCover project={featured} priority />
-          </span>
-        }
-      />
+
+      <section className={`page ${styles.hero}`}>
+        <div className={styles.heroText}>
+          <p className="label">Finrod Chen · Portfolio</p>
+          <h1 className={styles.heroTitle}>
+            <ScrambleText lines={["白天做細胞治療，", "晚上寫 side project。"]} />
+          </h1>
+          <p className={styles.heroLede}>
+            我是 Finrod Chen，在生醫產業做細胞治療的研發主任。工作之餘寫網站、玩雲端、3D 列印和
+            Arduino，這裡收的是那些做到一個說得上來的階段的東西。
+          </p>
+          <div className={styles.actions}>
+            <CtaLink href="#works" kind="primary">
+              看作品
+            </CtaLink>
+            <CtaLink href="mailto:me@finrod.xyz">來信聊聊</CtaLink>
+          </div>
+          <p className={`mono ${styles.heroMeta}`}>
+            {projects.length} 個作品 / {liveCount} 個上線中 / 台灣
+          </p>
+        </div>
+
+      </section>
 
       <section className="page" aria-labelledby="numbers-heading">
         <h2 id="numbers-heading" className="sr-only">
           數字
         </h2>
-        <div className={styles.metrics}>
-          <MetricCard label="在生技產業" value={14} suffix=" 年" context="從製程工程師到研發主任" />
-          <MetricCard
-            label="side project"
-            value={projects.length}
-            suffix=" 個"
-            context="網站、雲端、3D 列印、Arduino"
-          />
-          <MetricCard label="3D 印表機" value={3} suffix=" 台" context="Bambu、Ender，以及一台自己改的" />
-          <MetricCard label="文章" value={posts.length} suffix=" 篇" context="從 2013 累積到現在" />
-        </div>
+        <Reveal>
+          <dl className={styles.stats}>
+            {stats.map((stat) => (
+              <div key={stat.label} className={styles.stat}>
+                <dt className={`mono ${styles.statLabel}`}>{stat.label}</dt>
+                <dd className={styles.statValue}>
+                  <AnimatedCounter value={stat.value} animateOnView />
+                  <span className={styles.statUnit}>{stat.unit}</span>
+                </dd>
+                <dd className={styles.statNote}>{stat.note}</dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
       </section>
 
-      <hr className="rule" />
+      <Reveal className={styles.ticker}>
+        <StackTicker />
+      </Reveal>
 
       <div className="page band" id="works">
-        <WorkList projects={projects} />
+        <Reveal>
+          <WorkDeck projects={projects} />
+        </Reveal>
       </div>
-
-      <hr className="rule" />
 
       <div className="page band">
-        <CtaSection
-          variant="centered"
-          title="想聊些什麼？"
-          description="技術的、做東西的、細胞治療的，或純粹好奇的，寫信給我就好。"
-          primaryAction={{ label: "寄信到 me@finrod.xyz", href: "mailto:me@finrod.xyz" }}
-          secondaryAction={{ label: "先看看文章", href: "/blog" }}
-          note="通常 1 到 2 個工作天內回信，國定假日除外。"
-          faces={[]}
-        />
+        <Reveal>
+          <ProcessSteps />
+        </Reveal>
       </div>
+
+      <section className={`page band ${styles.contact}`} aria-labelledby="contact-heading">
+        <p className="label">Contact</p>
+        <h2 id="contact-heading" className={styles.contactTitle}>
+          <ScrambleText lines={["想聊些什麼？"]} onView />
+        </h2>
+        <p className={styles.contactLede}>
+          技術的、做東西的、細胞治療的，或純粹好奇的，寫信給我就好。通常 1 到 2 個工作天內回信。
+        </p>
+        <div className={styles.actions}>
+          <CtaLink href="mailto:me@finrod.xyz" kind="primary">
+            寄信到 me@finrod.xyz
+          </CtaLink>
+          <CtaLink href="/blog">先看看文章</CtaLink>
+        </div>
+      </section>
     </>
   );
 }

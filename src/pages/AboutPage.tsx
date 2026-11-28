@@ -1,8 +1,12 @@
+import type { CSSProperties } from "react";
 import { Badge } from "@/components/arc/badge/badge";
 import { Seo } from "@/components/Seo";
 import { CopyButton } from "@/components/arc/copy-button/copy-button";
 import { PageIntro } from "@/components/PageIntro";
 import { StickerDesk } from "@/components/StickerDesk";
+import { FlapText } from "@/components/FlapText";
+import { SocialLinks } from "@/components/SocialLinks";
+import { useInView } from "@/lib/use-in-view";
 import styles from "./AboutPage.module.css";
 
 /** Career, oldest first: a résumé reads forward, not newest first. */
@@ -46,13 +50,9 @@ const facts = [
   { label: "所在", value: "台灣" },
 ];
 
-const elsewhere = [
-  { label: "GitHub", href: "https://github.com/finrod-chen" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/finrodchen" },
-  { label: "舊部落格", href: "https://astro.finrod.xyz" },
-];
-
 export function AboutPage() {
+  const [factsRef, factsIn] = useInView<HTMLDListElement>();
+  const [careerRef, careerIn] = useInView<HTMLOListElement>();
   return (
     <div className="page">
       <Seo
@@ -62,6 +62,8 @@ export function AboutPage() {
       />
 
       <PageIntro
+        label="About"
+        titleEffect="flap"
         title="關於"
         description="我是 Finrod Chen，喜躍生醫的研發主任。生物工程研究所畢業後一直待在細胞治療產業，從製程工程師做到生產主任、資訊管理，到現在帶研發團隊與特管辦法案件。"
         breadcrumbs={[{ label: "作品", href: "/" }, { label: "關於" }]}
@@ -104,9 +106,9 @@ export function AboutPage() {
           <h2 id="about-facts" className={styles.sideHeading}>
             基本資料
           </h2>
-          <dl className={styles.group}>
-            {facts.map((fact) => (
-              <div key={fact.label} className={styles.row}>
+          <dl ref={factsRef} className={`${styles.group} ${styles.facts}`} data-inview={factsIn ? "" : undefined}>
+            {facts.map((fact, index) => (
+              <div key={fact.label} className={styles.row} style={{ "--i": index } as CSSProperties}>
                 <dt className={styles.rowLabel}>{fact.label}</dt>
                 <dd className={styles.rowValue}>{fact.value}</dd>
               </div>
@@ -114,27 +116,20 @@ export function AboutPage() {
           </dl>
 
           <h2 className={styles.sideHeading}>其它連結</h2>
-          <ul className={styles.linkList}>
-            {elsewhere.map((link) => (
-              <li key={link.href}>
-                <a className={styles.link} href={link.href} target="_blank" rel="noreferrer">
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <SocialLinks />
         </aside>
       </div>
 
       <StickerDesk />
 
       <section className={styles.career} aria-labelledby="about-career">
+        <p className="label">Career</p>
         <h2 id="about-career" className={styles.careerHeading}>
-          工作經歷
+          <FlapText text="工作經歷" onView />
         </h2>
-        <ol className={styles.group}>
-          {career.map((item) => (
-            <li key={item.year} className={styles.careerRow}>
+        <ol ref={careerRef} className={styles.timeline} data-inview={careerIn ? "" : undefined}>
+          {career.map((item, index) => (
+            <li key={item.year} className={styles.careerRow} style={{ "--i": index } as CSSProperties}>
               <span className={styles.careerYear}>{item.year}</span>
               <span className={styles.careerBody}>
                 <span className={styles.careerRole}>

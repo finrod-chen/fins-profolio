@@ -1,14 +1,55 @@
 .foot {
+  position: relative;
+  z-index: 1;
+  /* Covers the grid lines behind our bottom bar, which sits outside Arc's footer. */
+  background: var(--background);
   border-top: 1px solid var(--border);
 }
 
-/* The theme switch sits on its own line under the footer columns, aligned
-   to the same page column as everything above it. */
-.themeRow {
+/* The footer lockup doubles as the home link: 44px tall for touch. */
+.brandLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+/* Our bottom bar, in place of Arc's (hidden in theme.css): the copyright on
+   the left, availability and the profile logos on the right. Spacing and
+   rule match the bar it replaces. */
+.bottom {
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  max-width: var(--page-width);
-  margin-inline: auto;
-  padding: 0 var(--page-gutter) var(--space-8);
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-6);
+  margin: var(--space-6) var(--space-6) 0;
+  padding: var(--space-4) 0 var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.copyright {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.bottomEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-5);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  background: var(--success);
 }

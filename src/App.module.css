@@ -4,7 +4,10 @@
   flex-direction: column;
 }
 
+/* Above the fixed grid lines, which sit at z-index 0. */
 .main {
+  position: relative;
+  z-index: 1;
   flex: 1;
   min-width: 0;
 }

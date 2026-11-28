@@ -1,0 +1,47 @@
+.flap {
+  perspective: 600px;
+}
+
+.char {
+  display: inline-block;
+  transform-origin: 50% 0;
+}
+
+/* Waiting to flip: folded up out of sight, only once script is running. */
+:global(.js) .flap:not([data-play]) .char {
+  opacity: 0;
+  transform: rotateX(-90deg);
+}
+
+.flap[data-play] .char {
+  animation: flap 620ms cubic-bezier(.2, .7, .3, 1) both;
+  animation-delay: calc(var(--i) * 80ms);
+}
+
+@keyframes flap {
+  0% {
+    opacity: 0;
+    transform: rotateX(-90deg);
+  }
+  55% {
+    opacity: 1;
+    transform: rotateX(18deg);
+  }
+  80% {
+    transform: rotateX(-6deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.js) .flap:not([data-play]) .char {
+    opacity: 1;
+    transform: none;
+  }
+
+  .flap[data-play] .char {
+    animation: none;
+  }
+}

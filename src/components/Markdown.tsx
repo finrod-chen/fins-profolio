@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { ComponentPropsWithoutRef, ReactElement } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -36,9 +37,38 @@ function toText(children: unknown): string {
  * `rehypeRaw` lets a post bring its own HTML, so `rehypeSafeEmbeds` runs
  * straight after it and decides what that HTML may contain.
  */
+/** What in a post animates in as it scrolls into view (styles in global.css). */
+const IN_VIEW = ":scope > h2, :scope > h3, img, pre";
+
+/**
+ * Marks headings, images and code blocks with `data-inview` the first time
+ * each scrolls into view, which starts their entrance in CSS. The marks are
+ * added after hydration, so the prerendered markup never carries them.
+ */
+function useInView(root: React.RefObject<HTMLDivElement | null>, content: string) {
+  useEffect(() => {
+    const node = root.current;
+    if (!node || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.setAttribute("data-inview", "");
+          observer.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px" },
+    );
+    node.querySelectorAll(IN_VIEW).forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [root, content]);
+}
+
 export function Markdown({ children }: { children: string }) {
+  const root = useRef<HTMLDivElement>(null);
+  useInView(root, children);
   return (
-    <div className="prose">
+    <div className="prose" ref={root}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeSafeEmbeds, rehypeSlug]}

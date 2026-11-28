@@ -1,0 +1,70 @@
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.social {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+  color: var(--text-secondary);
+  transition:
+    color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-standard) var(--ease-spring);
+}
+
+/* The footer's row is quieter: no frame until hover, still 44px to touch. */
+.sm .social {
+  width: 44px;
+  height: 44px;
+  border-color: transparent;
+}
+
+.sm svg {
+  width: 20px;
+  height: 20px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .social:hover {
+    color: var(--brand);
+    border-color: var(--brand);
+    transform: translateY(-3px);
+  }
+}
+
+.socials[data-inview] li {
+  animation: pop 520ms var(--ease-spring) both;
+  animation-delay: calc(var(--i) * 70ms);
+}
+
+:global(.js) .socials:not([data-inview]) li {
+  opacity: 0;
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(.6) translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socials[data-inview] li {
+    animation: none;
+  }
+
+  :global(.js) .socials:not([data-inview]) li {
+    opacity: 1;
+  }
+
+  .social {
+    transition: none;
+  }
+}
